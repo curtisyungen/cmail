@@ -2,7 +2,7 @@ import json
 import mailbox
 import re
 from datetime import datetime
-from config import GMAIL_MAX_EMAILS
+from config import MAX_EMAILS
 from email.header import decode_header, Header
 
 def clean_and_tokenize(text):
@@ -113,8 +113,8 @@ def mbox_to_json(mbox_file, output_json_file):
         messages.append(cleaned_email_data)
         counter += 1
 
-        #if (counter == GMAIL_MAX_EMAILS):
-            #break
+        if (counter == MAX_EMAILS):
+            break
 
     with open(output_json_file, 'w', encoding='utf-8') as file:
         json.dump(messages, file, ensure_ascii=False, indent=4)

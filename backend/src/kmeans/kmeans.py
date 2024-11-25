@@ -2,7 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 from collections import Counter
-from config import GMAIL_DATA, MBOX_DATA, NUM_CLUSTERS
+from config import EMAILS, MBOX_DATA, NUM_CLUSTERS
 from .preprocess import clean_data
 from .feature_extraction import extract_features_from_dataframe
 from ..utils import clean_and_tokenize, mbox_to_json
@@ -44,11 +44,11 @@ class KMeans:
         return self.assign_clusters(X)
     
 def generate_new_data():
-    mbox_to_json(MBOX_DATA, GMAIL_DATA)
+    mbox_to_json(MBOX_DATA, EMAILS)
     
 def load_data():
     data = []
-    with open(GMAIL_DATA, 'r', encoding="utf-8") as file:
+    with open(EMAILS, 'r', encoding="utf-8") as file:
         data = json.load(file)
     return clean_data(pd.DataFrame(data))
 
