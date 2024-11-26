@@ -5,7 +5,8 @@ import { StyledUtils } from "../utils";
 const BaseComponent = styled("div")`
     border-radius: ${({ borderRadius }) =>
         StyledUtils.getSizeValue({ value: borderRadius })};
-    ${({ borderWidth }) => StyledUtils.getBorderWidth({ borderWidth })};
+    border-width: ${({ borderWidth }) =>
+        StyledUtils.getBorderWidth({ borderWidth })};
     box-shadow: ${({ boxShadow }) => StyledUtils.getBoxShadow({ boxShadow })};
     height: ${({ height }) =>
         StyledUtils.getSizeValue({

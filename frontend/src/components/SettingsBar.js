@@ -6,7 +6,12 @@ import { Box, Button, Select, Text } from "../styles";
 const DEFAULT_EMAIL_COUNT = 100;
 const DEFAULT_NUM_CLUSTERS = 12;
 
-const SettingsBar = ({ setClusters }) => {
+const SettingsBar = ({
+    loading,
+    setClusters,
+    setEmailClusters,
+    setLoading,
+}) => {
     const [emailCount, setEmailCount] = useState(DEFAULT_EMAIL_COUNT);
     const [error, setError] = useState("");
     const [generate, setGenerate] = useState(false);
@@ -18,10 +23,9 @@ const SettingsBar = ({ setClusters }) => {
     );
 
     const handleSubmit = async () => {
+        setLoading(true);
         setClusters([]);
         setError("");
-
-        console.log("numClusters: ", numClusters);
 
         try {
             const res = await axios.post("/api/run-model", {
@@ -30,8 +34,11 @@ const SettingsBar = ({ setClusters }) => {
                 numClusters,
             });
             setClusters(res.data.clusters);
+            setEmailClusters(res.data.email_clusters);
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
+        } finally {
+            setLoading(false);
         }
     };
 

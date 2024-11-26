@@ -2,17 +2,40 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import Email from "./Email";
+import { Box } from "../../styles";
 
-const EmailList = ({ refreshEmails }) => {
+const EmailList = ({ emailClusters, loading, refreshEmails }) => {
+    const [clusterMap, setClusterMap] = useState({});
     const [emails, setEmails] = useState([]);
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loadingEmails, setLoadingEmails] = useState(false);
 
     useEffect(() => {
-        if (refreshEmails) {
+        if (loading) {
+            setEmails([]);
+            setError(null);
+        }
+    }, [loading]);
+
+    useEffect(() => {
+        if (!loading && refreshEmails) {
             fetchEmails();
         }
-    }, [refreshEmails]);
+    }, [loading, refreshEmails]);
+
+    useEffect(() => {
+        if (emailClusters) {
+            const clusterMap = emailClusters.reduce(
+                (map, { cluster_label, id }) => {
+                    map[id] = cluster_label;
+                    return map;
+                },
+                {}
+            );
+            setClusterMap(clusterMap);
+            console.log("clusterMap: ", clusterMap);
+        }
+    }, [emailClusters]);
 
     async function fetchEmails() {
         try {
@@ -27,13 +50,19 @@ const EmailList = ({ refreshEmails }) => {
             console.log("Error: ", err);
             setError("Error connecting to the server.");
         } finally {
-            setLoading(false);
+            setLoadingEmails(false);
         }
     }
 
-    if (loading) return <div>Loading...</div>;
+    if (loadingEmails) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-    return emails.map((email, idx) => <Email key={idx} email={email} />);
+    return (
+        <Box>
+            {emails.map((email, idx) => (
+                <Email key={idx} cluster={clusterMap[email.id]} email={email} />
+            ))}
+        </Box>
+    );
 };
 
 export default EmailList;

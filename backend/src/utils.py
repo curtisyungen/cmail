@@ -21,9 +21,10 @@ def clean_email_data(email_data):
     def clean_text(text):
         if not isinstance(text, str): return ""
         text = re.sub(r'http\S+|www\S+|https\S+', '', text)
-        text = re.sub(r'\s+', ' ', text).strip()
-        text = ''.join(char.lower() if char.isalnum() or char.isspace() else ' ' for char in text)
         return re.sub(r'\s+', ' ', text).strip()
+    
+    def lower_text(text):
+        return ''.join(char.lower() if char.isalnum() or char.isspace() else ' ' for char in text)
     
     def decode_header_field(field):
         if not field:
@@ -64,14 +65,17 @@ def clean_email_data(email_data):
             return int(dt.timestamp() * 1000)
         except ValueError:
             return date_str
-        
-    email_data['subject'] = clean_text(decode_header_field(email_data.get('subject', '')))
+    
+    raw_subject = decode_header_field(email_data.get('subject', ''))
+    email_data['raw_subject'] = clean_text(raw_subject)
+    email_data['subject'] = lower_text(clean_text(raw_subject))
 
     if not is_valid_body(email_data.get('body', '')):
         email_data['body'] = ''
 
-    email_data['raw_body'] = email_data.get('body', '')
-    email_data['body'] = clean_text(" ".join(email_data.get('body', '')))
+    raw_body = " ".join(email_data.get('body', ''))
+    email_data['raw_body'] = clean_text(raw_body)
+    email_data['body'] = lower_text(clean_text(raw_body))
 
     sender_name, sender_email = extract_details(email_data.get('from', ''))
     recipient_name, recipient_email = extract_details(email_data.get('to', ''))
@@ -92,9 +96,9 @@ def mbox_to_json(email_count):
     mbox = mailbox.mbox(MBOX_DATA)
     messages = []
 
-    counter = 0
-    for message in mbox:
+    for index, message in enumerate(mbox):
         email_data = {
+            "id": None,
             "subject": message["subject"],
             "from": message["from"],
             "to": message["to"],
@@ -108,10 +112,10 @@ def mbox_to_json(email_count):
                 if part.get_content_type() == "text/plain":
                     email_data["body"].append(part.get_payload(decode=True).decode('utf-8', errors='ignore'))
         cleaned_email_data = clean_email_data(email_data)
+        cleaned_email_data['id'] = index
         messages.append(cleaned_email_data)
-        counter += 1
 
-        if (counter == email_count):
+        if (index == email_count):
             break
 
     with open(EMAILS, 'w', encoding='utf-8') as file:

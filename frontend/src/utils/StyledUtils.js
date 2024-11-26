@@ -3,11 +3,15 @@ import COLORS from "../styles/Colors";
 class StyledUtils {
     static getBorderWidth({ borderWidth }) {
         if (!borderWidth) {
-            return null;
+            return "0px";
         }
 
         if (typeof borderWidth === "object") {
-            const { bottom, left, right, top } = borderWidth;
+            const { all, bottom, left, right, top } = borderWidth;
+            if (all) {
+                return `${all}px`;
+            }
+
             let borderString = "";
             if (bottom) borderString += `border-bottom-width: ${bottom}px;`;
             if (left) borderString += `border-left-width: ${left}px;`;

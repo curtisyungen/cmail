@@ -15,4 +15,10 @@ const Text = styled("div")`
     }
 `;
 
+export const TextEllipsis = styled(Text)`
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`;
+
 export default Text;

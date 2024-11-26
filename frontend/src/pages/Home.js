@@ -5,6 +5,8 @@ import { Box } from "../styles";
 
 const Home = () => {
     const [clusters, setClusters] = useState({});
+    const [emailClusters, setEmailClusters] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [refreshEmails, setRefreshEmails] = useState(true);
 
     useEffect(() => {
@@ -20,7 +22,12 @@ const Home = () => {
 
     return (
         <Box padding={10}>
-            <SettingsBar setClusters={handleSetClusters} />
+            <SettingsBar
+                loading={loading}
+                setClusters={handleSetClusters}
+                setEmailClusters={setEmailClusters}
+                setLoading={setLoading}
+            />
             <div
                 style={{
                     display: "flex",
@@ -28,13 +35,17 @@ const Home = () => {
                     flexWrap: "wrap",
                 }}
             >
-                {Object.entries(clusters).map(([_, keywords], idx) => (
+                {/* {Object.entries(clusters).map(([_, keywords], idx) => (
                     <div key={idx}>
                         <ClusterKeywords title={idx + 1} keywords={keywords} />
                     </div>
-                ))}
+                ))} */}
 
-                <EmailList refreshEmails={refreshEmails} />
+                <EmailList
+                    emailClusters={emailClusters}
+                    loading={loading}
+                    refreshEmails={refreshEmails}
+                />
             </div>
         </Box>
     );

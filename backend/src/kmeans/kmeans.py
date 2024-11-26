@@ -83,4 +83,4 @@ def run_kmeans(generate_data, email_count, num_clusters):
     for cluster, _ in cluster_keywords.items():
         print(f"Cluster Keywords: {cluster_keywords[cluster]}")
     
-    return cluster_keywords
+    return df, cluster_keywords
