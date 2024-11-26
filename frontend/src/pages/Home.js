@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { ClusterKeywords, EmailList, SettingsBar } from "../components";
+import { ClusterViewer, EmailViewer, SettingsBar } from "../components";
 import { Box } from "../styles";
 
 const Home = () => {
@@ -8,6 +8,7 @@ const Home = () => {
     const [emailClusters, setEmailClusters] = useState([]);
     const [loading, setLoading] = useState(false);
     const [refreshEmails, setRefreshEmails] = useState(true);
+    const [selectedCluster, setSelectedCluster] = useState(-1);
 
     useEffect(() => {
         if (refreshEmails) {
@@ -28,25 +29,17 @@ const Home = () => {
                 setEmailClusters={setEmailClusters}
                 setLoading={setLoading}
             />
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                }}
-            >
-                {/* {Object.entries(clusters).map(([_, keywords], idx) => (
-                    <div key={idx}>
-                        <ClusterKeywords title={idx + 1} keywords={keywords} />
-                    </div>
-                ))} */}
-
-                <EmailList
-                    emailClusters={emailClusters}
-                    loading={loading}
-                    refreshEmails={refreshEmails}
-                />
-            </div>
+            <ClusterViewer
+                clusters={clusters}
+                selectedCluster={selectedCluster}
+                setSelectedCluster={setSelectedCluster}
+            />
+            <EmailViewer
+                emailClusters={emailClusters}
+                loading={loading}
+                refreshEmails={refreshEmails}
+                selectedCluster={selectedCluster}
+            />
         </Box>
     );
 };

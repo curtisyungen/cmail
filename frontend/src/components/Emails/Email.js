@@ -11,7 +11,7 @@ const Subject = styled(TextEllipsis)``;
 
 const CLIPPED_BODY_LENGTH = 50;
 
-const Email = ({ cluster, email }) => {
+const Email = ({ cluster, email, selectedCluster }) => {
     // console.log("email: ", email);
 
     const getRawBody = () => {
@@ -21,6 +21,10 @@ const Email = ({ cluster, email }) => {
                 : email.raw_body;
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
+
+    if (selectedCluster >= 0 && cluster !== selectedCluster) {
+        return null;
+    }
 
     return (
         <Box

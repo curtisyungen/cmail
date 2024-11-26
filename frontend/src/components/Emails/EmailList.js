@@ -4,7 +4,12 @@ import axios from "axios";
 import Email from "./Email";
 import { Box } from "../../styles";
 
-const EmailList = ({ emailClusters, loading, refreshEmails }) => {
+const EmailList = ({
+    emailClusters,
+    loading,
+    refreshEmails,
+    selectedCluster,
+}) => {
     const [clusterMap, setClusterMap] = useState({});
     const [emails, setEmails] = useState([]);
     const [error, setError] = useState(null);
@@ -59,7 +64,12 @@ const EmailList = ({ emailClusters, loading, refreshEmails }) => {
     return (
         <Box>
             {emails.map((email, idx) => (
-                <Email key={idx} cluster={clusterMap[email.id]} email={email} />
+                <Email
+                    key={idx}
+                    cluster={clusterMap[email.id]}
+                    email={email}
+                    selectedCluster={selectedCluster}
+                />
             ))}
         </Box>
     );

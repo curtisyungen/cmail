@@ -7,11 +7,16 @@ const Box = styled(BaseComponent)`
     background: ${({ background }) => background};
     border-color: ${({ borderColor }) => borderColor};
     border-style: ${({ borderStyle = "solid" }) => borderStyle};
-    cursor: ${({ cursor = "default" }) => cursor};
+    cursor: ${({ clickable, cursor = "default" }) =>
+        clickable ? "pointer" : cursor};
     display: flex;
     flex-direction: column;
     justify-content: ${({ justifyContent = "center" }) => justifyContent};
     position: relative;
+
+    &:hover {
+        background: ${({ hoverBackground }) => hoverBackground} !important;
+    }
 `;
 
 export default Box;

@@ -25,7 +25,7 @@ class StyledUtils {
             value: borderWidth,
         });
 
-        return finalBorderWidth && `border-width: ${finalBorderWidth};`;
+        return finalBorderWidth;
     }
 
     static getBoxShadow({ boxShadow }) {

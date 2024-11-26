@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Text } from "../styles";
-import SortUtils from "../utils/SortUtils";
+import { Box, Text } from "../../styles";
+import SortUtils from "../../utils/SortUtils";
 
-const ClusterKeywords = ({ title, keywords = [] }) => {
+const Cluster = ({ title, keywords = [], onClick, selectedCluster }) => {
+    const [expanded, setExpanded] = useState(false);
     const [maxFrequency, setMaxFrequency] = useState(0);
     const [sortedKeywords, setSortedKeywords] = useState([]);
+
+    const isSelected = title === selectedCluster;
 
     useEffect(() => {
         const sortedKeywords = SortUtils.sortData({ data: keywords });
@@ -21,18 +24,23 @@ const ClusterKeywords = ({ title, keywords = [] }) => {
     }, [keywords]);
 
     return (
-        <Box>
-            <Text bold>Cluster {title}</Text>
-            <Box>
-                {sortedKeywords.map(([word, frequency], idx) => (
+        <Box
+            borderWidth={isSelected ? 2 : 1}
+            clickable
+            margin={1}
+            onClick={() => onClick(title)}
+            width={100}
+        >
+            <Text bold>{title}</Text>
+            {expanded &&
+                sortedKeywords.map(([word, frequency], idx) => (
                     <Text
                         key={idx}
                         bold={frequency === maxFrequency}
                     >{`${word}: ${frequency}`}</Text>
                 ))}
-            </Box>
         </Box>
     );
 };
 
-export default ClusterKeywords;
+export default Cluster;
