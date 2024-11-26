@@ -1,4 +1,4 @@
 export { default as ClusterViewer } from "./Clusters/ClusterViewer";
-export { default as ClusterVisualization } from "./ClusterVisualization";
-export { default as EmailViewer } from "./EmailViewer/EmailViewer";
-export { default as SettingsBar } from "./SettingsBar";
+export { default as ClusterVisualization } from "./Clusters/ClusterVisualization";
+export { default as EmailViewer } from "./Emails/EmailViewer";
+export { default as Header } from "./Header";

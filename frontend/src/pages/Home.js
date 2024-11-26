@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { ClusterViewer, EmailViewer, SettingsBar } from "../components";
-import { Box } from "../styles";
+import { ClusterViewer, EmailViewer, Header } from "../components";
+import { Box, Colors as COLORS } from "../styles";
 
 const Home = () => {
     const [clusters, setClusters] = useState({});
@@ -22,16 +22,19 @@ const Home = () => {
     };
 
     return (
-        <Box padding={10}>
-            <SettingsBar
+        <Box
+            background={COLORS.GRAY_LIGHT}
+            height="100vh"
+            justifyContent="flex-start"
+            padding={{ left: 30, top: 30 }}
+        >
+            <Header
+                clusters={clusters}
                 loading={loading}
+                selectedCluster={selectedCluster}
                 setClusters={handleSetClusters}
                 setEmailClusters={setEmailClusters}
                 setLoading={setLoading}
-            />
-            <ClusterViewer
-                clusters={clusters}
-                selectedCluster={selectedCluster}
                 setSelectedCluster={setSelectedCluster}
             />
             <EmailViewer

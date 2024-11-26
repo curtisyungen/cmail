@@ -25,13 +25,16 @@ const Cluster = ({ title, keywords = [], onClick, selectedCluster }) => {
 
     return (
         <Box
-            borderWidth={isSelected ? 2 : 1}
-            clickable
+            borderWidth={1}
+            clickable={true}
+            height={20}
             margin={1}
             onClick={() => onClick(title)}
-            width={100}
+            width={20}
         >
-            <Text bold>{title}</Text>
+            <Text bold={isSelected} center={true}>
+                {title}
+            </Text>
             {expanded &&
                 sortedKeywords.map(([word, frequency], idx) => (
                     <Text

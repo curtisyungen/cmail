@@ -22,7 +22,7 @@ const Email = ({ cluster, email, selectedCluster }) => {
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (selectedCluster >= 0 && cluster !== selectedCluster) {
+    if (selectedCluster !== null && cluster !== selectedCluster) {
         return null;
     }
 
@@ -45,7 +45,9 @@ const Email = ({ cluster, email, selectedCluster }) => {
                     </Body>
                 </Box>
                 <Box height="100%" width={50}>
-                    <Text textAlign="center">{cluster || "-"}</Text>
+                    <Text textAlign="center">
+                        {cluster >= 0 ? cluster : "-"}
+                    </Text>
                 </Box>
             </Flex>
         </Box>

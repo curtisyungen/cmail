@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import Email from "./Email";
-import { Box } from "../../styles";
+import { Box, List } from "../../styles";
 
 const EmailList = ({
     emailClusters,
@@ -38,14 +38,12 @@ const EmailList = ({
                 {}
             );
             setClusterMap(clusterMap);
-            console.log("clusterMap: ", clusterMap);
         }
     }, [emailClusters]);
 
     async function fetchEmails() {
         try {
             const response = await axios.get("/api/get-emails");
-            console.log("emails response: ", response.data);
             if (response.data.status === "success") {
                 setEmails(response.data.emails);
             } else {
@@ -62,7 +60,12 @@ const EmailList = ({
     if (loadingEmails) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     return (
-        <Box>
+        <List
+            canScrollY
+            height={`calc(100vh - 300px)`}
+            style={{ minWidth: "300px" }}
+            width="fit-content"
+        >
             {emails.map((email, idx) => (
                 <Email
                     key={idx}
@@ -71,7 +74,7 @@ const EmailList = ({
                     selectedCluster={selectedCluster}
                 />
             ))}
-        </Box>
+        </List>
     );
 };
 

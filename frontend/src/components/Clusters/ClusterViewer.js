@@ -9,8 +9,7 @@ const ClusterViewer = ({ clusters, selectedCluster, setSelectedCluster }) => {
     };
 
     return (
-        <Box>
-            <Text>Clusters</Text>
+        <Box width={300} padding={{ left: 10, right: 10 }}>
             <Flex alignItems="flex-start" flexWrap>
                 {Object.entries(clusters).map(([_, keywords], idx) => (
                     <Cluster

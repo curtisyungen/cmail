@@ -24,7 +24,6 @@ const BaseComponent = styled("div")`
             defaultValue: "fit-content",
             value: height,
         })};
-    overflow: ${({ overflow }) => overflow || "hidden"};
     ${({ padding }) => StyledUtils.getPadding({ padding })};
     transition: ${({ transition = "0.5s" }) => transition};
     width: ${({ width }) =>

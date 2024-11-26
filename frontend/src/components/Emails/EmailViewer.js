@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import EmailList from "./EmailList";
 
-import { Box } from "../../styles";
+import EmailList from "./EmailList";
 
 const EmailViewer = ({
     emailClusters,
@@ -10,14 +9,12 @@ const EmailViewer = ({
     selectedCluster,
 }) => {
     return (
-        <Box>
-            <EmailList
-                emailClusters={emailClusters}
-                loading={loading}
-                refreshEmails={refreshEmails}
-                selectedCluster={selectedCluster}
-            />
-        </Box>
+        <EmailList
+            emailClusters={emailClusters}
+            loading={loading}
+            refreshEmails={refreshEmails}
+            selectedCluster={selectedCluster}
+        />
     );
 };
 
