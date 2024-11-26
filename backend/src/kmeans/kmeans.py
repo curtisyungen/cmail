@@ -2,7 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 from collections import Counter
-from config import EMAILS, MBOX_DATA, NUM_CLUSTERS
+from config import EMAILS, MBOX_DATA
 from .preprocess import clean_data
 from .feature_extraction import extract_features_from_dataframe
 from ..utils import clean_and_tokenize, mbox_to_json
@@ -43,8 +43,8 @@ class KMeans:
     def predict(self, X):
         return self.assign_clusters(X)
     
-def generate_new_data():
-    mbox_to_json(MBOX_DATA, EMAILS)
+def generate_new_data(email_count):
+    mbox_to_json(MBOX_DATA, EMAILS, email_count)
     
 def load_data():
     data = []
@@ -52,9 +52,9 @@ def load_data():
         data = json.load(file)
     return clean_data(pd.DataFrame(data))
 
-def run_kmeans(generate_data):
+def run_kmeans(generate_data, email_count, num_clusters):
     if generate_data == True:
-        generate_new_data()
+        generate_new_data(email_count)
     
     df = load_data()
 
@@ -65,7 +65,7 @@ def run_kmeans(generate_data):
     features_df = extract_features_from_dataframe(df, recipient_to_id, sender_to_id, subject_to_id)
     X = np.array(features_df.values, dtype=float)
 
-    kmeans = KMeans(k = NUM_CLUSTERS)
+    kmeans = KMeans(k = num_clusters)
     kmeans.fit(X)
     df['cluster_label'] = kmeans.labels
 
@@ -79,7 +79,7 @@ def run_kmeans(generate_data):
             all_words.extend(clean_and_tokenize(email))
 
         most_common_words = Counter(all_words).most_common(10)
-        cluster_keywords[cluster] = most_common_words
+        cluster_keywords[int(cluster)] = most_common_words
         #cluster_topics[cluster] = most_common_words[0][0].capitalize()
 
     for cluster, _ in cluster_keywords.items():

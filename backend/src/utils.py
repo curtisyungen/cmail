@@ -2,7 +2,6 @@ import json
 import mailbox
 import re
 from datetime import datetime
-from config import MAX_EMAILS
 from email.header import decode_header, Header
 
 def clean_and_tokenize(text):
@@ -90,8 +89,8 @@ def clean_email_data(email_data):
     email_data['date'] = date
     return email_data
 
-def mbox_to_json(mbox_file, output_json_file):
-    print("Creating new JSON file...")
+def mbox_to_json(mbox_file, output_json_file, email_count):
+    print(f"Creating new JSON file with {email_count} emails...")
     mbox = mailbox.mbox(mbox_file)
     messages = []
 
@@ -113,7 +112,7 @@ def mbox_to_json(mbox_file, output_json_file):
         messages.append(cleaned_email_data)
         counter += 1
 
-        if (counter == MAX_EMAILS):
+        if (counter == email_count):
             break
 
     with open(output_json_file, 'w', encoding='utf-8') as file:
