@@ -10,7 +10,10 @@ const Box = styled("div")`
     display: flex;
     flex-direction: column;
     justify-content: ${({ justifyContent = "center" }) => justifyContent};
+    margin: ${({ margin }) => `${margin}px`};
+    padding: ${({ padding }) => `${padding}px`};
     position: relative;
+    width: ${({ width }) => (width ? `${width}px` : "100%")};
 `;
 
 export default Box;

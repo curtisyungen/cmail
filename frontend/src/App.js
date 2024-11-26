@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 
-import { ClusterVisualization, RunModel } from "./components";
+import { Home } from "./pages";
 
 const App = () => {
-    return (
-        <div>
-            <h1>Model Runner</h1>
-            <RunModel />
-        </div>
-    );
+    return <Home />;
 };
 
 export default App;
