@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ClusterKeywords, EmailList, SettingsBar } from "../components";
 import { Box } from "../styles";
 
 const Home = () => {
     const [clusters, setClusters] = useState({});
-    const [emails, setEmails] = useState([]);
+    const [refreshEmails, setRefreshEmails] = useState(true);
+
+    useEffect(() => {
+        if (refreshEmails) {
+            setRefreshEmails(false);
+        }
+    }, [refreshEmails]);
+
+    const handleSetClusters = (clusters) => {
+        setClusters(clusters);
+        setRefreshEmails(true);
+    };
 
     return (
         <Box padding={10}>
-            <SettingsBar setClusters={setClusters} setEmails={setEmails} />
+            <SettingsBar setClusters={handleSetClusters} />
             <div
                 style={{
                     display: "flex",
@@ -23,7 +34,7 @@ const Home = () => {
                     </div>
                 ))}
 
-                <EmailList emails={emails} />
+                <EmailList refreshEmails={refreshEmails} />
             </div>
         </Box>
     );

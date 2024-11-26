@@ -1,6 +1,7 @@
 import json
 import mailbox
 import re
+from config import EMAILS, MBOX_DATA, RAW_EMAILS
 from datetime import datetime
 from email.header import decode_header, Header
 
@@ -66,17 +67,14 @@ def clean_email_data(email_data):
         
     email_data['subject'] = clean_text(decode_header_field(email_data.get('subject', '')))
 
-    if not is_valid_body(email_data['body']):
+    if not is_valid_body(email_data.get('body', '')):
         email_data['body'] = ''
 
+    email_data['raw_body'] = email_data.get('body', '')
     email_data['body'] = clean_text(" ".join(email_data.get('body', '')))
 
-    from_field = email_data.get('from', '')
-    to_field = email_data.get('to', '')
-    if isinstance(from_field, Header):
-        print(f"from_field: {from_field}")
-    sender_name, sender_email = extract_details(from_field)
-    recipient_name, recipient_email = extract_details(to_field)
+    sender_name, sender_email = extract_details(email_data.get('from', ''))
+    recipient_name, recipient_email = extract_details(email_data.get('to', ''))
 
     email_data['from_name'] = sender_name
     email_data['from_email'] = sender_email
@@ -89,9 +87,9 @@ def clean_email_data(email_data):
     email_data['date'] = date
     return email_data
 
-def mbox_to_json(mbox_file, output_json_file, email_count):
+def mbox_to_json(email_count):
     print(f"Creating new JSON file with {email_count} emails...")
-    mbox = mailbox.mbox(mbox_file)
+    mbox = mailbox.mbox(MBOX_DATA)
     messages = []
 
     counter = 0
@@ -102,6 +100,7 @@ def mbox_to_json(mbox_file, output_json_file, email_count):
             "to": message["to"],
             "date": message["date"],
             "body": message.get_payload(decode=True).decode('utf-8', errors='ignore') if message.is_multipart() is False else None,
+            "raw_body": ""
         }
         if message.is_multipart():
             email_data["body"] = []
@@ -115,7 +114,7 @@ def mbox_to_json(mbox_file, output_json_file, email_count):
         if (counter == email_count):
             break
 
-    with open(output_json_file, 'w', encoding='utf-8') as file:
+    with open(EMAILS, 'w', encoding='utf-8') as file:
         json.dump(messages, file, ensure_ascii=False, indent=4)
 
     

@@ -3,9 +3,11 @@ from src.kmeans.kmeans import run_kmeans
 
 def main(generate: bool = False, email_count: int = 100, num_clusters: int = 12):
     print(f"Running k-means with {num_clusters} clusters...")
-    df, cluster_keywords, cluster_topics = run_kmeans(
-        generate_data=generate, email_count=email_count, num_clusters = num_clusters)
-    return df, cluster_keywords, cluster_topics
+    return run_kmeans(
+        generate_data=generate, 
+        email_count=email_count, 
+        num_clusters=num_clusters
+    )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Choose whether to generate new data.')

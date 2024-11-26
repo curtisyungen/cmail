@@ -2,7 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 from collections import Counter
-from config import EMAILS, MBOX_DATA
+from config import EMAILS
 from .preprocess import clean_data
 from .feature_extraction import extract_features_from_dataframe
 from ..utils import clean_and_tokenize, mbox_to_json
@@ -44,7 +44,7 @@ class KMeans:
         return self.assign_clusters(X)
     
 def generate_new_data(email_count):
-    mbox_to_json(MBOX_DATA, EMAILS, email_count)
+    mbox_to_json(email_count)
     
 def load_data():
     data = []
@@ -70,7 +70,6 @@ def run_kmeans(generate_data, email_count, num_clusters):
     df['cluster_label'] = kmeans.labels
 
     cluster_keywords = {}
-    cluster_topics = {}
 
     for cluster in df['cluster_label'].unique():
         cluster_emails = df[df['cluster_label'] == cluster]['body']
@@ -80,10 +79,8 @@ def run_kmeans(generate_data, email_count, num_clusters):
 
         most_common_words = Counter(all_words).most_common(10)
         cluster_keywords[int(cluster)] = most_common_words
-        #cluster_topics[cluster] = most_common_words[0][0].capitalize()
 
     for cluster, _ in cluster_keywords.items():
         print(f"Cluster Keywords: {cluster_keywords[cluster]}")
-        #print(f"Suggested Topic: {cluster_topics[cluster]}")
     
-    return df, cluster_keywords, cluster_topics
+    return cluster_keywords

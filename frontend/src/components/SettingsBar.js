@@ -6,7 +6,7 @@ import { Box, Button, Select, Text } from "../styles";
 const DEFAULT_EMAIL_COUNT = 100;
 const DEFAULT_NUM_CLUSTERS = 12;
 
-const SettingsBar = ({ setClusters, setEmails }) => {
+const SettingsBar = ({ setClusters }) => {
     const [emailCount, setEmailCount] = useState(DEFAULT_EMAIL_COUNT);
     const [error, setError] = useState("");
     const [generate, setGenerate] = useState(false);
@@ -30,8 +30,6 @@ const SettingsBar = ({ setClusters, setEmails }) => {
                 numClusters,
             });
             setClusters(res.data.clusters);
-            console.log("emails: ", res.data.emails);
-            setEmails(res.data.emails);
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         }
