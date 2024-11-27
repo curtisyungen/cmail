@@ -7,29 +7,17 @@ import { Box, COLORS, DIMENS, Flex } from "../styles";
 
 const Home = () => {
     const [activeAction, setActiveAction] = useState(null);
-    const [topics, setTopics] = useState({});
-    const [topicsMap, setTopicsMap] = useState({});
     const [emailTopics, setEmailTopics] = useState([]);
     const [refreshEmails, setRefreshEmails] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
     const [selectedTopic, setSelectedTopic] = useState(ALL_TOPICS);
     const [selectedEmail, setSelectedEmail] = useState(null);
+    const [topics, setTopics] = useState({});
 
     useEffect(() => {
         if (refreshEmails) {
             setRefreshEmails(false);
         }
     }, [refreshEmails]);
-
-    useEffect(() => {
-        if (emailTopics) {
-            const topicsMap = emailTopics.reduce((map, { topic_label, id }) => {
-                map[id] = topic_label;
-                return map;
-            }, {});
-            setTopicsMap(topicsMap);
-        }
-    }, [emailTopics]);
 
     const handleSetTopics = (topics) => {
         setTopics(topics);
@@ -43,7 +31,7 @@ const Home = () => {
             justifyContent="flex-start"
             overflow="hidden"
         >
-            <Navbar setSearchTerm={setSearchTerm} />
+            <Navbar />
             <Flex alignItems="flex-start">
                 <Sidebar />
                 <Box
@@ -76,14 +64,14 @@ const Home = () => {
                                 selectedTopic={selectedTopic}
                                 setSelectedTopic={setSelectedTopic}
                                 topics={topics}
-                                topicsMap={topicsMap}
+                                topicsMap={emailTopics}
                             />
                             <EmailList
                                 refreshEmails={refreshEmails}
                                 selectedEmail={selectedEmail}
                                 selectedTopic={selectedTopic}
                                 setSelectedEmail={setSelectedEmail}
-                                topicsMap={topicsMap}
+                                topicsMap={emailTopics}
                             />
                             <Box
                                 height="100%"

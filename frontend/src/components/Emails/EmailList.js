@@ -67,7 +67,7 @@ const EmailList = ({
                     isSelected={selectedEmail?.id === email.id}
                     onClick={() => handleEmailClick(email)}
                     selectedTopic={selectedTopic}
-                    topic={topicsMap[email.id]}
+                    topics={topicsMap[email.id]}
                 />
             ))}
         </Box>

@@ -5,7 +5,7 @@ import { ALL_TOPICS, UNKNOWN_SENDER } from "../../res";
 
 const CLIPPED_BODY_LENGTH = 50;
 
-const Email = ({ email, isSelected, onClick, selectedTopic, topic }) => {
+const Email = ({ email, isSelected, onClick, selectedTopic, topics }) => {
     const getRawBody = () => {
         const raw_body =
             typeof email.raw_body === Array
@@ -14,7 +14,7 @@ const Email = ({ email, isSelected, onClick, selectedTopic, topic }) => {
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (selectedTopic !== ALL_TOPICS && topic !== selectedTopic) {
+    if (selectedTopic !== ALL_TOPICS && !topics.includes(selectedTopic)) {
         return null;
     }
 

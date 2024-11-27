@@ -9,7 +9,6 @@ const Text = styled("div")`
     font-weight: ${({ bold }) => (bold ? 700 : 400)};
     text-align: ${({ center, textAlign = "left" }) =>
         center ? "center" : textAlign};
-    user-select: none;
 
     &:hover {
         color: ${({ hoverColor }) => hoverColor && hoverColor};

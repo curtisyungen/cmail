@@ -30,12 +30,12 @@ def print_topics(lda_model):
     except Exception as e:
         print(f"Error printing topics: {e}")
 
-def train_model(corpus, dictionary):
+def train_model(corpus, dictionary, num_topics):
     print("Training LDA model...")
     try:
         lda_model = LdaModel(
             corpus=corpus,
-            num_topics=10,
+            num_topics=num_topics,
             id2word=dictionary,
             passes=10,
             random_state=42
@@ -46,9 +46,9 @@ def train_model(corpus, dictionary):
     except Exception as e:
         print(f"Error training model: {e}")
 
-def run_lda():
+def run_lda(num_topics: int):
     corpus, dictionary = generate_new_corpus()
-    lda_model = train_model(corpus, dictionary)
+    lda_model = train_model(corpus, dictionary, num_topics)
     topics = print_topics(lda_model)
     email_assignments, dominant_topics = get_email_topics(lda_model, corpus)
 

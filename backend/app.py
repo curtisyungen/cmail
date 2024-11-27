@@ -28,8 +28,10 @@ def run_kmeans():
     
 @app.route('/api/run-lda', methods=['POST'])
 def run_lda():
+    data = request.json
+    num_topics = data.get("numTopics", 10)
     try:
-        topics, dominant_topics, email_assignments = run_lda_model()
+        topics, dominant_topics, email_assignments = run_lda_model(num_topics)
         response = {
             "status": "success",
             "message": "Ran LDA model.",

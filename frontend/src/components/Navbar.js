@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../styles";
 
-const Navbar = ({ setSearchTerm }) => {
+const Navbar = () => {
     return (
         <Box
             height={DIMENS.NAVBAR_HEIGHT}
@@ -16,7 +16,6 @@ const Navbar = ({ setSearchTerm }) => {
                 <input
                     type="search"
                     placeholder="Search"
-                    onChange={(e) => setSearchTerm(e.target.value)}
                     style={{
                         borderColor: COLORS.BORDER,
                         borderRadius: "5px",

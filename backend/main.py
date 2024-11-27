@@ -8,9 +8,9 @@ def run_kmeans_model(num_clusters: int = 12):
         num_clusters=num_clusters
     )
 
-def run_lda_model():
+def run_lda_model(num_topics: int = 10):
     print(f"Running LDA model...")
-    return run_lda()
+    return run_lda(num_topics=num_topics)
 
 def generate_new_data(email_count: int = 100):
     print(f"Generating data...")

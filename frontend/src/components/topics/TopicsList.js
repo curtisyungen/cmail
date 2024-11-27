@@ -17,20 +17,23 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
             return;
         }
         const totals = {};
-        let totalEmails = 0;
-        for (const topic of Object.values(topicsMap)) {
+        for (const topic of Object.keys(topics)) {
             if (!totals[topic]) {
                 totals[topic] = 0;
             }
-            totals[topic] += 1;
-            totalEmails += 1;
+            for (const topicsList of topicsMap) {
+                if (topicsList.includes(parseInt(topic))) {
+                    totals[topic] += 1;
+                }
+            }
         }
-        totals[ALL_TOPICS] = totalEmails;
         setTopicTotals(totals);
     };
 
     const handleTopicClick = (topic) => {
-        setSelectedTopic(selectedTopic === topic ? ALL_TOPICS : topic);
+        setSelectedTopic(
+            selectedTopic === topic ? ALL_TOPICS : parseInt(topic)
+        );
     };
 
     return (
@@ -40,18 +43,18 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
             width="fit-content"
         >
             <Topic
+                id={ALL_TOPICS}
                 title={ALL_TOPICS}
-                keywords={[]}
                 onClick={() => handleTopicClick(ALL_TOPICS)}
                 selectedTopic={selectedTopic}
                 size={topicTotals[ALL_TOPICS]}
             />
-            {Object.entries(topics).map(([_, keywords], idx) => (
+            {Object.entries(topics).map(([id, words], idx) => (
                 <Topic
-                    key={idx}
-                    title={idx}
-                    keywords={keywords}
-                    onClick={handleTopicClick}
+                    key={id}
+                    id={parseInt(id)}
+                    title={words}
+                    onClick={() => handleTopicClick(id)}
                     selectedTopic={selectedTopic}
                     size={topicTotals[idx]}
                 />
