@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import Email from "./Email";
-import { Box, List } from "../../styles";
+import { Box } from "../../styles";
+import DIMENS from "../../styles/Dimens";
 
 const EmailList = ({
     emailClusters,
     loading,
     refreshEmails,
     selectedCluster,
+    selectedEmail,
+    setSelectedEmail,
 }) => {
     const [clusterMap, setClusterMap] = useState({});
     const [emails, setEmails] = useState([]);
@@ -60,21 +63,26 @@ const EmailList = ({
     if (loadingEmails) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     return (
-        <List
-            canScrollY
-            height={`calc(100vh - 300px)`}
-            style={{ minWidth: "300px" }}
-            width="fit-content"
+        <Box
+            borderRadius={5}
+            justifyContent="flex-start"
+            style={{
+                overflowX: "hidden",
+                overflowY: "scroll",
+            }}
+            width={DIMENS.EMAIL_WIDTH}
         >
             {emails.map((email, idx) => (
                 <Email
                     key={idx}
                     cluster={clusterMap[email.id]}
                     email={email}
+                    isSelected={selectedEmail?.id === email.id}
+                    onClick={() => setSelectedEmail(email)}
                     selectedCluster={selectedCluster}
                 />
             ))}
-        </List>
+        </Box>
     );
 };
 

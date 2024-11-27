@@ -19,11 +19,6 @@ const BaseComponent = styled("div")`
             defaultValue: "100%",
             value: width,
         })};
-    min-height: ${({ height }) =>
-        StyledUtils.getSizeValue({
-            defaultValue: "fit-content",
-            value: height,
-        })};
     ${({ padding }) => StyledUtils.getPadding({ padding })};
     transition: ${({ transition = "0.5s" }) => transition};
     width: ${({ width }) =>

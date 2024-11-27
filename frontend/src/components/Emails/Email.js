@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { Box, Flex, Text, TextEllipsis } from "../../styles";
+import COLORS from "../../styles/Colors";
 
 const Body = styled(TextEllipsis)``;
 
@@ -11,7 +12,7 @@ const Subject = styled(TextEllipsis)``;
 
 const CLIPPED_BODY_LENGTH = 50;
 
-const Email = ({ cluster, email, selectedCluster }) => {
+const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
     // console.log("email: ", email);
 
     const getRawBody = () => {
@@ -22,16 +23,18 @@ const Email = ({ cluster, email, selectedCluster }) => {
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (selectedCluster !== null && cluster !== selectedCluster) {
+    if (selectedCluster !== "All" && cluster !== selectedCluster) {
         return null;
     }
 
     return (
         <Box
-            borderWidth={{ all: 1 }}
-            margin={{ bottom: 5 }}
+            background={isSelected ? COLORS.BLUE_LIGHT : COLORS.WHITE}
+            clickable={true}
+            margin={{ bottom: 1 }}
+            onClick={onClick}
             padding={10}
-            width={300}
+            width="100%"
         >
             <Flex>
                 <Box>

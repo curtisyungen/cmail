@@ -1,1 +1,1 @@
-export { default as ClusterViewer } from "./ClusterViewer";
+export { default as ClusterList } from "./ClusterList";

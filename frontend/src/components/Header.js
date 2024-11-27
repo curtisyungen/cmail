@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { ClusterViewer } from "./Clusters";
 import { Box, Button, Flex, Select, Text } from "../styles";
 import COLORS from "../styles/Colors";
 import DIMENS from "../styles/Dimens";
@@ -142,12 +141,6 @@ const Header = ({
                 <Section>
                     <Button onClick={handleSubmit}>Execute</Button>
                 </Section>
-                <Divider />
-                <ClusterViewer
-                    clusters={clusters}
-                    selectedCluster={selectedCluster}
-                    setSelectedCluster={setSelectedCluster}
-                />
             </Flex>
         </Box>
     );

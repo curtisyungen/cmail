@@ -1,7 +1,10 @@
 const DIMENS = {
     BUTTON_HEIGHT: 32,
     BUTTON_WIDTH: 75,
+    EMAIL_WIDTH: 300,
     HEADER_HEIGHT: 100,
+    HOME_LEFT_PADDING: 30,
+    HOME_TOP_PADDING: 30,
 };
 
 export default DIMENS;
