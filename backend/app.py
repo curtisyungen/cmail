@@ -30,8 +30,14 @@ def run_kmeans():
 def run_lda():
     data = request.json
     num_topics = data.get("numTopics", 10)
+    no_below = data.get("noBelow", 2)
+    no_above = data.get("noAbove", 0.5)
     try:
-        topics, dominant_topics, email_assignments = run_lda_model(num_topics)
+        topics, dominant_topics, email_assignments = run_lda_model(
+            num_topics, 
+            no_below, 
+            no_above
+        )
         response = {
             "status": "success",
             "message": "Ran LDA model.",

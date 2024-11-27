@@ -3,12 +3,12 @@ from gensim.models import TfidfModel
 from config import CORPUS_PATH, DICT_PATH
 from ..utils.preprocess import clean_and_tokenize
 
-def generate_corpus(df):
+def generate_corpus(df, no_below = 2, no_above = 0.5):
     print("Generating corpus...")
     df["tokens"] = df['body'].apply(clean_and_tokenize)
 
     dictionary = corpora.Dictionary(df['tokens'])
-    dictionary.filter_extremes(no_below=2, no_above=0.5, keep_n=10000)
+    dictionary.filter_extremes(no_below=no_below, no_above=no_above, keep_n=10000)
     corpus = [dictionary.doc2bow(tokens) for tokens in df["tokens"]]
 
     tfidf_model = TfidfModel(corpus)

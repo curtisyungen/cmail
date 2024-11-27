@@ -53,7 +53,10 @@ const ActionBar = ({
                 </Section>
                 <Divider />
                 <Section>
-                    <DataActions />
+                    <DataActions
+                        activeAction={activeAction}
+                        setActiveAction={setActiveAction}
+                    />
                 </Section>
             </Flex>
         </Box>
