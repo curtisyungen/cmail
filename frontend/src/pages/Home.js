@@ -6,10 +6,10 @@ import { ALL_CLUSTERS } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 
 const Home = () => {
+    const [activeAction, setActiveAction] = useState(null);
     const [clusters, setClusters] = useState({});
     const [clusterMap, setClusterMap] = useState({});
     const [emailClusters, setEmailClusters] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [refreshEmails, setRefreshEmails] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCluster, setSelectedCluster] = useState(ALL_CLUSTERS);
@@ -57,12 +57,12 @@ const Home = () => {
                     width="unset"
                 >
                     <Header
+                        activeAction={activeAction}
                         clusters={clusters}
-                        loading={loading}
                         selectedCluster={selectedCluster}
+                        setActiveAction={setActiveAction}
                         setClusters={handleSetClusters}
                         setEmailClusters={setEmailClusters}
-                        setLoading={setLoading}
                         setSelectedCluster={setSelectedCluster}
                     />
                     <Box height={DIMENS.SPACING_STANDARD} width="100%" />
@@ -83,7 +83,6 @@ const Home = () => {
                             />
                             <EmailList
                                 clusterMap={clusterMap}
-                                loading={loading}
                                 refreshEmails={refreshEmails}
                                 selectedCluster={selectedCluster}
                                 selectedEmail={selectedEmail}

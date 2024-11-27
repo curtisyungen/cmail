@@ -9,6 +9,7 @@ export { default as Text } from "./Text.styled.js";
 export { TextEllipsis } from "./Text.styled.js";
 
 export const FONT_SIZE = {
+    XS: 9,
     S: 10,
     M: 12,
     L: 14,

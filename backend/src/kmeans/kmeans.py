@@ -5,7 +5,7 @@ from collections import Counter
 from config import EMAILS
 from .preprocess import clean_data
 from .feature_extraction import extract_features_from_dataframe
-from ..utils import clean_and_tokenize, mbox_to_json
+from ..utils import clean_and_tokenize
 
 class KMeans:
     def __init__(self, k, max_iterations=100, tolerance=1e-4, random_state=42):
@@ -43,19 +43,13 @@ class KMeans:
     def predict(self, X):
         return self.assign_clusters(X)
     
-def generate_new_data(email_count):
-    mbox_to_json(email_count)
-    
 def load_data():
     data = []
     with open(EMAILS, 'r', encoding="utf-8") as file:
         data = json.load(file)
     return clean_data(pd.DataFrame(data))
 
-def run_kmeans(generate_data, email_count, num_clusters):
-    if generate_data == True:
-        generate_new_data(email_count)
-    
+def run_kmeans(num_clusters):
     df = load_data()
 
     recipient_to_id = {}

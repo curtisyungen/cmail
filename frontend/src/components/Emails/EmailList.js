@@ -6,7 +6,6 @@ import { Box, COLORS, DIMENS } from "../../styles";
 
 const EmailList = ({
     clusterMap,
-    loading,
     refreshEmails,
     selectedCluster,
     selectedEmail,
@@ -14,20 +13,13 @@ const EmailList = ({
 }) => {
     const [emails, setEmails] = useState([]);
     const [error, setError] = useState(null);
-    const [loadingEmails, setLoadingEmails] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (loading) {
-            setEmails([]);
-            setError(null);
-        }
-    }, [loading]);
-
-    useEffect(() => {
-        if (!loading && refreshEmails) {
+        if (refreshEmails) {
             fetchEmails();
         }
-    }, [loading, refreshEmails]);
+    }, [refreshEmails]);
 
     async function fetchEmails() {
         try {
@@ -41,7 +33,7 @@ const EmailList = ({
             console.log("Error: ", err);
             setError("Error connecting to the server.");
         } finally {
-            setLoadingEmails(false);
+            setLoading(false);
         }
     }
 
@@ -49,7 +41,7 @@ const EmailList = ({
         setSelectedEmail(selectedEmail?.id === email.id ? null : email);
     };
 
-    if (loadingEmails) return <div>Loading...</div>;
+    if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
     return (

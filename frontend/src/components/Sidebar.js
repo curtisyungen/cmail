@@ -20,7 +20,7 @@ const Sidebar = () => {
             justifyContent="flex-start"
             width={DIMENS.SIDEBAR_WIDTH}
         >
-            <SidebarItem icon={ICON.ENVELOPE} />
+            <SidebarItem icon={ICON.INBOX} />
             <SidebarItem icon={ICON.CALENDAR} />
             <SidebarItem icon={ICON.USERS} />
             <SidebarItem icon={ICON.CHECK} />
