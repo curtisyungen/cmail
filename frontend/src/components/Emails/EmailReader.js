@@ -3,22 +3,24 @@ import React from "react";
 import Avatar from "./Avatar";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { DateTimeUtils } from "../../utils";
+import { UNKNOWN_SENDER } from "../../res";
 
 const Body = ({ body }) => {
     return <Text>{body}</Text>;
 };
 
 const Header = ({ date, from_name, to }) => {
+    const sender = from_name || UNKNOWN_SENDER;
     return (
         <Box margin={{ bottom: 20 }}>
             <Flex>
-                <Avatar name={from_name} />
+                <Avatar name={sender} />
                 <Box margin={{ left: DIMENS.SPACING_STANDARD }}>
                     <Flex
                         justifyContent="space-between"
                         style={{ marginBottom: 3 }}
                     >
-                        <Text>{from_name}</Text>
+                        <Text>{sender}</Text>
                         <Text fontSize={FONT_SIZE.S}>
                             {DateTimeUtils.millisToDate(date)}
                         </Text>

@@ -24,7 +24,7 @@ const Navbar = ({ setSearchTerm }) => {
                         borderWidth: "1px",
                         fontSize: FONT_SIZE.M,
                         height: "25px",
-                        marginLeft: "140px",
+                        marginLeft: "165px",
                         paddingLeft: "5px",
                         paddingRight: "5px",
                         width: DIMENS.EMAIL_WIDTH,

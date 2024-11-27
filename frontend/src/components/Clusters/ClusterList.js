@@ -49,7 +49,7 @@ const ClusterList = ({
             <Cluster
                 title={ALL_CLUSTERS}
                 keywords={[]}
-                onClick={() => handleClusterClick(null)}
+                onClick={() => handleClusterClick(ALL_CLUSTERS)}
                 selectedCluster={selectedCluster}
                 size={clusterTotals[ALL_CLUSTERS]}
             />

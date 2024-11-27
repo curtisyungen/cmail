@@ -6,7 +6,7 @@ import { ICON } from "../res/icons";
 
 const SidebarItem = ({ color, icon }) => {
     return (
-        <Box alignItems="center" height={35}>
+        <Box alignItems="center" height={38}>
             <Icon color={color} name={icon} />
         </Box>
     );

@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../styles";
 
 const Avatar = ({ name }) => {
+    const [initials, setInitials] = useState("");
+
+    useEffect(() => {
+        loadInitials();
+    }, [name]);
+
+    const loadInitials = () => {
+        const words = name.trim().split(/\s+/);
+        const firstInitial = words[0]?.charAt(0).toUpperCase() || "";
+        const secondInitial = words[1]?.charAt(0).toUpperCase() || "";
+        setInitials(`${firstInitial}${secondInitial}`);
+    };
+
     return (
         <Box
             alignItems="center"
@@ -13,7 +26,7 @@ const Avatar = ({ name }) => {
             width={DIMENS.AVATAR_SIZE}
         >
             <Text bold fontSize={FONT_SIZE.L}>
-                {name.slice(0, 1)}
+                {initials}
             </Text>
         </Box>
     );

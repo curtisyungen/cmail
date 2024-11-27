@@ -7,7 +7,7 @@ const Icon = ({
     background,
     color = COLORS.BLUE_DARK,
     name,
-    size = 18,
+    size = 16,
     style = {},
 }) => {
     const FaComponent = FA_COMPONENTS[name];
