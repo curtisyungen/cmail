@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { ClusterList, Header } from "../components";
+import { ClusterList, Header, Navbar, Sidebar } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
 import { ALL_CLUSTERS } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
@@ -11,6 +11,7 @@ const Home = () => {
     const [emailClusters, setEmailClusters] = useState([]);
     const [loading, setLoading] = useState(false);
     const [refreshEmails, setRefreshEmails] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedCluster, setSelectedCluster] = useState(ALL_CLUSTERS);
     const [selectedEmail, setSelectedEmail] = useState(null);
 
@@ -45,56 +46,62 @@ const Home = () => {
             justifyContent="flex-start"
             overflow="hidden"
         >
-            <Box
-                margin={{
-                    left: DIMENS.HOME_PADDING,
-                    right: DIMENS.HOME_PADDING,
-                    top: DIMENS.HOME_PADDING,
-                }}
-                width="unset"
-            >
-                <Header
-                    clusters={clusters}
-                    loading={loading}
-                    selectedCluster={selectedCluster}
-                    setClusters={handleSetClusters}
-                    setEmailClusters={setEmailClusters}
-                    setLoading={setLoading}
-                    setSelectedCluster={setSelectedCluster}
-                />
-                <Box height={DIMENS.SPACING_STANDARD} width="100%" />
+            <Navbar setSearchTerm={setSearchTerm} />
+            <Flex alignItems="flex-start">
+                <Sidebar />
                 <Box
-                    height={DIMENS.EMAIL_LIST_HEIGHT}
-                    justifyContent="flex-start"
-                    overflow="hidden"
+                    margin={{
+                        right: DIMENS.HOME_PADDING,
+                    }}
+                    style={{ flex: 1 }}
+                    width="unset"
                 >
-                    <Flex
-                        alignItems="flex-start"
-                        style={{ overflow: "hidden" }}
+                    <Header
+                        clusters={clusters}
+                        loading={loading}
+                        selectedCluster={selectedCluster}
+                        setClusters={handleSetClusters}
+                        setEmailClusters={setEmailClusters}
+                        setLoading={setLoading}
+                        setSelectedCluster={setSelectedCluster}
+                    />
+                    <Box height={DIMENS.SPACING_STANDARD} width="100%" />
+                    <Box
+                        height={DIMENS.EMAIL_LIST_HEIGHT}
+                        justifyContent="flex-start"
+                        overflow="hidden"
                     >
-                        <ClusterList
-                            clusters={clusters}
-                            clusterMap={clusterMap}
-                            selectedCluster={selectedCluster}
-                            setSelectedCluster={setSelectedCluster}
-                        />
-                        <EmailList
-                            clusterMap={clusterMap}
-                            loading={loading}
-                            refreshEmails={refreshEmails}
-                            selectedCluster={selectedCluster}
-                            selectedEmail={selectedEmail}
-                            setSelectedEmail={setSelectedEmail}
-                        />
-                        <Box height="100%" width={DIMENS.SPACING_STANDARD} />
-                        {selectedEmail ? (
-                            <EmailReader selectedEmail={selectedEmail} />
-                        ) : (
-                            <EmptyStateView />
-                        )}
-                    </Flex>
+                        <Flex
+                            alignItems="flex-start"
+                            style={{ overflow: "hidden" }}
+                        >
+                            <ClusterList
+                                clusters={clusters}
+                                clusterMap={clusterMap}
+                                selectedCluster={selectedCluster}
+                                setSelectedCluster={setSelectedCluster}
+                            />
+                            <EmailList
+                                clusterMap={clusterMap}
+                                loading={loading}
+                                refreshEmails={refreshEmails}
+                                selectedCluster={selectedCluster}
+                                selectedEmail={selectedEmail}
+                                setSelectedEmail={setSelectedEmail}
+                            />
+                            <Box
+                                height="100%"
+                                width={DIMENS.SPACING_STANDARD}
+                            />
+                            {selectedEmail ? (
+                                <EmailReader selectedEmail={selectedEmail} />
+                            ) : (
+                                <EmptyStateView />
+                            )}
+                        </Flex>
+                    </Box>
                 </Box>
-            </Box>
+            </Flex>
         </Box>
     );
 };
