@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { ALL_CLUSTERS } from "../../res";
-import { Box, Text } from "../../styles";
+import { Box, Flex, FONT_SIZE, Text } from "../../styles";
 import COLORS from "../../styles/Colors";
 import SortUtils from "../../utils/SortUtils";
 
-const Cluster = ({ title, keywords = [], onClick, selectedCluster }) => {
+const Cluster = ({ title, keywords = [], onClick, selectedCluster, size }) => {
     const [expanded, setExpanded] = useState(false);
     const [maxFrequency, setMaxFrequency] = useState(0);
     const [sortedKeywords, setSortedKeywords] = useState([]);
@@ -32,19 +32,15 @@ const Cluster = ({ title, keywords = [], onClick, selectedCluster }) => {
             clickable={true}
             margin={1}
             onClick={() => onClick(title)}
-            padding={{ bottom: 3, left: 20, top: 3 }}
+            padding={{ bottom: 3, left: 20, right: 5, top: 3 }}
             width={150}
         >
-            <Text bold={isSelected}>
-                {title === ALL_CLUSTERS ? ALL_CLUSTERS : `Cluster ${title}`}
-            </Text>
-            {expanded &&
-                sortedKeywords.map(([word, frequency], idx) => (
-                    <Text
-                        key={idx}
-                        bold={frequency === maxFrequency}
-                    >{`${word}: ${frequency}`}</Text>
-                ))}
+            <Flex justifyContent="space-between">
+                <Text bold={isSelected}>
+                    {title === ALL_CLUSTERS ? ALL_CLUSTERS : `Cluster ${title}`}
+                </Text>
+                <Text color={COLORS.GRAY_DARK}>{size}</Text>
+            </Flex>
         </Box>
     );
 };

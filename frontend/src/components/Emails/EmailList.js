@@ -2,18 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import Email from "./Email";
-import { Box } from "../../styles";
-import DIMENS from "../../styles/Dimens";
+import { Box, COLORS, DIMENS } from "../../styles";
 
 const EmailList = ({
-    emailClusters,
+    clusterMap,
     loading,
     refreshEmails,
     selectedCluster,
     selectedEmail,
     setSelectedEmail,
 }) => {
-    const [clusterMap, setClusterMap] = useState({});
     const [emails, setEmails] = useState([]);
     const [error, setError] = useState(null);
     const [loadingEmails, setLoadingEmails] = useState(false);
@@ -30,19 +28,6 @@ const EmailList = ({
             fetchEmails();
         }
     }, [loading, refreshEmails]);
-
-    useEffect(() => {
-        if (emailClusters) {
-            const clusterMap = emailClusters.reduce(
-                (map, { cluster_label, id }) => {
-                    map[id] = cluster_label;
-                    return map;
-                },
-                {}
-            );
-            setClusterMap(clusterMap);
-        }
-    }, [emailClusters]);
 
     async function fetchEmails() {
         try {
@@ -66,12 +51,18 @@ const EmailList = ({
 
     if (loadingEmails) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
+
     return (
         <Box
-            borderRadius={5}
-            height="100%"
+            borderColor={COLORS.BORDER}
+            height={DIMENS.EMAIL_LIST_HEIGHT}
             justifyContent="flex-start"
             style={{
+                borderLeftWidth: 1,
+                borderRightWidth: 1,
+                borderTopWidth: 1,
+                borderTopLeftRadius: 5,
+                borderTopRightRadius: 5,
                 overflowX: "hidden",
                 overflowY: "scroll",
             }}

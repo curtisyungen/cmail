@@ -28,12 +28,12 @@ const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
     return (
         <Box
             background={isSelected ? COLORS.BLUE_LIGHT : COLORS.WHITE}
+            borderColor={COLORS.BORDER}
             clickable={true}
             height={DIMENS.EMAIL_HEIGHT}
-            margin={{ bottom: 1 }}
             onClick={onClick}
             padding={10}
-            style={{ minHeight: DIMENS.EMAIL_HEIGHT }}
+            style={{ borderBottomWidth: 1, minHeight: DIMENS.EMAIL_HEIGHT }}
             width="100%"
         >
             <Flex>

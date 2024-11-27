@@ -7,6 +7,7 @@ import { Box, COLORS, DIMENS, Flex } from "../styles";
 
 const Home = () => {
     const [clusters, setClusters] = useState({});
+    const [clusterMap, setClusterMap] = useState({});
     const [emailClusters, setEmailClusters] = useState([]);
     const [loading, setLoading] = useState(false);
     const [refreshEmails, setRefreshEmails] = useState(true);
@@ -18,6 +19,19 @@ const Home = () => {
             setRefreshEmails(false);
         }
     }, [refreshEmails]);
+
+    useEffect(() => {
+        if (emailClusters) {
+            const clusterMap = emailClusters.reduce(
+                (map, { cluster_label, id }) => {
+                    map[id] = cluster_label;
+                    return map;
+                },
+                {}
+            );
+            setClusterMap(clusterMap);
+        }
+    }, [emailClusters]);
 
     const handleSetClusters = (clusters) => {
         setClusters(clusters);
@@ -60,11 +74,12 @@ const Home = () => {
                     >
                         <ClusterList
                             clusters={clusters}
+                            clusterMap={clusterMap}
                             selectedCluster={selectedCluster}
                             setSelectedCluster={setSelectedCluster}
                         />
                         <EmailList
-                            emailClusters={emailClusters}
+                            clusterMap={clusterMap}
                             loading={loading}
                             refreshEmails={refreshEmails}
                             selectedCluster={selectedCluster}
