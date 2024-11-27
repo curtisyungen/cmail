@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { Box, Button, Flex, Select, Text } from "../styles";
-import COLORS from "../styles/Colors";
-import DIMENS from "../styles/Dimens";
+import { Box, Button, COLORS, DIMENS, Flex, Select, Text } from "../styles";
 import { StorageUtils } from "../utils";
 
 const DEFAULT_EMAIL_COUNT = 100;

@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ClusterList, Header } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
 import { ALL_CLUSTERS } from "../res";
-import { Box, Colors as COLORS, Flex } from "../styles";
-import DIMENS from "../styles/Dimens";
+import { Box, COLORS, DIMENS, Flex } from "../styles";
 
 const Home = () => {
     const [clusters, setClusters] = useState({});

@@ -1,22 +1,18 @@
 import React from "react";
-import styled from "styled-components";
 
-import { Box, Flex, Text, TextEllipsis } from "../../styles";
-import COLORS from "../../styles/Colors";
+import {
+    Box,
+    COLORS,
+    DIMENS,
+    Flex,
+    FONT_SIZE,
+    TextEllipsis,
+} from "../../styles";
 import { ALL_CLUSTERS } from "../../res";
-import DIMENS from "../../styles/Dimens";
-
-const Body = styled(TextEllipsis)``;
-
-const Sender = styled(TextEllipsis)``;
-
-const Subject = styled(TextEllipsis)``;
 
 const CLIPPED_BODY_LENGTH = 50;
 
 const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
-    // console.log("email: ", email);
-
     const getRawBody = () => {
         const raw_body =
             typeof email.raw_body === Array
@@ -37,23 +33,23 @@ const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
             margin={{ bottom: 1 }}
             onClick={onClick}
             padding={10}
+            style={{ minHeight: DIMENS.EMAIL_HEIGHT }}
             width="100%"
         >
             <Flex>
                 <Box>
-                    <Sender fontSize={14}>{email.from_name}</Sender>
-                    <Subject fontSize={10}>{email.raw_subject}</Subject>
-                    <Body fontSize={10}>
+                    <TextEllipsis>
+                        {email.from_name || "Unknown Sender"}
+                    </TextEllipsis>
+                    <TextEllipsis fontSize={FONT_SIZE.S}>
+                        {email.raw_subject || "No subject"}
+                    </TextEllipsis>
+                    <TextEllipsis fontSize={FONT_SIZE.S}>
                         {getRawBody()}
                         {email.raw_body.length > CLIPPED_BODY_LENGTH
                             ? "..."
                             : ""}
-                    </Body>
-                </Box>
-                <Box height="100%" width={50}>
-                    <Text textAlign="center">
-                        {cluster >= 0 ? cluster : "-"}
-                    </Text>
+                    </TextEllipsis>
                 </Box>
             </Flex>
         </Box>

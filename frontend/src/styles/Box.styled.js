@@ -7,6 +7,7 @@ const Box = styled(BaseComponent)`
     background: ${({ background }) => background};
     border-color: ${({ borderColor }) => borderColor};
     border-style: ${({ borderStyle = "solid" }) => borderStyle};
+    box-sizing: border-box;
     cursor: ${({ clickable, cursor = "default" }) =>
         clickable ? "pointer" : cursor} !important;
     display: flex;

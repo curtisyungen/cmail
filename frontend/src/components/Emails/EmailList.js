@@ -69,6 +69,7 @@ const EmailList = ({
     return (
         <Box
             borderRadius={5}
+            height="100%"
             justifyContent="flex-start"
             style={{
                 overflowX: "hidden",

@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
+import { FONT_SIZE } from ".";
 import COLORS from "./Colors";
 
 const Text = styled("div")`
     color: ${({ color = COLORS.BLACK }) => color};
-    font-size: ${({ fontSize = 12 }) => `${fontSize}px`};
+    font-size: ${({ fontSize = FONT_SIZE.M }) => `${fontSize}px`};
     font-weight: ${({ bold }) => (bold ? 700 : 400)};
     text-align: ${({ center, textAlign = "left" }) =>
         center ? "center" : textAlign};
