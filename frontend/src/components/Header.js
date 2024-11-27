@@ -36,15 +36,7 @@ const Section = ({ children }) => {
     );
 };
 
-const Header = ({
-    clusters,
-    loading,
-    selectedCluster,
-    setClusters,
-    setEmailClusters,
-    setLoading,
-    setSelectedCluster,
-}) => {
+const Header = ({ loading, setClusters, setEmailClusters, setLoading }) => {
     const [emailCount, setEmailCount] = useState(DEFAULT_EMAIL_COUNT);
     const [error, setError] = useState("");
     const [generate, setGenerate] = useState(false);

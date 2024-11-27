@@ -1,5 +1,6 @@
 import React from "react";
 
+import EmptyStateView from "./EmptyStateView";
 import { Box, Flex, Text } from "../../styles";
 import COLORS from "../../styles/Colors";
 
@@ -11,7 +12,7 @@ const EmailReader = ({ selectedEmail }) => {
             background={COLORS.WHITE}
             borderRadius={5}
             padding={10}
-            style={{ height: "100%" }}
+            style={{ flex: 1, height: "100%" }}
         >
             <Text>{raw_subject}</Text>
             <Flex>

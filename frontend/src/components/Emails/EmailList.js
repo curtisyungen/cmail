@@ -60,6 +60,10 @@ const EmailList = ({
         }
     }
 
+    const handleEmailClick = (email) => {
+        setSelectedEmail(selectedEmail?.id === email.id ? null : email);
+    };
+
     if (loadingEmails) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     return (
@@ -78,7 +82,7 @@ const EmailList = ({
                     cluster={clusterMap[email.id]}
                     email={email}
                     isSelected={selectedEmail?.id === email.id}
-                    onClick={() => setSelectedEmail(email)}
+                    onClick={() => handleEmailClick(email)}
                     selectedCluster={selectedCluster}
                 />
             ))}

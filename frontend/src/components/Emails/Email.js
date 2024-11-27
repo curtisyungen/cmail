@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { Box, Flex, Text, TextEllipsis } from "../../styles";
 import COLORS from "../../styles/Colors";
+import { ALL_CLUSTERS } from "../../res";
+import DIMENS from "../../styles/Dimens";
 
 const Body = styled(TextEllipsis)``;
 
@@ -23,7 +25,7 @@ const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (selectedCluster !== "All" && cluster !== selectedCluster) {
+    if (selectedCluster !== ALL_CLUSTERS && cluster !== selectedCluster) {
         return null;
     }
 
@@ -31,6 +33,7 @@ const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
         <Box
             background={isSelected ? COLORS.BLUE_LIGHT : COLORS.WHITE}
             clickable={true}
+            height={DIMENS.EMAIL_HEIGHT}
             margin={{ bottom: 1 }}
             onClick={onClick}
             padding={10}

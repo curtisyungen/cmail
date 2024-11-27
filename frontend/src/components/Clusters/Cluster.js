@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+import { ALL_CLUSTERS } from "../../res";
 import { Box, Text } from "../../styles";
-import SortUtils from "../../utils/SortUtils";
 import COLORS from "../../styles/Colors";
+import SortUtils from "../../utils/SortUtils";
 
 const Cluster = ({ title, keywords = [], onClick, selectedCluster }) => {
     const [expanded, setExpanded] = useState(false);
@@ -27,12 +28,16 @@ const Cluster = ({ title, keywords = [], onClick, selectedCluster }) => {
     return (
         <Box
             background={isSelected ? COLORS.BLUE_LIGHT : COLORS.TRANSPARENT}
+            borderRadius={5}
             clickable={true}
             margin={1}
             onClick={() => onClick(title)}
-            padding={{ bottom: 3, top: 3 }}
+            padding={{ bottom: 3, left: 20, top: 3 }}
+            width={150}
         >
-            <Text bold={isSelected}>{title}</Text>
+            <Text bold={isSelected}>
+                {title === ALL_CLUSTERS ? ALL_CLUSTERS : `Cluster ${title}`}
+            </Text>
             {expanded &&
                 sortedKeywords.map(([word, frequency], idx) => (
                     <Text
