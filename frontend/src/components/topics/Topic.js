@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import { ALL_CLUSTERS } from "../../res";
-import { Box, Flex, FONT_SIZE, Text } from "../../styles";
+import { ALL_TOPICS } from "../../res";
+import { Box, Flex, Text } from "../../styles";
 import COLORS from "../../styles/Colors";
 import SortUtils from "../../utils/SortUtils";
 
-const Cluster = ({ title, keywords = [], onClick, selectedCluster, size }) => {
+const Topic = ({ title, keywords = [], onClick, selectedTopic, size }) => {
     const [expanded, setExpanded] = useState(false);
     const [maxFrequency, setMaxFrequency] = useState(0);
     const [sortedKeywords, setSortedKeywords] = useState([]);
 
-    const isSelected = title === selectedCluster;
+    const isSelected = title === selectedTopic;
 
     useEffect(() => {
         const sortedKeywords = SortUtils.sortData({ data: keywords });
@@ -37,7 +37,7 @@ const Cluster = ({ title, keywords = [], onClick, selectedCluster, size }) => {
         >
             <Flex justifyContent="space-between">
                 <Text bold={isSelected}>
-                    {title === ALL_CLUSTERS ? ALL_CLUSTERS : `Cluster ${title}`}
+                    {title === ALL_TOPICS ? ALL_TOPICS : title}
                 </Text>
                 <Text color={COLORS.GRAY_DARK}>{size}</Text>
             </Flex>
@@ -45,4 +45,4 @@ const Cluster = ({ title, keywords = [], onClick, selectedCluster, size }) => {
     );
 };
 
-export default Cluster;
+export default Topic;

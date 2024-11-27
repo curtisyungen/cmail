@@ -48,14 +48,14 @@ const DataActions = ({ activeAction, setActiveAction }) => {
                     alignItems="center"
                     borderRadius={5}
                     clickable={!activeAction}
-                    height={DIMENS.HEADER_SECTION_HEIGHT}
+                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
                         activeAction ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
                     onClick={handleGenerate}
                     style={{ flex: 1 }}
-                    width={DIMENS.HEADER_SECTION_HEIGHT}
+                    width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
                         color={

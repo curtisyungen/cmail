@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 
-import { ActionBar, ClusterList, Navbar, Sidebar } from "../components";
+import { ActionBar, Navbar, Sidebar, TopicsList } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
-import { ALL_CLUSTERS } from "../res";
+import { ALL_TOPICS } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 
 const Home = () => {
     const [activeAction, setActiveAction] = useState(null);
-    const [clusters, setClusters] = useState({});
-    const [clusterMap, setClusterMap] = useState({});
-    const [emailClusters, setEmailClusters] = useState([]);
+    const [topics, setTopics] = useState({});
+    const [topicsMap, setTopicsMap] = useState({});
+    const [emailTopics, setEmailTopics] = useState([]);
     const [refreshEmails, setRefreshEmails] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCluster, setSelectedCluster] = useState(ALL_CLUSTERS);
+    const [selectedTopic, setSelectedTopic] = useState(ALL_TOPICS);
     const [selectedEmail, setSelectedEmail] = useState(null);
 
     useEffect(() => {
@@ -22,20 +22,17 @@ const Home = () => {
     }, [refreshEmails]);
 
     useEffect(() => {
-        if (emailClusters) {
-            const clusterMap = emailClusters.reduce(
-                (map, { cluster_label, id }) => {
-                    map[id] = cluster_label;
-                    return map;
-                },
-                {}
-            );
-            setClusterMap(clusterMap);
+        if (emailTopics) {
+            const topicsMap = emailTopics.reduce((map, { topic_label, id }) => {
+                map[id] = topic_label;
+                return map;
+            }, {});
+            setTopicsMap(topicsMap);
         }
-    }, [emailClusters]);
+    }, [emailTopics]);
 
-    const handleSetClusters = (clusters) => {
-        setClusters(clusters);
+    const handleSetTopics = (topics) => {
+        setTopics(topics);
         setRefreshEmails(true);
     };
 
@@ -58,12 +55,12 @@ const Home = () => {
                 >
                     <ActionBar
                         activeAction={activeAction}
-                        clusters={clusters}
-                        selectedCluster={selectedCluster}
+                        selectedTopic={selectedTopic}
                         setActiveAction={setActiveAction}
-                        setClusters={handleSetClusters}
-                        setEmailClusters={setEmailClusters}
-                        setSelectedCluster={setSelectedCluster}
+                        setEmailTopics={setEmailTopics}
+                        setSelectedTopic={setSelectedTopic}
+                        setTopics={handleSetTopics}
+                        topics={topics}
                     />
                     <Box height={DIMENS.SPACING_STANDARD} width="100%" />
                     <Box
@@ -75,18 +72,18 @@ const Home = () => {
                             alignItems="flex-start"
                             style={{ overflow: "hidden" }}
                         >
-                            <ClusterList
-                                clusters={clusters}
-                                clusterMap={clusterMap}
-                                selectedCluster={selectedCluster}
-                                setSelectedCluster={setSelectedCluster}
+                            <TopicsList
+                                selectedTopic={selectedTopic}
+                                setSelectedTopic={setSelectedTopic}
+                                topics={topics}
+                                topicsMap={topicsMap}
                             />
                             <EmailList
-                                clusterMap={clusterMap}
                                 refreshEmails={refreshEmails}
-                                selectedCluster={selectedCluster}
                                 selectedEmail={selectedEmail}
+                                selectedTopic={selectedTopic}
                                 setSelectedEmail={setSelectedEmail}
+                                topicsMap={topicsMap}
                             />
                             <Box
                                 height="100%"

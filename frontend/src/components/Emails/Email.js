@@ -1,11 +1,11 @@
 import React from "react";
 
 import { Box, COLORS, DIMENS, FONT_SIZE, TextEllipsis } from "../../styles";
-import { ALL_CLUSTERS, UNKNOWN_SENDER } from "../../res";
+import { ALL_TOPICS, UNKNOWN_SENDER } from "../../res";
 
 const CLIPPED_BODY_LENGTH = 50;
 
-const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
+const Email = ({ email, isSelected, onClick, selectedTopic, topic }) => {
     const getRawBody = () => {
         const raw_body =
             typeof email.raw_body === Array
@@ -14,7 +14,7 @@ const Email = ({ cluster, email, isSelected, onClick, selectedCluster }) => {
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (selectedCluster !== ALL_CLUSTERS && cluster !== selectedCluster) {
+    if (selectedTopic !== ALL_TOPICS && topic !== selectedTopic) {
         return null;
     }
 

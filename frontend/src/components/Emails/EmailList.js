@@ -5,11 +5,11 @@ import Email from "./Email";
 import { Box, COLORS, DIMENS } from "../../styles";
 
 const EmailList = ({
-    clusterMap,
     refreshEmails,
-    selectedCluster,
     selectedEmail,
+    selectedTopic,
     setSelectedEmail,
+    topicsMap,
 }) => {
     const [emails, setEmails] = useState([]);
     const [error, setError] = useState(null);
@@ -63,11 +63,11 @@ const EmailList = ({
             {emails.map((email, idx) => (
                 <Email
                     key={idx}
-                    cluster={clusterMap[email.id]}
                     email={email}
                     isSelected={selectedEmail?.id === email.id}
                     onClick={() => handleEmailClick(email)}
-                    selectedCluster={selectedCluster}
+                    selectedTopic={selectedTopic}
+                    topic={topicsMap[email.id]}
                 />
             ))}
         </Box>

@@ -9,7 +9,7 @@ const Divider = () => {
     return (
         <Box
             background={COLORS.BORDER}
-            height={DIMENS.HEADER_HEIGHT - 10}
+            height={DIMENS.ACTION_BAR_HEIGHT - 10}
             margin={{ left: 5, right: 5 }}
             width={1}
         />
@@ -20,7 +20,7 @@ const Section = ({ children }) => {
     return (
         <Box
             alignItems="center"
-            height={DIMENS.HEADER_SECTION_HEIGHT}
+            height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
             padding={5}
             width="fit-content"
         >
@@ -29,17 +29,17 @@ const Section = ({ children }) => {
     );
 };
 
-const Header = ({
+const ActionBar = ({
     activeAction,
-    setClusters,
-    setEmailClusters,
     setActiveAction,
+    setEmailTopics,
+    setTopics,
 }) => {
     return (
         <Box
             background={COLORS.WHITE}
             borderRadius={5}
-            height={DIMENS.HEADER_HEIGHT}
+            height={DIMENS.ACTION_BAR_HEIGHT}
             padding={{ left: 5 }}
         >
             <Flex>
@@ -47,8 +47,8 @@ const Header = ({
                     <KMeansActions
                         activeAction={activeAction}
                         setActiveAction={setActiveAction}
-                        setClusters={setClusters}
-                        setEmailClusters={setEmailClusters}
+                        setTopics={setTopics}
+                        setEmailTopics={setEmailTopics}
                     />
                 </Section>
                 <Divider />
@@ -67,4 +67,4 @@ const Header = ({
     );
 };
 
-export default Header;
+export default ActionBar;
