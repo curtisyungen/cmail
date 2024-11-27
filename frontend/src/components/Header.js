@@ -77,22 +77,36 @@ const Header = ({
         }
     };
 
-    const handleRun = async () => {
+    const handleRunKmeans = async () => {
         if (activeAction) {
             return;
         }
-        setActiveAction(ACTION.RUN);
+        setActiveAction(ACTION.KMEANS);
         setClusters([]);
         setError("");
 
         try {
-            const res = await axios.post("/api/run-model", {
+            const res = await axios.post("/api/run-kmeans", {
                 numClusters,
             });
             setClusters(res.data.clusters);
             setEmailClusters(res.data.email_clusters);
             StorageUtils.setItem(LS_CLUSTERS, res.data.clusters);
             StorageUtils.setItem(LS_EMAIL_CLUSTERS, res.data.email_clusters);
+        } catch (error) {
+            setError(error.response?.data?.message || "An error occurred");
+        } finally {
+            setActiveAction(null);
+        }
+    };
+
+    const handleRunLDA = async () => {
+        if (activeAction) {
+            return;
+        }
+        setActiveAction(ACTION.LDA);
+        try {
+            const res = await axios.post("/api/run-lda");
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         } finally {
@@ -120,7 +134,7 @@ const Header = ({
                                     ? COLORS.TRANSPARENT
                                     : COLORS.GRAY_LIGHT
                             }
-                            onClick={handleRun}
+                            onClick={handleRunKmeans}
                             margin={{ right: DIMENS.SPACING_STANDARD }}
                             style={{ flex: 1 }}
                             width={SECTION_HEIGHT}
@@ -136,7 +150,7 @@ const Header = ({
                                 style={{ marginBottom: "5px" }}
                             />
                             <Text center fontSize={FONT_SIZE.S}>
-                                {activeAction === ACTION.RUN
+                                {activeAction === ACTION.KMEANS
                                     ? "Running"
                                     : "Run"}
                             </Text>
@@ -168,6 +182,42 @@ const Header = ({
                         </Box>
                     </Flex>
                     <Text fontSize={FONT_SIZE.XS}>Run K-means</Text>
+                </Section>
+                <Divider />
+                <Section>
+                    <Flex>
+                        <Box
+                            alignItems="center"
+                            borderRadius={5}
+                            clickable={!activeAction}
+                            height={SECTION_HEIGHT}
+                            hoverBackground={
+                                activeAction
+                                    ? COLORS.TRANSPARENT
+                                    : COLORS.GRAY_LIGHT
+                            }
+                            onClick={handleRunLDA}
+                            style={{ flex: 1 }}
+                            width={SECTION_HEIGHT}
+                        >
+                            <Icon
+                                color={
+                                    activeAction
+                                        ? COLORS.GRAY_MEDIUM
+                                        : COLORS.BLUE_DARK
+                                }
+                                name={ICON.RUN}
+                                size={26}
+                                style={{ marginBottom: "5px" }}
+                            />
+                            <Text center fontSize={FONT_SIZE.S}>
+                                {activeAction === ACTION.LDA
+                                    ? "Running"
+                                    : "Run"}
+                            </Text>
+                        </Box>
+                    </Flex>
+                    <Text fontSize={FONT_SIZE.XS}>Run LDA</Text>
                 </Section>
                 <Divider />
                 <Section>

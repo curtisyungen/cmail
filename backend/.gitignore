@@ -1,4 +1,3 @@
 __pycache__
 env
-data/emails.json
-data/emails.mbox
+data

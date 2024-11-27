@@ -1,13 +1,9 @@
 import json
 import mailbox
 import re
-from config import EMAILS, MBOX_DATA, RAW_EMAILS
+from config import EMAILS, MBOX_DATA
 from datetime import datetime
 from email.header import decode_header, Header
-
-def clean_and_tokenize(text):
-    words = text.lower().split()
-    return [word for word in words if word.isalpha()]
 
 def is_valid_body(content):
     if isinstance(content, list):
