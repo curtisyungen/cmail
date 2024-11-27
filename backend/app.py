@@ -29,10 +29,13 @@ def run_kmeans():
 @app.route('/api/run-lda', methods=['POST'])
 def run_lda():
     try:
-        run_lda_model()
+        topics, dominant_topics, email_assignments = run_lda_model()
         response = {
             "status": "success",
-            "message": "Ran LDA model."
+            "message": "Ran LDA model.",
+            "topics": topics,
+            "dominant_topics": dominant_topics,
+            "email_assignments": email_assignments
         }
         return jsonify(response), 200
     except Exception as e:

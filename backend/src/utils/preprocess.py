@@ -1,6 +1,9 @@
+import json
+import pandas as pd
 import re
 import requests
 from nltk.stem import WordNetLemmatizer
+from config import EMAILS
 
 lemmatizer = WordNetLemmatizer()
 stopwords_list = requests.get("https://gist.githubusercontent.com/rg089/35e00abf8941d72d419224cfd5b5925d/raw/12d899b70156fd0041fa9778d657330b024b959c/stopwords.txt").content
@@ -30,3 +33,12 @@ def clean_body(df):
 def clean_and_tokenize(text):
     words = text.lower().split()
     return [word for word in words if word.isalpha()]
+
+def load_data():
+    print("Loading data...")
+    data = []
+    with open(EMAILS, 'r', encoding="utf-8") as file:
+        data = json.load(file)
+    cleaned_df = clean_body(pd.DataFrame(data))
+    print("Complete.")
+    return cleaned_df

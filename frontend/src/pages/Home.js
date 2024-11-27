@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { ClusterList, Header, Navbar, Sidebar } from "../components";
+import { ActionBar, ClusterList, Navbar, Sidebar } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
 import { ALL_CLUSTERS } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
@@ -56,7 +56,7 @@ const Home = () => {
                     style={{ flex: 1 }}
                     width="unset"
                 >
-                    <Header
+                    <ActionBar
                         activeAction={activeAction}
                         clusters={clusters}
                         selectedCluster={selectedCluster}

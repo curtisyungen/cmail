@@ -17,8 +17,21 @@ def generate_corpus(df):
     print("Generation complete.")
     return tfidf_corpus, dictionary
 
+def load_corpus():
+    print("Loading corpus...")
+    try:
+        corpus = corpora.MmCorpus.load(CORPUS_PATH)
+        dictionary = corpora.Dictionary.load(DICT_PATH)
+        print("Success.")
+        return corpus, dictionary
+    except Exception as e:
+        print(f"Error loading corpus: {e}")
+        
 def save_corpus(corpus, dictionary):
     print("Saving corpus...")
-    corpora.MmCorpus.serialize(CORPUS_PATH, corpus)
-    dictionary.save(DICT_PATH)
-    print("Saving complete.")
+    try:
+        corpora.MmCorpus.serialize(CORPUS_PATH, corpus)
+        dictionary.save(DICT_PATH)
+        print("Saving complete.")
+    except Exception as e:
+        print(f"Error saving corpus: {e}")

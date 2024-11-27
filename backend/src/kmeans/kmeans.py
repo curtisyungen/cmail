@@ -1,10 +1,7 @@
-import json
 import numpy as np
-import pandas as pd
 from collections import Counter
-from config import EMAILS
 from .feature_extraction import extract_features_from_dataframe
-from ..utils.preprocess import clean_body, clean_and_tokenize
+from ..utils.preprocess import clean_and_tokenize, load_data
 
 class KMeans:
     def __init__(self, k, max_iterations=100, tolerance=1e-4, random_state=42):
@@ -41,12 +38,6 @@ class KMeans:
     
     def predict(self, X):
         return self.assign_clusters(X)
-    
-def load_data():
-    data = []
-    with open(EMAILS, 'r', encoding="utf-8") as file:
-        data = json.load(file)
-    return clean_body(pd.DataFrame(data))
 
 def run_kmeans(num_clusters):
     df = load_data()
