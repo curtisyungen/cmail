@@ -4,8 +4,8 @@ import { ALL_TOPICS } from "../../res";
 import { Box, Flex, Text } from "../../styles";
 import COLORS from "../../styles/Colors";
 
-const Topic = ({ title, onClick, selectedTopic, size }) => {
-    const isSelected = title === selectedTopic;
+const Topic = ({ id, title, onClick, selectedTopic, size }) => {
+    const isSelected = id === selectedTopic;
 
     return (
         <Box

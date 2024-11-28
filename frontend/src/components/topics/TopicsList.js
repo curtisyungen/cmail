@@ -16,18 +16,17 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
         if (!topicsMap) {
             return;
         }
-        // const totals = {};
-        // for (const topic of Object.keys(topics)) {
-        //     if (!totals[topic]) {
-        //         totals[topic] = 0;
-        //     }
-        //     for (const topicsList of topicsMap) {
-        //         if (topicsList.includes(parseInt(topic))) {
-        //             totals[topic] += 1;
-        //         }
-        //     }
-        // }
-        // setTopicTotals(totals);
+        const totals = {};
+        let totalEmails = 0;
+        for (const { cluster_label } of topicsMap) {
+            if (!totals[cluster_label]) {
+                totals[cluster_label] = 0;
+            }
+            totals[cluster_label] += 1;
+            totalEmails += 1;
+        }
+        totals[ALL_TOPICS] = totalEmails;
+        setTopicTotals(totals);
     };
 
     const handleTopicClick = (topic) => {
