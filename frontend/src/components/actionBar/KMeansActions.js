@@ -22,17 +22,17 @@ const LS_EMAIL_CLUSTERS = "email_clusters";
 const KMeansActions = ({
     activeAction,
     setActiveAction,
-    setTopics: setClusters,
     setEmailTopics: setEmailClusters,
+    setTopics: setClusters,
 }) => {
     const [error, setError] = useState(null);
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
 
     useEffect(() => {
-        const savedClusters = StorageUtils.getItem(LS_CLUSTERS);
-        const savedEmailClusters = StorageUtils.getItem(LS_EMAIL_CLUSTERS);
-        setClusters(savedClusters || []);
-        setEmailClusters(savedEmailClusters || []);
+        // const savedClusters = StorageUtils.getItem(LS_CLUSTERS);
+        // const savedEmailClusters = StorageUtils.getItem(LS_EMAIL_CLUSTERS);
+        // setClusters(savedClusters || []);
+        // setEmailClusters(savedEmailClusters || []);
     }, []);
 
     const handleRunKmeans = async () => {
@@ -47,10 +47,11 @@ const KMeansActions = ({
             const res = await axios.post("/api/run-kmeans", {
                 numClusters,
             });
+            console.log("response: ", res.data);
             setClusters(res.data.clusters);
             setEmailClusters(res.data.email_clusters);
-            StorageUtils.setItem(LS_CLUSTERS, res.data.clusters);
-            StorageUtils.setItem(LS_EMAIL_CLUSTERS, res.data.email_clusters);
+            // StorageUtils.setItem(LS_CLUSTERS, res.data.clusters);
+            // StorageUtils.setItem(LS_EMAIL_CLUSTERS, res.data.email_clusters);
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         } finally {

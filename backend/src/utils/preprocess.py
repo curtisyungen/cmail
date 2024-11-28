@@ -36,5 +36,5 @@ def load_data():
     with open(EMAILS, 'r', encoding="utf-8") as file:
         data = json.load(file)
     cleaned_df = clean_body(pd.DataFrame(data))
-    print("Complete.")
+    print("Loading complete.")
     return cleaned_df

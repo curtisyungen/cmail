@@ -1,34 +1,59 @@
 from collections import Counter
 from datetime import datetime
 import pandas as pd
+import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def compute_sender_freqs(sender_column):
-    sender_counts = Counter(sender_column)
-    total_senders = len(sender_column)
-    return { sender: count / total_senders for sender, count in sender_counts.items() }
+    try:
+        sender_column = sender_column.fillna("").astype(str)
 
+        email_pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        cleaned_senders = sender_column.apply(lambda x: re.sub(r'\s+|<.*?>', '', x).strip())
+        valid_senders = cleaned_senders[cleaned_senders.apply(lambda x: re.match(email_pattern, x) is not None)]
+
+        sender_counts = Counter(valid_senders)
+        sender_counts = {k: int(v) for k, v in sender_counts.items()}
+        total_senders = len(valid_senders)
+
+        if total_senders == 0:
+            return {}
+        
+        sender_freqs = {}
+        for sender, count in sender_counts.items():
+            freq = count / total_senders
+            sender_freqs[sender] = freq
+        return sender_freqs
+    except Exception as e:
+        print(f"Error computing sender frequencies: {e}")
+        return {}
+    
 def process_subject(subject):
     return subject.lower().strip()
 
 def process_time(timestamp):
-    if isinstance(timestamp, pd.Timestamp):
-        date_time = timestamp
-    else:
-        date_time = datetime.fromtimestamp(timestamp / 1000) if timestamp else None
-    
-    if date_time:
-        return {
-            "hour": date_time.hour / 23.0,
-            "day": date_time.day / 31.0,
-            "weekday": date_time.weekday() / 6.0
-        }
-    else:
-        return {
-            "hour": 0,
-            "day": 0,
-            "weekday": 0
-        }
+    try:
+        if isinstance(timestamp, pd.Timestamp):
+            date_time = timestamp
+        elif isinstance(timestamp, (int, float)):
+            date_time = datetime.fromtimestamp(timestamp / 1000)
+        else:
+            date_time = None
+        
+        if date_time:
+            return {
+                "hour": date_time.hour / 23.0,
+                "day": date_time.day / 31.0,
+                "weekday": date_time.weekday() / 6.0
+            }
+        else:
+            return {
+                "hour": 0,
+                "day": 0,
+                "weekday": 0
+            }
+    except Exception as e:
+        print(f"Error processing time: {e}")
     
 def run_tfidf(df):
     vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 4))
@@ -49,20 +74,23 @@ def extract_features(email_entry, sender_freqs):
     return features
 
 def extract_features_from_dataframe(df):
-    sender_freqs = compute_sender_freqs(df['from_email'])
+    try:
+        sender_freqs = compute_sender_freqs(df['from_email'])
 
-    extracted_features = []
-    total_rows = len(df)
-    
-    for idx, row in df.iterrows():
-        if idx % 100 == 0 and idx > 0:
-            print(f"Processed {idx}/{total_rows} rows")
-        features = extract_features(row, sender_freqs)
-        extracted_features.append(features)
-    print(f"Processing complete.")
+        extracted_features = []
+        total_rows = len(df)
+        
+        for idx, row in df.iterrows():
+            if idx % 100 == 0 and idx > 0:
+                print(f"Processed {idx}/{total_rows} rows")
+            features = extract_features(row, sender_freqs)
+            extracted_features.append(features)
+        print(f"Processing complete.")
 
-    tfidf_df = run_tfidf(df)
-    features_df = pd.DataFrame(extracted_features).fillna(0)
-    final_df = pd.concat([tfidf_df, features_df], axis=1)
+        tfidf_df = run_tfidf(df)
+        features_df = pd.DataFrame(extracted_features).fillna(0)
+        final_df = pd.concat([tfidf_df, features_df], axis=1)
 
-    return final_df
+        return final_df
+    except Exception as e:
+        print(f"Error extracting features: {e}")
