@@ -33,17 +33,19 @@ def run_lda():
     no_below = data.get("noBelow", 2)
     no_above = data.get("noAbove", 0.5)
     try:
-        topics, dominant_topics, email_assignments = run_lda_model(
+        topics, dominant_topics, email_assignments, topic_labels = run_lda_model(
             num_topics, 
             no_below, 
             no_above
         )
+        print(f"topic_labels: {topic_labels}")
         response = {
             "status": "success",
             "message": "Ran LDA model.",
             "topics": topics,
             "dominant_topics": dominant_topics,
-            "email_assignments": email_assignments
+            "email_assignments": email_assignments,
+            "topic_labels": topic_labels
         }
         return jsonify(response), 200
     except Exception as e:

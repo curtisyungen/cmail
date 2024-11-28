@@ -4,7 +4,7 @@ from .feature_extraction import extract_features_from_dataframe
 from ..utils.preprocess import clean_and_tokenize, load_data
 
 class KMeans:
-    def __init__(self, k, max_iterations=100, tolerance=1e-4, random_state=42):
+    def __init__(self, k, max_iterations=100, tolerance=1e-4, random_state=26):
         self.k = k
         self.max_iterations = max_iterations
         self.tolerance = tolerance
@@ -42,14 +42,10 @@ class KMeans:
 def run_kmeans(num_clusters):
     df = load_data()
 
-    recipient_to_id = {}
-    sender_to_id = {}
-    subject_to_id = {}
-
-    features_df = extract_features_from_dataframe(df, recipient_to_id, sender_to_id, subject_to_id)
+    features_df = extract_features_from_dataframe(df)
     X = np.array(features_df.values, dtype=float)
 
-    kmeans = KMeans(k = num_clusters)
+    kmeans = KMeans(k = num_clusters, random_state=26)
     kmeans.fit(X)
     df['cluster_label'] = kmeans.labels
 

@@ -44,6 +44,15 @@ const ActionBar = ({
         >
             <Flex>
                 <Section>
+                    <KMeansActions
+                        activeAction={activeAction}
+                        setActiveAction={setActiveAction}
+                        setEmailTopics={setEmailTopics}
+                        setTopics={setTopics}
+                    />
+                </Section>
+                <Divider />
+                <Section>
                     <LdaActions
                         activeAction={activeAction}
                         setActiveAction={setActiveAction}

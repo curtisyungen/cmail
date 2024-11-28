@@ -16,18 +16,18 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
         if (!topicsMap) {
             return;
         }
-        const totals = {};
-        for (const topic of Object.keys(topics)) {
-            if (!totals[topic]) {
-                totals[topic] = 0;
-            }
-            for (const topicsList of topicsMap) {
-                if (topicsList.includes(parseInt(topic))) {
-                    totals[topic] += 1;
-                }
-            }
-        }
-        setTopicTotals(totals);
+        // const totals = {};
+        // for (const topic of Object.keys(topics)) {
+        //     if (!totals[topic]) {
+        //         totals[topic] = 0;
+        //     }
+        //     for (const topicsList of topicsMap) {
+        //         if (topicsList.includes(parseInt(topic))) {
+        //             totals[topic] += 1;
+        //         }
+        //     }
+        // }
+        // setTopicTotals(totals);
     };
 
     const handleTopicClick = (topic) => {

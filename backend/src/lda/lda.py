@@ -1,5 +1,6 @@
 from gensim.models.ldamodel import LdaModel
 from config import LDA_MODEL_PATH, stopwords
+from .label_generator import generate_smart_label
 from .feature_extraction import generate_corpus, load_corpus, save_corpus
 from ..utils.preprocess import load_data
 
@@ -14,17 +15,20 @@ def generate_new_corpus(no_below, no_above):
     save_corpus(corpus, dictionary)
     return corpus, dictionary
 
-def generate_topic_labels(lda_model, num_words):
-    topic_labels = []
-    topics = lda_model.print_topics(num_words=num_words)
-    for topic in topics:
-        words = [word.split("*")[1].replace('"', '').strip() for word in topic[1].split(" + ")]
-        label = ' '.join(words[:num_words])
-        label = clean_topic_label(label)
-        topic_labels.append(label)
-    return topic_labels
+def assign_labels_to_topics(lda_model):
+    print("Assigning labels to topics...")
+    try:
+        topics = lda_model.show_topics(num_topics=-1, num_words=10, formatted=False)
+        topic_labels = {}
+        for topic_id, keywords in topics:
+            keyword_list = [word for word, _ in keywords]
+            topic_labels[topic_id] = generate_smart_label(keyword_list)
+        return topic_labels
+    except Exception as e:
+        print(f"Error assigning labels to topics: {e}")
 
 def get_email_topics(lda_model, corpus, threshold = 0.1):
+    print("Getting email topics...")
     try:
         email_assignments = []
         dominant_topics = []
@@ -39,6 +43,7 @@ def get_email_topics(lda_model, corpus, threshold = 0.1):
         print(f"Error getting email topics: {e}")
 
 def print_topics(lda_model):
+    print("Printing topics...")
     try:
         topics = lda_model.print_topics(num_words=10)
         return topics
@@ -62,12 +67,14 @@ def train_model(corpus, dictionary, num_topics):
         print(f"Error training model: {e}")
 
 def run_lda(num_topics: int, no_below: int, no_above: float):
-    print(f"Running LDA with no_below {no_below}, no_above {no_above}, and num_topics {num_topics}")
-    corpus, dictionary = generate_new_corpus(no_below, no_above)
-    lda_model = train_model(corpus, dictionary, num_topics)
-    topic_labels = generate_topic_labels(lda_model)
-    topics = print_topics(lda_model)
-    email_assignments, dominant_topics = get_email_topics(lda_model, corpus)
-
-    return topics, dominant_topics, email_assignments, topic_labels
+    try:
+        print(f"Running LDA with no_below {no_below}, no_above {no_above}, and num_topics {num_topics}")
+        corpus, dictionary = generate_new_corpus(no_below, no_above)
+        lda_model = train_model(corpus, dictionary, num_topics)
+        topics = print_topics(lda_model)
+        email_assignments, dominant_topics = get_email_topics(lda_model, corpus)
+        topic_labels = assign_labels_to_topics(lda_model)
+        return topics, dominant_topics, email_assignments, topic_labels
+    except Exception as e:
+        print(f"Error running LDA: {e}")
 
