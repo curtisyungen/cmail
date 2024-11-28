@@ -1,6 +1,7 @@
 export { default as Box } from "./Box.styled.js";
 export { default as Button } from "./Button.styled.js";
 export { default as COLORS } from "./Colors.js";
+export { CATEGORY_COLORS } from "./Colors.js";
 export { default as DIMENS } from "./Dimens.js";
 export { default as Flex } from "./Flex.styled.js";
 export { default as List } from "./List.styled.js";

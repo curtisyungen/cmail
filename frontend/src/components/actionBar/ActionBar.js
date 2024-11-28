@@ -1,5 +1,6 @@
 import React from "react";
 
+import CategoryActions from "./CategoryActions";
 import DataActions from "./DataActions";
 import KMeansActions from "./KMeansActions";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
@@ -56,6 +57,10 @@ const ActionBar = ({
                         activeAction={activeAction}
                         setActiveAction={setActiveAction}
                     />
+                </Section>
+                <Divider />
+                <Section>
+                    <CategoryActions activeAction={activeAction} />
                 </Section>
             </Flex>
         </Box>

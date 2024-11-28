@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { Icon } from "../common";
-import { ACTION } from "../../res";
+import { ACTION, DEFAULT_CATEGORIES, LS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,
@@ -16,8 +16,6 @@ import {
 import { SortUtils, StorageUtils } from "../../utils";
 
 const DEFAULT_NUM_CLUSTERS = 12;
-const LS_CLUSTERS = "clusters";
-const LS_EMAIL_CLUSTERS = "email_clusters";
 
 const KMeansActions = ({
     activeAction,
@@ -29,11 +27,10 @@ const KMeansActions = ({
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
 
     useEffect(() => {
-        const savedClusters = StorageUtils.getItem(LS_CLUSTERS);
-        const savedEmailClusters = StorageUtils.getItem(LS_EMAIL_CLUSTERS);
+        const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
+        const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
         setClusters(savedClusters || []);
         setEmailClusters(savedEmailClusters || []);
-        console.log("savedEmailClusters: ", savedEmailClusters);
     }, []);
 
     const handleRunKmeans = async () => {
@@ -44,9 +41,12 @@ const KMeansActions = ({
         setClusters([]);
         setError("");
 
+        const categories =
+            StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
         try {
             const res = await axios.post("/api/run-kmeans", {
                 numClusters,
+                categories: categories.map(({ name }) => name),
             });
             console.log("response: ", res.data);
             const clusterLabels = res.data.lda_topics.map(
@@ -54,8 +54,8 @@ const KMeansActions = ({
             );
             setClusters(SortUtils.sortData({ data: clusterLabels }));
             setEmailClusters(res.data.email_clusters);
-            StorageUtils.setItem(LS_CLUSTERS, clusterLabels);
-            StorageUtils.setItem(LS_EMAIL_CLUSTERS, res.data.email_clusters);
+            StorageUtils.setItem(LS.CLUSTERS, clusterLabels);
+            StorageUtils.setItem(LS.EMAIL_CLUSTERS, res.data.email_clusters);
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         } finally {

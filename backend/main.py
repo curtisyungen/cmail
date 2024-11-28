@@ -2,10 +2,11 @@ from src.kmeans.kmeans import run_kmeans
 from src.lda.lda import run_lda
 from src.utils.mbox_to_json import mbox_to_json
 
-def run_kmeans_model(num_clusters: int = 12):
+def run_kmeans_model(num_clusters: int = 12, categories: list[str] = []):
     print(f"Running k-means with {num_clusters} clusters...")
     return run_kmeans(
-        num_clusters=num_clusters
+        num_clusters=num_clusters,
+        categories=categories
     )
 
 def run_lda_model(num_topics: int, no_below: int, no_above: float):

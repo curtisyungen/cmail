@@ -8,14 +8,17 @@ import {
     FaEnvelopeOpenText,
     FaFileAlt,
     FaRegEnvelope,
+    FaRegTrashAlt,
     FaSitemap,
     FaStroopwafel,
+    FaTag,
     FaTh,
     FaUserFriends,
 } from "react-icons/fa";
 
 export const ICON = {
     CALENDAR: "CALENDAR",
+    CATEGORY: "CATEGORY",
     CHECK: "CHECK",
     CLOUD: "CLOUD",
     GENERATE: "GENERATE",
@@ -25,11 +28,13 @@ export const ICON = {
     RUN: "RUN",
     STROOP: "STROOP",
     TABLE: "TABLE",
+    TRASH: "TRASH",
     USERS: "USERS",
 };
 
 export const FA_COMPONENTS = {
     [ICON.CALENDAR]: FaCalendarAlt,
+    [ICON.CATEGORY]: FaTag,
     [ICON.CHECK]: FaCheck,
     [ICON.CLOUD]: FaCloud,
     [ICON.GENERATE]: FaRegEnvelope,
@@ -39,6 +44,7 @@ export const FA_COMPONENTS = {
     [ICON.RUN]: FaAtom,
     [ICON.STROOP]: FaStroopwafel,
     [ICON.TABLE]: FaTh,
+    [ICON.TRASH]: FaRegTrashAlt,
     [ICON.USERS]: FaUserFriends,
 };
 
