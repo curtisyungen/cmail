@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
-import CategoryActions from "./CategoryActions";
 import DataActions from "./DataActions";
 import KMeansActions from "./KMeansActions";
+import LdaActions from "./LdaActions";
+import OtherActions from "./OtherActions";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
 
 const Divider = () => {
@@ -29,12 +30,20 @@ const Section = ({ children }) => {
     );
 };
 
+const DEFAULT_NO_ABOVE = 50; // %
+const DEFAULT_NO_BELOW = 2;
+
 const ActionBar = ({
     activeAction,
     setActiveAction,
     setEmailTopics,
     setTopics,
 }) => {
+    const [ldaConfig, setLdaConfig] = useState({
+        noBelow: DEFAULT_NO_BELOW,
+        noAbove: DEFAULT_NO_ABOVE,
+    });
+
     return (
         <Box
             background={COLORS.WHITE}
@@ -47,6 +56,7 @@ const ActionBar = ({
                     <KMeansActions
                         activeAction={activeAction}
                         setActiveAction={setActiveAction}
+                        ldaConfig={ldaConfig}
                         setEmailTopics={setEmailTopics}
                         setTopics={setTopics}
                     />
@@ -60,7 +70,15 @@ const ActionBar = ({
                 </Section>
                 <Divider />
                 <Section>
-                    <CategoryActions activeAction={activeAction} />
+                    <LdaActions
+                        activeAction={activeAction}
+                        ldaConfig={ldaConfig}
+                        setLdaConfig={setLdaConfig}
+                    />
+                </Section>
+                <Divider />
+                <Section>
+                    <OtherActions activeAction={activeAction} />
                 </Section>
             </Flex>
         </Box>

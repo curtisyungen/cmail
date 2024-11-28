@@ -1,4 +1,8 @@
 class StorageUtils {
+    static clearAll() {
+        localStorage.clear();
+    }
+
     static getItem(key) {
         const value = localStorage.getItem(key);
         return value ? JSON.parse(value) : null;

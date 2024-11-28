@@ -19,6 +19,7 @@ const DEFAULT_NUM_CLUSTERS = 12;
 
 const KMeansActions = ({
     activeAction,
+    ldaConfig,
     setActiveAction,
     setEmailTopics: setEmailClusters,
     setTopics: setClusters,
@@ -47,6 +48,7 @@ const KMeansActions = ({
             const res = await axios.post("/api/run-kmeans", {
                 numClusters,
                 categories: categories.map(({ name }) => name),
+                lda_config: ldaConfig,
             });
             console.log("response: ", res.data);
 
@@ -118,7 +120,7 @@ const KMeansActions = ({
                     </Text>
                 </Box>
             </Flex>
-            <Text fontSize={FONT_SIZE.XS}>Run K-means</Text>
+            <Text fontSize={FONT_SIZE.XS}>K-means</Text>
         </>
     );
 };
