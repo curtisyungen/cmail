@@ -13,7 +13,7 @@ import {
     Select,
     Text,
 } from "../../styles";
-import { StorageUtils } from "../../utils";
+import { SortUtils, StorageUtils } from "../../utils";
 
 const DEFAULT_NUM_CLUSTERS = 12;
 const LS_CLUSTERS = "clusters";
@@ -29,10 +29,11 @@ const KMeansActions = ({
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
 
     useEffect(() => {
-        // const savedClusters = StorageUtils.getItem(LS_CLUSTERS);
-        // const savedEmailClusters = StorageUtils.getItem(LS_EMAIL_CLUSTERS);
-        // setClusters(savedClusters || []);
-        // setEmailClusters(savedEmailClusters || []);
+        const savedClusters = StorageUtils.getItem(LS_CLUSTERS);
+        const savedEmailClusters = StorageUtils.getItem(LS_EMAIL_CLUSTERS);
+        setClusters(savedClusters || []);
+        setEmailClusters(savedEmailClusters || []);
+        console.log("savedEmailClusters: ", savedEmailClusters);
     }, []);
 
     const handleRunKmeans = async () => {
@@ -48,10 +49,13 @@ const KMeansActions = ({
                 numClusters,
             });
             console.log("response: ", res.data);
-            setClusters(res.data.clusters);
+            const clusterLabels = res.data.lda_topics.map(
+                ([{ label }]) => label
+            );
+            setClusters(SortUtils.sortData({ data: clusterLabels }));
             setEmailClusters(res.data.email_clusters);
-            // StorageUtils.setItem(LS_CLUSTERS, res.data.clusters);
-            // StorageUtils.setItem(LS_EMAIL_CLUSTERS, res.data.email_clusters);
+            StorageUtils.setItem(LS_CLUSTERS, clusterLabels);
+            StorageUtils.setItem(LS_EMAIL_CLUSTERS, res.data.email_clusters);
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         } finally {

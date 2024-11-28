@@ -2,14 +2,12 @@ import gensim
 import numpy as np
 from gensim import corpora
 from sentence_transformers import SentenceTransformer, util
-from ..utils.preprocess import clean_and_tokenize
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 CATEGORY_LABELS = ["Apartments", "Finance", "Health", "Payment", "Personal", "Piano", "School", "Travel"]
 
 def generate_label(keywords):
-    print("Generating label...")
     try:
         if not keywords:
             print("Missing keywords")
@@ -27,11 +25,10 @@ def generate_label(keywords):
         print(f"Error generating label: {e}")
         return "Unknown"
 
-def run_lda(df, num_topics=5):
+def run_lda(keywords, num_topics=5):
     try:
-        all_text = df['body'].apply(clean_and_tokenize)
-        dictionary = corpora.Dictionary(all_text)
-        corpus = [dictionary.doc2bow(text) for text in all_text]
+        dictionary = corpora.Dictionary([keywords])
+        corpus = [dictionary.doc2bow(keywords)]
 
         lda_model = gensim.models.LdaMulticore(corpus, num_topics=num_topics, id2word=dictionary, passes=10)
         lda_topics = []
@@ -43,7 +40,6 @@ def run_lda(df, num_topics=5):
                 "keywords": [{"word": word, "weight": float(weight)} for word, weight in words],
                 "label": label
             })
-        
         return lda_topics
     except Exception as e:
         print(f"Error running LDA: {e}")

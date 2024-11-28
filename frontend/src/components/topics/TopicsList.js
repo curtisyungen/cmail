@@ -31,10 +31,10 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
     };
 
     const handleTopicClick = (topic) => {
-        setSelectedTopic(
-            selectedTopic === topic ? ALL_TOPICS : parseInt(topic)
-        );
+        setSelectedTopic(selectedTopic === topic ? ALL_TOPICS : topic);
     };
+
+    console.log("topics: ", topics);
 
     return (
         <Box
@@ -49,12 +49,12 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
                 selectedTopic={selectedTopic}
                 size={topicTotals[ALL_TOPICS]}
             />
-            {Object.entries(topics).map(([id, words], idx) => (
+            {topics.map((topic, idx) => (
                 <Topic
-                    key={id}
-                    id={parseInt(id)}
-                    title={words}
-                    onClick={() => handleTopicClick(id)}
+                    key={idx}
+                    id={idx}
+                    title={topic}
+                    onClick={() => handleTopicClick(idx)}
                     selectedTopic={selectedTopic}
                     size={topicTotals[idx]}
                 />

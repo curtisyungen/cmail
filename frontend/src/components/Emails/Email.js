@@ -14,7 +14,10 @@ const Email = ({ email, isSelected, onClick, selectedTopic, topics }) => {
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (selectedTopic !== ALL_TOPICS && !topics.includes(selectedTopic)) {
+    if (
+        selectedTopic !== ALL_TOPICS &&
+        topics.cluster_label !== selectedTopic
+    ) {
         return null;
     }
 

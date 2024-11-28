@@ -2,7 +2,6 @@ import React from "react";
 
 import DataActions from "./DataActions";
 import KMeansActions from "./KMeansActions";
-import LdaActions from "./LdaActions";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
 
 const Divider = () => {
@@ -45,15 +44,6 @@ const ActionBar = ({
             <Flex>
                 <Section>
                     <KMeansActions
-                        activeAction={activeAction}
-                        setActiveAction={setActiveAction}
-                        setEmailTopics={setEmailTopics}
-                        setTopics={setTopics}
-                    />
-                </Section>
-                <Divider />
-                <Section>
-                    <LdaActions
                         activeAction={activeAction}
                         setActiveAction={setActiveAction}
                         setEmailTopics={setEmailTopics}

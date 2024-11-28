@@ -1,6 +1,6 @@
 import numpy as np
 from collections import Counter
-from .topic_generator import run_lda
+from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
 from ..utils.preprocess import clean_and_tokenize, load_data
 
@@ -60,6 +60,9 @@ def run_kmeans(num_clusters):
         most_common_words = Counter(all_words).most_common(10)
         cluster_keywords[int(cluster)] = most_common_words
 
-    lda_topics = run_lda(df)
+    lda_topics = []
+    for cluster in df['cluster_label'].unique():
+        keywords = [word for word, _ in cluster_keywords[int(cluster)]]
+        lda_topics.append(run_lda(keywords, num_topics=1))
 
     return df, cluster_keywords, lda_topics

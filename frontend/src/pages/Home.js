@@ -11,7 +11,7 @@ const Home = () => {
     const [refreshEmails, setRefreshEmails] = useState(true);
     const [selectedTopic, setSelectedTopic] = useState(ALL_TOPICS);
     const [selectedEmail, setSelectedEmail] = useState(null);
-    const [topics, setTopics] = useState({});
+    const [topics, setTopics] = useState([]);
 
     useEffect(() => {
         if (refreshEmails) {

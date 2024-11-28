@@ -39,7 +39,6 @@ def run_lda():
             no_below, 
             no_above
         )
-        print(f"topic_labels: {topic_labels}")
         response = {
             "status": "success",
             "message": "Ran LDA model.",

@@ -4,8 +4,8 @@ import { ALL_TOPICS } from "../../res";
 import { Box, Flex, Text } from "../../styles";
 import COLORS from "../../styles/Colors";
 
-const Topic = ({ id, title, onClick, selectedTopic, size }) => {
-    const isSelected = id === selectedTopic;
+const Topic = ({ title, onClick, selectedTopic, size }) => {
+    const isSelected = title === selectedTopic;
 
     return (
         <Box
@@ -18,7 +18,7 @@ const Topic = ({ id, title, onClick, selectedTopic, size }) => {
             width={150}
         >
             <Flex justifyContent="space-between">
-                <Text bold={isSelected}>
+                <Text bold={isSelected} style={{ textTransform: "capitalize" }}>
                     {title === ALL_TOPICS ? ALL_TOPICS : title}
                 </Text>
                 <Text color={COLORS.GRAY_DARK}>{size}</Text>
