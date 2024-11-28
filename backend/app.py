@@ -13,16 +13,15 @@ def run_kmeans():
     categories = data.get("categories", [])
 
     try:
-        df, cluster_keywords, lda_topics = run_kmeans_model(num_clusters, categories)
+        df, clusters = run_kmeans_model(num_clusters, categories)
         email_clusters = df[['body', 'cluster_label']].astype({'cluster_label': int})
         email_clusters['id'] = email_clusters.index
         email_clusters = email_clusters[['id', 'body', 'cluster_label']].to_dict(orient='records')
         response = {
             "status": "success",
             "message": "Ran K-means model.",
-            "clusters": cluster_keywords,
-            "email_clusters": email_clusters,
-            "lda_topics": lda_topics
+            "clusters": clusters,
+            "email_clusters": email_clusters
         }
         return jsonify(response), 200
     except Exception as e:

@@ -49,13 +49,14 @@ const KMeansActions = ({
                 categories: categories.map(({ name }) => name),
             });
             console.log("response: ", res.data);
-            const clusterLabels = res.data.lda_topics.map(
-                ([{ label }]) => label
-            );
-            setClusters(SortUtils.sortData({ data: clusterLabels }));
-            setEmailClusters(res.data.email_clusters);
-            StorageUtils.setItem(LS.CLUSTERS, clusterLabels);
-            StorageUtils.setItem(LS.EMAIL_CLUSTERS, res.data.email_clusters);
+
+            const { clusters, email_clusters } = res.data;
+
+            setClusters(clusters);
+            setEmailClusters(email_clusters);
+
+            StorageUtils.setItem(LS.CLUSTERS, clusters);
+            StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         } finally {

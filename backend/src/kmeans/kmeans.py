@@ -60,9 +60,9 @@ def run_kmeans(num_clusters, categories):
         most_common_words = Counter(all_words).most_common(10)
         cluster_keywords[int(cluster)] = most_common_words
 
-    lda_topics = []
+    clusters_with_labels = []
     for cluster in df['cluster_label'].unique():
         keywords = [word for word, _ in cluster_keywords[int(cluster)]]
-        lda_topics.append(run_lda(keywords, categories, num_topics=1))
+        clusters_with_labels.append(run_lda(cluster, keywords, categories, num_topics=1))
 
-    return df, cluster_keywords, lda_topics
+    return df, clusters_with_labels

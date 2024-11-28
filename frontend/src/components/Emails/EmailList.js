@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import Email from "./Email";
+import Header from "./Header";
 import { Box, COLORS, DIMENS } from "../../styles";
 
 const EmailList = ({
@@ -9,6 +10,7 @@ const EmailList = ({
     selectedEmail,
     selectedTopic,
     setSelectedEmail,
+    topics,
     topicsMap,
 }) => {
     const [emails, setEmails] = useState([]);
@@ -60,6 +62,7 @@ const EmailList = ({
             }}
             width={DIMENS.EMAIL_WIDTH}
         >
+            <Header selectedTopic={selectedTopic} topics={topics} />
             {emails.map((email, idx) => (
                 <Email
                     key={idx}

@@ -33,8 +33,6 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
         setSelectedTopic(selectedTopic === topic ? ALL_TOPICS : topic);
     };
 
-    console.log("topics: ", topics);
-
     return (
         <Box
             margin={{ right: DIMENS.SPACING_STANDARD }}
@@ -48,14 +46,14 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
                 selectedTopic={selectedTopic}
                 size={topicTotals[ALL_TOPICS]}
             />
-            {topics.map((topic, idx) => (
+            {topics.map(({ label, topic_id }, idx) => (
                 <Topic
                     key={idx}
-                    id={idx}
-                    title={topic}
-                    onClick={() => handleTopicClick(idx)}
+                    id={topic_id}
+                    title={label}
+                    onClick={() => handleTopicClick(topic_id)}
                     selectedTopic={selectedTopic}
-                    size={topicTotals[idx]}
+                    size={topicTotals[topic_id]}
                 />
             ))}
         </Box>

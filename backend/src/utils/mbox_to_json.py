@@ -93,6 +93,8 @@ def mbox_to_json(email_count):
     messages = []
 
     for index, message in enumerate(mbox):
+        if (index == email_count):
+            break
         email_data = {
             "id": None,
             "subject": message["subject"],
@@ -110,9 +112,6 @@ def mbox_to_json(email_count):
         cleaned_email_data = clean_email_data(email_data)
         cleaned_email_data['id'] = index
         messages.append(cleaned_email_data)
-
-        if (index == email_count):
-            break
 
     with open(EMAILS, 'w', encoding='utf-8') as file:
         json.dump(messages, file, ensure_ascii=False, indent=4)

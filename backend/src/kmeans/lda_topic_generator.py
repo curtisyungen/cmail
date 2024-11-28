@@ -23,21 +23,23 @@ def generate_label(keywords, categories):
         print(f"Error generating label: {e}")
         return "Unknown"
 
-def run_lda(keywords, categories, num_topics=5,):
+def run_lda(cluster, keywords, categories, num_topics=1):
+    print(f"Running LDA...")
     try:
         dictionary = corpora.Dictionary([keywords])
         corpus = [dictionary.doc2bow(keywords)]
 
         lda_model = gensim.models.LdaMulticore(corpus, num_topics=num_topics, id2word=dictionary, passes=10)
         lda_topics = []
-        for topic_id, words in lda_model.show_topics(num_topics=num_topics, formatted=False):
+        for _, words in lda_model.show_topics(num_topics=num_topics, formatted=False):
             keywords = [word for word, _ in words]
             label = generate_label(keywords, categories)
-            lda_topics.append({
-                "topic_id": topic_id,
+            lda_topics = {
+                "topic_id": int(cluster),
                 "keywords": [{"word": word, "weight": float(weight)} for word, weight in words],
                 "label": label
-            })
+            }
+        print("LDA complete.")
         return lda_topics
     except Exception as e:
         print(f"Error running LDA: {e}")

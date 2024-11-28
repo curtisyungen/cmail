@@ -42,6 +42,7 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                 content: {
                     height: "fit-content",
                     margin: "auto",
+                    width: "420px",
                 },
             }}
         >
@@ -90,7 +91,7 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                         </Box>
                     ))}
                 </Flex>
-                <Flex justifyContent="flex-end">
+                <Flex justifyContent="flex-end" style={{ marginTop: "10px" }}>
                     <Button
                         disabled={newCategory.length === 0}
                         onClick={handleSave}
@@ -114,10 +115,10 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                             key={idx}
                             margin={5}
                             style={{ flex: 1 }}
-                            width={200}
+                            width={130}
                         >
                             <Flex justifyContent="space-between">
-                                <Flex style={{ width: "200px" }}>
+                                <Flex style={{ width: "130px" }}>
                                     <Icon
                                         color={color}
                                         name={ICON.CATEGORY}
@@ -126,7 +127,11 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                                     />
                                     <Text>{name}</Text>
                                 </Flex>
-                                <Box clickable onClick={() => onDelete(idx)}>
+                                <Box
+                                    clickable
+                                    onClick={() => onDelete(idx)}
+                                    width={20}
+                                >
                                     <Icon
                                         color={COLORS.GRAY_DARK}
                                         name={ICON.TRASH}

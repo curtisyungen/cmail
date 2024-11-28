@@ -14,6 +14,10 @@ const Home = () => {
     const [topics, setTopics] = useState([]);
 
     useEffect(() => {
+        console.log("topics: ", topics);
+    }, [topics]);
+
+    useEffect(() => {
         if (refreshEmails) {
             setRefreshEmails(false);
         }
@@ -71,6 +75,7 @@ const Home = () => {
                                 selectedEmail={selectedEmail}
                                 selectedTopic={selectedTopic}
                                 setSelectedEmail={setSelectedEmail}
+                                topics={topics}
                                 topicsMap={emailTopics}
                             />
                             <Box
