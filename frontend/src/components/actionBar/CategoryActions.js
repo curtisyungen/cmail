@@ -74,12 +74,17 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                             borderWidth={newColor === color ? 2 : 1}
                             clickable
                             height={25}
-                            margin={5}
+                            margin={3}
                             onClick={() => setNewColor(color)}
+                            style={{ opacity: newColor === color ? 1 : 0.85 }}
                             transition={0}
                             width={25}
                         >
-                            <Text center color={COLORS.BLACK}>
+                            <Text
+                                bold={newColor === color}
+                                center
+                                color={COLORS.BLACK}
+                            >
                                 A
                             </Text>
                         </Box>
@@ -154,10 +159,7 @@ const CategoryActions = ({ activeAction }) => {
     };
 
     const handleAdd = (category) => {
-        const updatedCategories = SortUtils.sortData({
-            data: [...categories, category],
-        });
-        saveCategories(updatedCategories);
+        saveCategories([...categories, category]);
     };
 
     const handleDelete = (index) => {
@@ -165,6 +167,7 @@ const CategoryActions = ({ activeAction }) => {
     };
 
     const saveCategories = (categories) => {
+        categories = SortUtils.sortData({ data: categories, key: "name" });
         StorageUtils.setItem(LS.CATEGORIES, categories);
         setCategories(categories);
     };

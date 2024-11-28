@@ -1,7 +1,9 @@
 class SortUtils {
-    static sortData({ data = [] }) {
+    static sortData({ data, key }) {
         function sortBy(a, b) {
-            return a === b ? 0 : a > b ? 1 : -1;
+            const aVal = key ? a[key] : a;
+            const bVal = key ? b[key] : b;
+            return aVal === bVal ? 0 : aVal > bVal ? 1 : -1;
         }
         return data.sort(sortBy);
     }
