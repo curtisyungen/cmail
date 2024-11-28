@@ -40,7 +40,7 @@ class KMeans:
     def predict(self, X):
         return self.assign_clusters(X)
 
-def run_kmeans(num_clusters, categories):
+def run_kmeans(num_clusters, categories, lda_config):
     df = load_data()
 
     features_df = extract_features_from_dataframe(df)
@@ -63,6 +63,8 @@ def run_kmeans(num_clusters, categories):
     clusters_with_labels = []
     for cluster in df['cluster_label'].unique():
         keywords = [word for word, _ in cluster_keywords[int(cluster)]]
-        clusters_with_labels.append(run_lda(cluster, keywords, categories, num_topics=1))
+        lda_result = run_lda(cluster, keywords, categories, no_below=lda_config.no_below, 
+                             no_above=lda_config.no_above, num_topics=1)
+        clusters_with_labels.append(lda_result)
 
     return df, clusters_with_labels

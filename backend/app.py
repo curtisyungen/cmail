@@ -11,9 +11,10 @@ def run_kmeans():
     data = request.json
     num_clusters = data.get("numClusters", 12)
     categories = data.get("categories", [])
+    lda_config = data.get("ldaConfig", {})
 
     try:
-        df, clusters = run_kmeans_model(num_clusters, categories)
+        df, clusters = run_kmeans_model(num_clusters, categories, lda_config)
         email_clusters = df[['body', 'cluster_label']].astype({'cluster_label': int})
         email_clusters['id'] = email_clusters.index
         email_clusters = email_clusters[['id', 'body', 'cluster_label']].to_dict(orient='records')
@@ -22,30 +23,6 @@ def run_kmeans():
             "message": "Ran K-means model.",
             "clusters": clusters,
             "email_clusters": email_clusters
-        }
-        return jsonify(response), 200
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
-    
-@app.route('/api/run-lda', methods=['POST'])
-def run_lda():
-    data = request.json
-    num_topics = data.get("numTopics", 10)
-    no_below = data.get("noBelow", 2)
-    no_above = data.get("noAbove", 0.5)
-    try:
-        topics, dominant_topics, email_assignments, topic_labels = run_lda_model(
-            num_topics, 
-            no_below, 
-            no_above
-        )
-        response = {
-            "status": "success",
-            "message": "Ran LDA model.",
-            "topics": topics,
-            "dominant_topics": dominant_topics,
-            "email_assignments": email_assignments,
-            "topic_labels": topic_labels
         }
         return jsonify(response), 200
     except Exception as e:

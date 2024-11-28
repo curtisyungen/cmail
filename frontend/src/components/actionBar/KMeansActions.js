@@ -48,7 +48,7 @@ const KMeansActions = ({
             const res = await axios.post("/api/run-kmeans", {
                 numClusters,
                 categories: categories.map(({ name }) => name),
-                lda_config: ldaConfig,
+                ldaConfig,
             });
             console.log("response: ", res.data);
 

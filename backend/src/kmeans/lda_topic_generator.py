@@ -23,10 +23,11 @@ def generate_label(keywords, categories):
         print(f"Error generating label: {e}")
         return "Unknown"
 
-def run_lda(cluster, keywords, categories, num_topics=1):
+def run_lda(cluster, keywords, categories, no_below, no_above, num_topics=1):
     print(f"Running LDA...")
     try:
         dictionary = corpora.Dictionary([keywords])
+        dictionary.filter_extremes(no_below=no_below, no_above=no_above)
         corpus = [dictionary.doc2bow(keywords)]
 
         lda_model = gensim.models.LdaMulticore(corpus, num_topics=num_topics, id2word=dictionary, passes=10)
