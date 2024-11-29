@@ -6,6 +6,7 @@ import Header from "./Header";
 import { Box, COLORS, DIMENS } from "../../styles";
 
 const EmailList = ({
+    categories,
     refreshEmails,
     selectedEmail,
     selectedTopic,
@@ -39,6 +40,15 @@ const EmailList = ({
         }
     }
 
+    const getCategory = (email) => {
+        const { id } = email;
+        const { cluster_id } = topicsMap[id];
+        const { category_idx } = topics.find(
+            ({ topic_id }) => topic_id === cluster_id
+        );
+        return categories[category_idx];
+    };
+
     const handleEmailClick = (email) => {
         setSelectedEmail(selectedEmail?.id === email.id ? null : email);
     };
@@ -66,6 +76,7 @@ const EmailList = ({
             {emails.map((email, idx) => (
                 <Email
                     key={idx}
+                    category={getCategory(email)}
                     email={email}
                     isSelected={selectedEmail?.id === email.id}
                     onClick={() => handleEmailClick(email)}

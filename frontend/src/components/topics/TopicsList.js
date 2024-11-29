@@ -18,11 +18,11 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
         }
         const totals = {};
         let totalEmails = 0;
-        for (const { cluster_label } of topicsMap) {
-            if (!totals[cluster_label]) {
-                totals[cluster_label] = 0;
+        for (const { cluster_id } of topicsMap) {
+            if (!totals[cluster_id]) {
+                totals[cluster_id] = 0;
             }
-            totals[cluster_label] += 1;
+            totals[cluster_id] += 1;
             totalEmails += 1;
         }
         totals[ALL_TOPICS] = totalEmails;
@@ -46,11 +46,11 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
                 selectedTopic={selectedTopic}
                 size={topicTotals[ALL_TOPICS]}
             />
-            {topics.map(({ label, topic_id }, idx) => (
+            {topics.map(({ category, topic_id }, idx) => (
                 <Topic
                     key={idx}
                     id={topic_id}
-                    title={label}
+                    title={category}
                     onClick={() => handleTopicClick(topic_id)}
                     selectedTopic={selectedTopic}
                     size={topicTotals[topic_id]}

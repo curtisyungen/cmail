@@ -1,5 +1,4 @@
 import numpy as np
-from collections import Counter
 from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
 from ..utils.preprocess import clean_and_tokenize, load_data
@@ -46,25 +45,29 @@ def run_kmeans(num_clusters, categories, lda_config):
     features_df = extract_features_from_dataframe(df)
     X = np.array(features_df.values, dtype=float)
 
+    print("Running K-means...")
     kmeans = KMeans(k = num_clusters, random_state=26)
     kmeans.fit(X)
-    df['cluster_label'] = kmeans.labels
+    df['cluster_id'] = kmeans.labels
+    print("K-means complete.")
 
-    cluster_keywords = {}
-    for cluster in df['cluster_label'].unique():
-        cluster_emails = df[df['cluster_label'] == cluster]['body']
+    print("Extracting keywords...")
+    cluster_words = {}
+    for cluster in df['cluster_id'].unique():
+        cluster_emails = df[df['cluster_id'] == cluster]['body']
         all_words = []
         for email in cluster_emails:
             all_words.extend(clean_and_tokenize(email))
+        cluster_words[int(cluster)] = all_words
+    print("Extraction complete.")
 
-        most_common_words = Counter(all_words).most_common(10)
-        cluster_keywords[int(cluster)] = most_common_words
-
+    print(f"Running LDA...")
     clusters_with_labels = []
-    for cluster in df['cluster_label'].unique():
-        keywords = [word for word, _ in cluster_keywords[int(cluster)]]
-        lda_result = run_lda(cluster, keywords, categories, no_below=lda_config.no_below, 
-                             no_above=lda_config.no_above, num_topics=1)
+    for cluster in df['cluster_id'].unique():
+        keywords = cluster_words[int(cluster)]
+        lda_result = run_lda(cluster, keywords, categories, no_below=lda_config.get('no_below'), 
+                             no_above=lda_config.get('no_above'), num_topics=1)
         clusters_with_labels.append(lda_result)
+    print("LDA complete.")
 
     return df, clusters_with_labels

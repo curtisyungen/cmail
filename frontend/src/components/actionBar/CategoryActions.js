@@ -147,15 +147,8 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
     );
 };
 
-const CategoryActions = ({ activeAction }) => {
-    const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+const CategoryActions = ({ activeAction, categories, setCategories }) => {
     const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        const savedCategories =
-            StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
-        setCategories(savedCategories);
-    }, []);
 
     const handleClick = () => {
         if (!activeAction) {

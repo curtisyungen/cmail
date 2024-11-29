@@ -6,7 +6,7 @@ import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
 
-const OtherActions = ({ activeAction }) => {
+const OtherActions = ({ activeAction, categories, setCategories }) => {
     const handleClearCache = () => {
         StorageUtils.clearAll();
     };
@@ -14,7 +14,11 @@ const OtherActions = ({ activeAction }) => {
     return (
         <>
             <Flex>
-                <CategoryActions activeAction={activeAction} />
+                <CategoryActions
+                    activeAction={activeAction}
+                    categories={categories}
+                    setCategories={setCategories}
+                />
                 <Box
                     alignItems="center"
                     borderRadius={5}

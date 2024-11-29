@@ -1,11 +1,19 @@
 import React from "react";
 
-import { Box, COLORS, DIMENS, FONT_SIZE, TextEllipsis } from "../../styles";
+import Tag from "./Tag";
 import { ALL_TOPICS, UNKNOWN_SENDER } from "../../res";
+import { Box, COLORS, DIMENS, FONT_SIZE, TextEllipsis } from "../../styles";
 
 const CLIPPED_BODY_LENGTH = 50;
 
-const Email = ({ email, isSelected, onClick, selectedTopic, topics }) => {
+const Email = ({
+    category,
+    email,
+    isSelected,
+    onClick,
+    selectedTopic,
+    topics,
+}) => {
     const getRawBody = () => {
         const raw_body =
             typeof email.raw_body === Array
@@ -14,10 +22,7 @@ const Email = ({ email, isSelected, onClick, selectedTopic, topics }) => {
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (
-        selectedTopic !== ALL_TOPICS &&
-        topics.cluster_label !== selectedTopic
-    ) {
+    if (selectedTopic !== ALL_TOPICS && topics.cluster_id !== selectedTopic) {
         return null;
     }
 
@@ -26,11 +31,15 @@ const Email = ({ email, isSelected, onClick, selectedTopic, topics }) => {
             background={isSelected ? COLORS.BLUE_LIGHT : COLORS.WHITE}
             borderColor={COLORS.BORDER}
             clickable={true}
-            height={DIMENS.EMAIL_HEIGHT}
+            height="fit-content"
             hoverBackground={isSelected ? COLORS.BLUE_LIGHT : COLORS.GRAY_LIGHT}
             onClick={onClick}
             padding={10}
-            style={{ borderBottomWidth: 1, minHeight: DIMENS.EMAIL_HEIGHT }}
+            style={{
+                borderBottomWidth: 1,
+                maxHeight: DIMENS.EMAIL_HEIGHT,
+                userSelect: "none",
+            }}
             transition={0}
             width="100%"
         >
@@ -42,6 +51,7 @@ const Email = ({ email, isSelected, onClick, selectedTopic, topics }) => {
                 {getRawBody()}
                 {email.raw_body.length > CLIPPED_BODY_LENGTH ? "..." : ""}
             </TextEllipsis>
+            <Tag color={category?.color} tag={category?.name} />
         </Box>
     );
 };

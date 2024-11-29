@@ -1,7 +1,7 @@
 import json
 import os
 from flask import Flask, request, jsonify
-from main import generate_new_data, run_kmeans_model, run_lda_model
+from main import generate_new_data, run_kmeans_model
 from config import EMAILS
 
 app = Flask(__name__)
@@ -15,9 +15,9 @@ def run_kmeans():
 
     try:
         df, clusters = run_kmeans_model(num_clusters, categories, lda_config)
-        email_clusters = df[['body', 'cluster_label']].astype({'cluster_label': int})
+        email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
         email_clusters['id'] = email_clusters.index
-        email_clusters = email_clusters[['id', 'body', 'cluster_label']].to_dict(orient='records')
+        email_clusters = email_clusters[['id', 'body', 'cluster_id']].to_dict(orient='records')
         response = {
             "status": "success",
             "message": "Ran K-means model.",

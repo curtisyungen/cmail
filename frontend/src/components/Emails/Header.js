@@ -15,6 +15,7 @@ const Header = ({ selectedTopic, topics = [] }) => {
             style={{
                 borderBottomWidth: 1,
                 borderColor: COLORS.BORDER,
+                userSelect: "none",
             }}
         >
             <Text bold>Cluster Keywords</Text>

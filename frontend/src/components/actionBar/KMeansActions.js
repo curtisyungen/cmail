@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { Icon } from "../common";
-import { ACTION, DEFAULT_CATEGORIES, LS } from "../../res";
+import { ACTION, LS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,
@@ -13,12 +13,13 @@ import {
     Select,
     Text,
 } from "../../styles";
-import { SortUtils, StorageUtils } from "../../utils";
+import { StorageUtils } from "../../utils";
 
 const DEFAULT_NUM_CLUSTERS = 12;
 
 const KMeansActions = ({
     activeAction,
+    categories,
     ldaConfig,
     setActiveAction,
     setEmailTopics: setEmailClusters,
@@ -42,8 +43,8 @@ const KMeansActions = ({
         setClusters([]);
         setError("");
 
-        const categories =
-            StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
+        console.log("lda_config: ", ldaConfig);
+
         try {
             const res = await axios.post("/api/run-kmeans", {
                 numClusters,

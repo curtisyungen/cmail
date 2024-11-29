@@ -1,17 +1,6 @@
 import React from "react";
 
-import { Icon } from "../common";
-import { ACTION } from "../../res";
-import { ICON } from "../../res/icons";
-import {
-    Box,
-    COLORS,
-    DIMENS,
-    Flex,
-    FONT_SIZE,
-    Select,
-    Text,
-} from "../../styles";
+import { Box, DIMENS, Flex, FONT_SIZE, Select, Text } from "../../styles";
 
 const MAX_NO_ABOVE = 10; // will be * 10
 const MAX_NO_BELOW = 6;
@@ -35,12 +24,12 @@ const LdaActions = ({ activeAction, ldaConfig, setLdaConfig }) => {
                 >
                     <Select
                         disabled={activeAction}
-                        name="noBelow"
+                        name="no_below"
                         onChange={handleConfigChange}
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={ldaConfig.noBelow}
+                        value={ldaConfig.no_below}
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
@@ -62,20 +51,20 @@ const LdaActions = ({ activeAction, ldaConfig, setLdaConfig }) => {
                 >
                     <Select
                         disabled={activeAction}
-                        name="noAbove"
+                        name="no_above"
                         onChange={handleConfigChange}
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={ldaConfig.noAbove}
+                        value={ldaConfig.no_above}
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
                             { length: MAX_NO_ABOVE },
-                            (_, index) => (index + 1) * 10
+                            (_, index) => index + 1
                         ).map((num) => (
                             <option key={num} value={num}>
-                                {num}
+                                {num * 10}
                             </option>
                         ))}
                     </Select>

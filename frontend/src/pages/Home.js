@@ -2,16 +2,28 @@ import React, { useEffect, useState } from "react";
 
 import { ActionBar, Navbar, Sidebar, TopicsList } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
-import { ALL_TOPICS } from "../res";
+import { ALL_TOPICS, DEFAULT_CATEGORIES, LS } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
+import { StorageUtils } from "../utils";
 
 const Home = () => {
     const [activeAction, setActiveAction] = useState(null);
+    const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
     const [emailTopics, setEmailTopics] = useState([]);
     const [refreshEmails, setRefreshEmails] = useState(true);
     const [selectedTopic, setSelectedTopic] = useState(ALL_TOPICS);
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [topics, setTopics] = useState([]);
+
+    useEffect(() => {
+        const savedCategories =
+            StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
+        setCategories(savedCategories);
+    }, []);
+
+    useEffect(() => {
+        console.log("categories: ", categories);
+    }, [topics]);
 
     useEffect(() => {
         console.log("topics: ", topics);
@@ -47,12 +59,11 @@ const Home = () => {
                 >
                     <ActionBar
                         activeAction={activeAction}
-                        selectedTopic={selectedTopic}
+                        categories={categories}
                         setActiveAction={setActiveAction}
+                        setCategories={setCategories}
                         setEmailTopics={setEmailTopics}
-                        setSelectedTopic={setSelectedTopic}
                         setTopics={handleSetTopics}
-                        topics={topics}
                     />
                     <Box height={DIMENS.SPACING_STANDARD} width="100%" />
                     <Box
@@ -71,6 +82,7 @@ const Home = () => {
                                 topicsMap={emailTopics}
                             />
                             <EmailList
+                                categories={categories}
                                 refreshEmails={refreshEmails}
                                 selectedEmail={selectedEmail}
                                 selectedTopic={selectedTopic}

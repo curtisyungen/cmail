@@ -15,6 +15,7 @@ const Topic = ({ id, title, onClick, selectedTopic, size }) => {
             margin={1}
             onClick={onClick}
             padding={{ bottom: 3, left: 20, right: 5, top: 3 }}
+            style={{ userSelect: "none" }}
             width={150}
         >
             <Flex justifyContent="space-between">
