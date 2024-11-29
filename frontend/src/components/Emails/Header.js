@@ -18,7 +18,7 @@ const Header = ({ selectedTopic, topics = [] }) => {
                 userSelect: "none",
             }}
         >
-            <Text bold>Cluster Keywords</Text>
+            <Text bold>Top Keywords</Text>
             <Box margin={{ top: 5 }}>
                 <Flex flexWrap={true}>
                     <Text capitalize>

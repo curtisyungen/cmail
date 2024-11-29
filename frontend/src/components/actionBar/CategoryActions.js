@@ -42,6 +42,7 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                 content: {
                     height: "fit-content",
                     margin: "auto",
+                    userSelect: "none",
                     width: "420px",
                 },
             }}

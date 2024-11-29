@@ -52,6 +52,7 @@ const ActionBar = ({
             borderRadius={5}
             height={DIMENS.ACTION_BAR_HEIGHT}
             padding={{ left: 5 }}
+            style={{ userSelect: "none" }}
         >
             <Flex>
                 <Section>

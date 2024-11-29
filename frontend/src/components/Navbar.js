@@ -10,7 +10,12 @@ const Navbar = () => {
             style={{}}
         >
             <Flex>
-                <Text bold color={COLORS.BLUE_DARK} fontSize={FONT_SIZE.L}>
+                <Text
+                    bold
+                    color={COLORS.BLUE_DARK}
+                    fontSize={FONT_SIZE.L}
+                    style={{ userSelect: "none" }}
+                >
                     Kmail
                 </Text>
                 <input
