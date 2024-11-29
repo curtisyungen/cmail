@@ -18,6 +18,8 @@ const EmailList = ({
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    console.log("topics: ", topics);
+
     useEffect(() => {
         if (refreshEmails) {
             fetchEmails();
@@ -41,12 +43,20 @@ const EmailList = ({
     }
 
     const getCategory = (email) => {
-        const { id } = email;
-        const { cluster_id } = topicsMap[id];
-        const { category_idx } = topics.find(
-            ({ topic_id }) => topic_id === cluster_id
-        );
-        return categories[category_idx];
+        try {
+            const { id } = email;
+            const clusterId = topicsMap[id].cluster_id;
+            let name = "";
+            for (const { label, topic_id } of topics) {
+                if (topic_id === clusterId) {
+                    name = label;
+                    break;
+                }
+            }
+            return { name };
+        } catch (e) {
+            console.log("Error getting category: ", e);
+        }
     };
 
     const handleEmailClick = (email) => {

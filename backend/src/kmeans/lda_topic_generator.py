@@ -9,7 +9,6 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 def assign_category(keywords, categories):
     try:
         if not keywords:
-            print("Missing keywords")
             return "Unknown"
         keywords = [kw.lower() for kw in keywords]
         lower_categories = [category.lower() for category in categories]
@@ -23,8 +22,24 @@ def assign_category(keywords, categories):
     except Exception as e:
         print(f"Error generating category: {e}")
         return "Unknown"
+    
+def generate_label(keywords):
+    if not keywords:
+        return "Unknown"
+    try:
+       topic_representation = ' '.join(keywords)
+       topic_embedding = model.encode(topic_representation, convert_to_tensor=True)
+       keyword_embeddings = model.encode(keywords, convert_to_tensor=True)
+       similiarities = util.pytorch_cos_sim(topic_embedding, keyword_embeddings).numpy().flatten()
+       best_idx = similiarities.argmax()
+       final_keyword = keywords[best_idx].title()
+       return final_keyword
+    except Exception as e:
+        print(f"Error generating label: {e}")
+        return "Unknown"
 
-def run_lda(cluster, keywords, categories, no_below, no_above, num_topics=1):
+def run_lda(cluster, keywords, categories, no_below, no_above, num_topics=5):
+    print(f"cluster {cluster}, keywords: {len(keywords)}")
     if not keywords:
         return []
     try:
@@ -33,17 +48,25 @@ def run_lda(cluster, keywords, categories, no_below, no_above, num_topics=1):
         corpus = [dictionary.doc2bow(keywords)]
 
         lda_model = gensim.models.LdaMulticore(corpus, num_topics=num_topics, id2word=dictionary, passes=10)
-        lda_topics = []
+        lda_topics = {}
         for _, words in lda_model.show_topics(num_topics=num_topics, formatted=False):
-            category, category_idx = assign_category(keywords, categories)
-            sorted_keywords = sorted(words, key=lambda x: x[1], reverse=True)[:10]
-            top_keywords = [{"word": word, "weight": float(weight)} for word, weight in sorted_keywords]
+            sorted_keywords = [word for word, _ in words]
+            label = generate_label(sorted_keywords)
             lda_topics = {
-                "topic_id": int(cluster),
-                "keywords": top_keywords,
-                "category": category,
-                "category_idx": int(category_idx)
+                'topic_id': int(cluster),
+                'keywords': [{'word': word, 'weight': float(weight)} for word, weight in words],
+                'label': label
             }
+            
+            # category, category_idx = assign_category(keywords, categories)
+            # sorted_keywords = sorted(words, key=lambda x: x[1], reverse=True)[:10]
+            # top_keywords = [{"word": word, "weight": float(weight)} for word, weight in sorted_keywords]
+            # lda_topics = {
+            #     "topic_id": int(cluster),
+            #     "keywords": top_keywords,
+            #     "category": category,
+            #     "category_idx": int(category_idx)
+            # }
         return lda_topics
     except Exception as e:
         print(f"Error running LDA: {e}")

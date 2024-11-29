@@ -46,11 +46,11 @@ const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
                 selectedTopic={selectedTopic}
                 size={topicTotals[ALL_TOPICS]}
             />
-            {topics.map(({ category, topic_id }, idx) => (
+            {topics.map(({ label, topic_id }, idx) => (
                 <Topic
                     key={idx}
                     id={topic_id}
-                    title={category}
+                    title={label}
                     onClick={() => handleTopicClick(topic_id)}
                     selectedTopic={selectedTopic}
                     size={topicTotals[topic_id]}

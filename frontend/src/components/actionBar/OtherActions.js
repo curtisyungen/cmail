@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import CategoryActions from "./CategoryActions";
 import { Icon } from "../common";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
+import { LS } from "../../res";
 
 const OtherActions = ({ activeAction, categories, setCategories }) => {
+    const [hasCachedData, setHasCachedData] = useState(false);
+
+    useEffect(() => {
+        const cachedData = StorageUtils.getItem(LS.CLUSTERS);
+        setHasCachedData(!!cachedData);
+    }, []);
+
     const handleClearCache = () => {
         StorageUtils.clearAll();
+        setHasCachedData(false);
     };
 
     return (
@@ -22,10 +31,12 @@ const OtherActions = ({ activeAction, categories, setCategories }) => {
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!activeAction}
+                    clickable={!activeAction && hasCachedData}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        activeAction ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                        activeAction || !hasCachedData
+                            ? COLORS.TRANSPARENT
+                            : COLORS.GRAY_LIGHT
                     }
                     onClick={handleClearCache}
                     style={{ flex: 1 }}
@@ -33,13 +44,23 @@ const OtherActions = ({ activeAction, categories, setCategories }) => {
                 >
                     <Icon
                         color={
-                            activeAction ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK
+                            activeAction || !hasCachedData
+                                ? COLORS.GRAY_MEDIUM
+                                : COLORS.BLUE_DARK
                         }
                         name={ICON.TRASH}
                         size={24}
                         style={{ marginBottom: "5px" }}
                     />
-                    <Text center fontSize={FONT_SIZE.S}>
+                    <Text
+                        center
+                        color={
+                            activeAction || !hasCachedData
+                                ? COLORS.GRAY_MEDIUM
+                                : COLORS.BLACK
+                        }
+                        fontSize={FONT_SIZE.S}
+                    >
                         Clear cache
                     </Text>
                 </Box>

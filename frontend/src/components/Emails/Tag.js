@@ -8,7 +8,6 @@ const Tag = ({ color, tag }) => {
     return (
         <Box
             alignItems="flex-start"
-            borderColor={color}
             borderRadius={10}
             height={20}
             justifyContent="flex-start"
@@ -16,7 +15,7 @@ const Tag = ({ color, tag }) => {
         >
             <Flex>
                 <Box
-                    bprderColor={color}
+                    borderColor={color}
                     borderRadius={10}
                     borderWidth={1}
                     margin={{ right: 5 }}

@@ -12,13 +12,11 @@ def clean_body(df):
         def clean(body):
             if not body:
                 return ""
-            body = re.sub(r'http\S+|www\S+|https\S+', '', body) # URLs
-            body = re.sub(r'\S+@\S+', '', body) # emails
-            body = re.sub(r'=(09|20|0A|0D)', ' ', body) # encodings
-            body = re.sub(r'[^\w\s]', '', body) # punctuation and special chars
-            body = re.sub(r'\s+', ' ', body).strip() # whitespaces
             words = body.split()
-            lemmatized_words = [lemmatizer.lemmatize(word.lower()) for word in words if word.lower() not in stopwords]
+            lemmatized_words = [
+                lemmatizer.lemmatize(word.lower()) for word in words 
+                if word.lower() not in stopwords
+            ]
             return ' '.join(lemmatized_words)
         df['body'] = df['body'].apply(clean)
         return df

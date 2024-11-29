@@ -1,6 +1,8 @@
+import html
 import json
 import mailbox
 import re
+from bs4 import BeautifulSoup
 from config import EMAILS, MBOX_DATA
 from datetime import datetime
 from email.header import decode_header, Header
@@ -16,8 +18,22 @@ def is_valid_body(content):
 def clean_email_data(email_data):
     def clean_text(text):
         if not isinstance(text, str): return ""
-        text = re.sub(r'http\S+|www\S+|https\S+', '', text)
-        return re.sub(r'\s+', ' ', text).strip()
+
+        text = html.unescape(text)
+
+        # Trying to remove HTML tags
+        if '<' in text and '>' in text:
+            soup = BeautifulSoup(text, 'html.parser')
+            text = soup.get_text()
+        text = re.sub(r'<[^>]*>', '', text)
+
+        text = re.sub(r'http\S+|www\S+|https\S+', '', text) # URLs
+        text = re.sub(r'\S+@\S+', '', text) # emails
+        text = re.sub(r'=(09|20|0A|0D)', ' ', text) # encodings
+        text = re.sub(r'[^\w\s]', '', text) # punctuation and special chars
+        text = re.sub(r'\s+', ' ', text).strip() # whitespaces
+
+        return text
     
     def lower_text(text):
         return ''.join(char.lower() if char.isalnum() or char.isspace() else ' ' for char in text)
@@ -63,14 +79,14 @@ def clean_email_data(email_data):
             return date_str
     
     raw_subject = decode_header_field(email_data.get('subject', ''))
-    email_data['raw_subject'] = clean_text(raw_subject)
+    email_data['raw_subject'] = clean_text(raw_subject) # This is really just for display on the front-end
     email_data['subject'] = lower_text(clean_text(raw_subject))
 
     if not is_valid_body(email_data.get('body', '')):
         email_data['body'] = ''
 
     raw_body = " ".join(email_data.get('body', ''))
-    email_data['raw_body'] = clean_text(raw_body)
+    email_data['raw_body'] = clean_text(raw_body) # Just for displaying
     email_data['body'] = lower_text(clean_text(raw_body))
 
     sender_name, sender_email = extract_details(email_data.get('from', ''))

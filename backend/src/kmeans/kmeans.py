@@ -21,7 +21,15 @@ class KMeans:
         return np.argmin(distances, axis=1)
     
     def update_centroids(self, X, labels):
-        return np.array([X[labels == i].mean(axis=0) for i in range(self.k)])
+        centroids = []
+        for i in range(self.k):
+            cluster_points = X[labels == i]
+            if len(cluster_points) == 0:
+                new_centroid = X[np.random.choice(len(X))]
+                centroids.append(new_centroid)
+            else:
+                centroids.append(cluster_points.mean(axis=0))
+        return np.array(centroids)
         
     def fit(self, X):
         self.initialize_centroids(X)

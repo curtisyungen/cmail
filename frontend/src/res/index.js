@@ -7,16 +7,16 @@ export const ACTION = {
 };
 export const ALL_TOPICS = "All";
 export const DEFAULT_CATEGORIES = [
-    { name: "Apartments", color: COLORS.BLACK },
-    { name: "Health", color: COLORS.BLACK },
+    { name: "Apartments", color: COLORS.YELLOW },
+    { name: "Health", color: COLORS.GREEN },
     { name: "Investments", color: COLORS.BLACK },
-    { name: "Meeting", color: COLORS.BLACK },
-    { name: "Payment", color: COLORS.BLACK },
-    { name: "Personal", color: COLORS.BLACK },
+    { name: "Meeting", color: COLORS.ORANGE },
+    { name: "Payment", color: COLORS.RED },
+    { name: "Personal", color: COLORS.PURPLE },
     { name: "Piano", color: COLORS.BLACK },
-    { name: "Receipt", color: COLORS.BLACK },
-    { name: "School", color: COLORS.BLACK },
-    { name: "Travel", color: COLORS.BLACK },
+    { name: "Receipt", color: COLORS.BLUE_DARK },
+    { name: "School", color: COLORS.GRAY_MEDIUM },
+    { name: "Travel", color: COLORS.PINK },
 ];
 export const LS = {
     CATEGORIES: "categories",

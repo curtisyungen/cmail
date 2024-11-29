@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 
 import { Icon } from "../common";
-import { DEFAULT_CATEGORIES, LS } from "../../res";
+import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,

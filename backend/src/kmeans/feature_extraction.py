@@ -56,19 +56,19 @@ def process_time(timestamp):
         print(f"Error processing time: {e}")
     
 def run_tfidf(df):
-    vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 4))
+    vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 3))
     tfidf_matrix = vectorizer.fit_transform(df['body'])
     tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
     return tfidf_df
 
 def extract_features(email_entry, sender_freqs):
     sender = email_entry.get("from_email", "")
-    timestamp = email_entry.get("date", None)
+    # timestamp = email_entry.get("date", None)
     subject = email_entry.get("subject", "")
 
     features = {}
     features["sender_freq"] = sender_freqs.get(sender, 0)
-    features.update(process_time(timestamp))
+    # features.update(process_time(timestamp))
     subject = process_subject(subject)
 
     return features
