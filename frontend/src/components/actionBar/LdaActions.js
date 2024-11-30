@@ -3,8 +3,8 @@ import React from "react";
 import { useAppActions, useAppContext } from "../../hooks";
 import { Box, DIMENS, Flex, FONT_SIZE, Select, Text } from "../../styles";
 
-const MAX_NO_ABOVE = 10; // will be * 10
-const MAX_NO_BELOW = 6;
+const MAX_NO_ABOVE = 100;
+const MAX_NO_BELOW = 5;
 const MAX_NUM_TOPICS = 5;
 
 const LdaActions = ({ disabled }) => {
@@ -12,10 +12,13 @@ const LdaActions = ({ disabled }) => {
     const { setLdaConfig } = useAppActions();
 
     const handleConfigChange = (e) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name === "no_above") {
+            value /= 10;
+        }
         setLdaConfig({
             ...ldaConfig,
-            [name]: value,
+            [name]: parseFloat(value),
         });
     };
 
@@ -34,12 +37,12 @@ const LdaActions = ({ disabled }) => {
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={ldaConfig.no_below}
+                        value={ldaConfig.num_topics}
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
-                            { length: MAX_NO_BELOW },
-                            (_, index) => index
+                            { length: MAX_NUM_TOPICS },
+                            (_, index) => index + 1
                         ).map((num) => (
                             <option key={num} value={num}>
                                 {num}
@@ -66,8 +69,8 @@ const LdaActions = ({ disabled }) => {
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
-                            { length: MAX_NUM_TOPICS },
-                            (_, index) => index
+                            { length: MAX_NO_BELOW },
+                            (_, index) => index + 1
                         ).map((num) => (
                             <option key={num} value={num}>
                                 {num}
@@ -89,11 +92,11 @@ const LdaActions = ({ disabled }) => {
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={ldaConfig.no_above}
+                        value={ldaConfig.no_above * 10}
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
-                            { length: MAX_NO_ABOVE },
+                            { length: MAX_NO_ABOVE / 10 },
                             (_, index) => index + 1
                         ).map((num) => (
                             <option key={num} value={num}>
