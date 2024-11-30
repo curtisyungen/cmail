@@ -5,10 +5,18 @@ import { useAppActions, useAppContext } from "../../hooks";
 import { ALL_TOPICS } from "../../res";
 import { Box } from "../../styles";
 import DIMENS from "../../styles/Dimens";
+import { SortUtils } from "../../utils";
 
 const TopicsList = () => {
     const { setSelectedEmail, setSelectedTopic } = useAppActions();
     const { selectedTopic, topics, topicsMap } = useAppContext();
+
+    const [sortedTopics, setSortedTopics] = useState([]);
+
+    useEffect(() => {
+        console.log("topics: ", topics);
+        sortTopics();
+    }, [topics]);
 
     const [topicTotals, setTopicTotals] = useState({});
 
@@ -38,10 +46,22 @@ const TopicsList = () => {
         setSelectedTopic(selectedTopic === topic ? ALL_TOPICS : topic);
     };
 
+    const sortTopics = () => {
+        const sortedTopics = SortUtils.sortData({
+            data: topics.flat(),
+            key: "label",
+        });
+        console.log("sortedTopics: ", sortedTopics);
+        setSortedTopics(sortedTopics);
+    };
+
     return (
         <Box
+            height={DIMENS.EMAIL_LIST_HEIGHT}
+            justifyContent="flex-start"
             margin={{ right: DIMENS.SPACING_STANDARD }}
             padding={{ left: 10 }}
+            style={{ overflowY: "scroll" }}
             width="fit-content"
         >
             <Topic
@@ -51,7 +71,7 @@ const TopicsList = () => {
                 selectedTopic={selectedTopic}
                 size={topicTotals[ALL_TOPICS]}
             />
-            {topics.map(({ label, topic_id }, idx) => (
+            {sortedTopics.map(({ label, topic_id }, idx) => (
                 <Topic
                     key={idx}
                     id={topic_id}

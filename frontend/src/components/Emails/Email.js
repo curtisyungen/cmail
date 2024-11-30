@@ -8,7 +8,7 @@ import { Box, COLORS, DIMENS, FONT_SIZE, TextEllipsis } from "../../styles";
 const CLIPPED_BODY_LENGTH = 50;
 
 const Email = ({ email, isSelected, onClick, topicId }) => {
-    const { selectedTopic, topics, topicsMap } = useAppContext();
+    const { categories, selectedTopic, topics, topicsMap } = useAppContext();
 
     const [category, setCategory] = useState(null);
 
@@ -19,9 +19,17 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
     const loadCategory = () => {
         try {
             let category = null;
-            for (const { label, topic_id } of topics) {
+            for (const { label, topic_id } of topics.flat()) {
                 if (topic_id === topicId) {
-                    category = { name: label };
+                    const matchingCategory = categories.find(
+                        ({ name }) => name.toLowerCase() === label.toLowerCase()
+                    );
+                    console.log("matchingCategory: ", matchingCategory);
+                    if (matchingCategory) {
+                        category = matchingCategory;
+                    } else {
+                        category = { color: COLORS.BLUE_DARK, name: label };
+                    }
                     break;
                 }
             }

@@ -32,7 +32,7 @@ const LdaActions = ({ disabled }) => {
                 >
                     <Select
                         disabled={disabled}
-                        name="no_below"
+                        name="num_topics"
                         onChange={handleConfigChange}
                         style={{
                             marginBottom: "5px",
@@ -60,12 +60,12 @@ const LdaActions = ({ disabled }) => {
                 >
                     <Select
                         disabled={disabled}
-                        name="num_topics"
+                        name="no_below"
                         onChange={handleConfigChange}
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={ldaConfig.num_topics}
+                        value={ldaConfig.no_below}
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(

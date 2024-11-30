@@ -7,9 +7,9 @@ const useKeywords = () => {
     const [keywords, setKeywords] = useState([]);
 
     useEffect(() => {
-        const keywords = topics.find(
-            ({ topic_id }) => topic_id === selectedTopic
-        )?.keywords;
+        const keywords = topics
+            .flat()
+            .find(({ topic_id }) => topic_id === selectedTopic)?.keywords;
         setKeywords(keywords || []);
     }, [selectedTopic, topics]);
 

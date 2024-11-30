@@ -41,7 +41,7 @@ const Home = () => {
             const response = await axios.get("/api/fetch-emails", {
                 params: { limit: 400 },
             });
-            console.log("response: ", response);
+            console.log("fetch_emails response: ", response);
             if (response.status === 200) {
                 setEmails(response.data.emails);
             } else {
@@ -101,7 +101,7 @@ const Home = () => {
                     </Box>
                 </Box>
             </Flex>
-            {loading ? <Loading /> : <></>}
+            {/* {loading ? <Loading /> : <></>} */}
         </Box>
     );
 };

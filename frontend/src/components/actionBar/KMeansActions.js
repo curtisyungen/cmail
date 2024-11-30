@@ -18,13 +18,12 @@ import { StorageUtils } from "../../utils";
 
 const DEFAULT_NUM_CLUSTERS = 12;
 
-const KMeansActions = () => {
-    const { emails, ldaConfig } = useAppContext();
+const KMeansActions = ({ isRunning, setIsRunning }) => {
+    const { categories, emails, ldaConfig } = useAppContext();
     const { setTopics: setClusters, setTopicsMap: setEmailClusters } =
         useAppActions();
 
     const [error, setError] = useState(null);
-    const [isRunning, setIsRunning] = useState(false);
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
 
     useEffect(() => {
@@ -45,7 +44,7 @@ const KMeansActions = () => {
         try {
             const res = await axios.post("/api/run-kmeans", {
                 numClusters,
-                categories: [],
+                categories: categories.map(({ name }) => name),
                 ldaConfig,
             });
             console.log("response: ", res.data);

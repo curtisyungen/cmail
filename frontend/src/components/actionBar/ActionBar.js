@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
@@ -30,6 +30,7 @@ const Section = ({ children }) => {
 };
 
 const ActionBar = () => {
+    const [isRunning, setIsRunning] = useState(false);
     return (
         <Box
             background={COLORS.WHITE}
@@ -40,11 +41,14 @@ const ActionBar = () => {
         >
             <Flex>
                 <Section>
-                    <KMeansActions />
+                    <KMeansActions
+                        isRunning={isRunning}
+                        setIsRunning={setIsRunning}
+                    />
                 </Section>
                 <Divider />
                 <Section>
-                    <LdaActions />
+                    <LdaActions disabled={isRunning} />
                 </Section>
                 <Divider />
                 <Section>

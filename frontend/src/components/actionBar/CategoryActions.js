@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 
 import { Icon } from "../common";
+import { useAppActions, useAppContext } from "../../hooks";
 import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
@@ -148,11 +149,14 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
     );
 };
 
-const CategoryActions = ({ activeAction, categories, setCategories }) => {
+const CategoryActions = () => {
+    const { categories, loading } = useAppContext();
+    const { setCategories } = useAppActions();
+
     const [showModal, setShowModal] = useState(false);
 
     const handleClick = () => {
-        if (!activeAction) {
+        if (!loading) {
             setShowModal(true);
         }
     };
@@ -177,10 +181,10 @@ const CategoryActions = ({ activeAction, categories, setCategories }) => {
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!activeAction}
+                    clickable={!loading}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        activeAction ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                        loading ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
                     onClick={handleClick}
@@ -188,9 +192,7 @@ const CategoryActions = ({ activeAction, categories, setCategories }) => {
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
-                        color={
-                            activeAction ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK
-                        }
+                        color={loading ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK}
                         name={ICON.CATEGORY}
                         size={24}
                         style={{ marginBottom: "5px" }}

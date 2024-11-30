@@ -72,13 +72,14 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
     print("Extraction complete.")
 
     print(f"Running LDA...")
+    print(f"Categories: {categories}")
     clusters_with_labels = []
     for cluster in df['cluster_id'].unique():
         keywords = cluster_words[int(cluster)]
         lda_result = run_lda(cluster, keywords, categories, 
                              no_below=lda_config.get('no_below'), 
                              no_above=lda_config.get('no_above'), 
-                             num_topics=3)
+                             num_topics=lda_config.get('num_topics'))
         clusters_with_labels.append(lda_result)
     print("LDA complete.")
 

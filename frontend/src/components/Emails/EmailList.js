@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Email from "./Email";
 import Header from "./Header";
 import { useAppActions, useAppContext } from "../../hooks";
-import { Box, COLORS, DIMENS } from "../../styles";
+import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../styles";
 
 const EmailList = () => {
     const { emails, loading, selectedEmail, selectedTopic, topics, topicsMap } =
@@ -18,7 +18,14 @@ const EmailList = () => {
         setSelectedEmail(selectedEmail?.id === email.id ? null : email);
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+        return (
+            <Box margin={{ top: 10 }}>
+                <Text center fontSize={FONT_SIZE.S}>
+                    Loading emails...
+                </Text>
+            </Box>
+        );
 
     return (
         <Box
