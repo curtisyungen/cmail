@@ -11,7 +11,7 @@ def fetch_emails(creds, limit = 10):
     print(f"fetching {limit} emails...")
 
     emails = get_emails_from_redis()
-    if not emails.empty:
+    if not emails is None and not emails.empty:
         print(f"Emails loaded from Redis.")
         return pd.DataFrame(emails), True
     

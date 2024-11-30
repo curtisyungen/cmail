@@ -46,7 +46,7 @@ def fetch_emails_for_user():
             return jsonify({'error': 'Failed to get credentials.'}), 400
         
         emails_df, loaded_from_redis = fetch_emails(creds, limit)
-        if emails_df.empty:
+        if emails_df is None or emails_df.empty:
             return []
         
         if not loaded_from_redis:

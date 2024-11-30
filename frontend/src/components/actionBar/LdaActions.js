@@ -5,7 +5,7 @@ import { Box, DIMENS, Flex, FONT_SIZE, Select, Text } from "../../styles";
 const MAX_NO_ABOVE = 10; // will be * 10
 const MAX_NO_BELOW = 6;
 
-const LdaActions = ({ activeAction, ldaConfig, setLdaConfig }) => {
+const LdaActions = ({ disabled, ldaConfig, setLdaConfig }) => {
     const handleConfigChange = (e) => {
         const { name, value } = e.target;
         setLdaConfig({
@@ -23,7 +23,7 @@ const LdaActions = ({ activeAction, ldaConfig, setLdaConfig }) => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={activeAction}
+                        disabled={disabled}
                         name="no_below"
                         onChange={handleConfigChange}
                         style={{
@@ -50,7 +50,7 @@ const LdaActions = ({ activeAction, ldaConfig, setLdaConfig }) => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={activeAction}
+                        disabled={disabled}
                         name="no_above"
                         onChange={handleConfigChange}
                         style={{

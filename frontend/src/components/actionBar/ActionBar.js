@@ -32,13 +32,7 @@ const Section = ({ children }) => {
 const DEFAULT_NO_ABOVE = 0.5; // %
 const DEFAULT_NO_BELOW = 2;
 
-const ActionBar = ({
-    activeAction,
-    categories,
-    setCategories,
-    setEmailTopics,
-    setTopics,
-}) => {
+const ActionBar = () => {
     const [ldaConfig, setLdaConfig] = useState({
         no_below: DEFAULT_NO_BELOW,
         no_above: DEFAULT_NO_ABOVE,
@@ -54,27 +48,18 @@ const ActionBar = ({
         >
             <Flex>
                 <Section>
-                    <KMeansActions
-                        ldaConfig={ldaConfig}
-                        setEmailTopics={setEmailTopics}
-                        setTopics={setTopics}
-                    />
+                    <KMeansActions ldaConfig={ldaConfig} />
                 </Section>
                 <Divider />
                 <Section>
                     <LdaActions
-                        activeAction={activeAction}
                         ldaConfig={ldaConfig}
                         setLdaConfig={setLdaConfig}
                     />
                 </Section>
                 <Divider />
                 <Section>
-                    <OtherActions
-                        activeAction={activeAction}
-                        categories={categories}
-                        setCategories={setCategories}
-                    />
+                    <OtherActions categories={[]} setCategories={() => {}} />
                 </Section>
             </Flex>
         </Box>

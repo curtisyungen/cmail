@@ -11,10 +11,6 @@ const EmailList = () => {
     const { setSelectedEmail } = useAppActions();
 
     useEffect(() => {
-        console.log("selectedTopic: ", selectedTopic);
-    }, [selectedTopic]);
-
-    useEffect(() => {
         console.log("topicsMap: ", topicsMap);
     }, [topicsMap]);
 

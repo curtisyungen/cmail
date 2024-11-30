@@ -7,7 +7,7 @@ import { Box } from "../../styles";
 import DIMENS from "../../styles/Dimens";
 
 const TopicsList = () => {
-    const { setSelectedTopic } = useAppActions();
+    const { setSelectedEmail, setSelectedTopic } = useAppActions();
     const { selectedTopic, topics, topicsMap } = useAppContext();
 
     const [topicTotals, setTopicTotals] = useState({});
@@ -34,6 +34,7 @@ const TopicsList = () => {
     };
 
     const handleTopicClick = (topic) => {
+        setSelectedEmail(null);
         setSelectedTopic(selectedTopic === topic ? ALL_TOPICS : topic);
     };
 

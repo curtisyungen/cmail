@@ -1,42 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { AppContext } from "../AppContext";
 import { ActionBar, Loading, Navbar, Sidebar, TopicsList } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
-import { useAppActions } from "../hooks";
+import { useAppActions, useAppContext } from "../hooks";
 import { DEFAULT_CATEGORIES, LS, PAGES } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 import { StorageUtils } from "../utils";
 
 const Home = () => {
     const navigate = useNavigate();
-    const { state } = useContext(AppContext);
-    const {
-        authenticated,
-        categories,
-        emails,
-        loading,
-        selectedEmail,
-        selectedTopic,
-        topics,
-        topicsMap,
-    } = state;
-
-    const {
-        setCategories,
-        setEmails,
-        setLoading,
-        setSelectedEmail,
-        setSelectedTopic,
-        setTopics,
-        setTopicsMap,
-    } = useAppActions();
-
-    const [activeAction, setActiveAction] = useState(null);
-    const [emailTopics, setEmailTopics] = useState([]);
-    const [refreshEmails, setRefreshEmails] = useState(false);
+    const { authenticated, emails, loading, selectedEmail } = useAppContext();
+    const { setCategories, setEmails, setLoading } = useAppActions();
 
     useEffect(() => {
         if (!authenticated) {
@@ -56,13 +32,10 @@ const Home = () => {
         setCategories(savedCategories);
     }, []);
 
-    useEffect(() => {
-        if (refreshEmails) {
-            setRefreshEmails(false);
-        }
-    }, [refreshEmails]);
-
     async function fetchEmails() {
+        if (loading) {
+            return;
+        }
         setLoading(true);
         try {
             const response = await axios.get("/api/fetch-emails", {
@@ -80,10 +53,6 @@ const Home = () => {
             setLoading(false);
         }
     }
-    const handleSetTopics = (topics) => {
-        setTopics(topics);
-        setRefreshEmails(true);
-    };
 
     if (!authenticated) {
         return null;
@@ -106,13 +75,7 @@ const Home = () => {
                     style={{ flex: 1 }}
                     width="unset"
                 >
-                    <ActionBar
-                        activeAction={activeAction}
-                        categories={categories}
-                        setCategories={setCategories}
-                        setEmailTopics={setEmailTopics}
-                        setTopics={handleSetTopics}
-                    />
+                    <ActionBar />
                     <Box height={DIMENS.SPACING_STANDARD} width="100%" />
                     <Box
                         height={DIMENS.EMAIL_LIST_HEIGHT}
