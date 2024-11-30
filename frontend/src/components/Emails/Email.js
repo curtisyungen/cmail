@@ -16,9 +16,7 @@ const Email = ({
 }) => {
     const getRawBody = () => {
         const raw_body =
-            typeof email.raw_body === Array
-                ? email.raw_body[0]
-                : email.raw_body;
+            typeof email.body === Array ? email.body[0] : email.body;
         return raw_body.slice(0, CLIPPED_BODY_LENGTH);
     };
 

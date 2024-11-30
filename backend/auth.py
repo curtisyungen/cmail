@@ -1,7 +1,8 @@
 import json
 import requests
 from flask import jsonify, session
-from google.auth.credentials import Credentials
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 
 CREDENTIALS_FILE = './credentials.json'
 
@@ -41,7 +42,7 @@ def get_creds():
         if not access_token or not refresh_token:
             return None
         
-        return Credentials(
+        creds = Credentials(
             token=access_token,
             refresh_token=refresh_token,
             token_uri=TOKEN_URI,
@@ -49,6 +50,10 @@ def get_creds():
             client_secret=CLIENT_SECRET,
             scopes=SCOPES
         )
+
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        return creds
     except Exception as e:
         print(f"Error retrieving credentials: {e}")
         return None

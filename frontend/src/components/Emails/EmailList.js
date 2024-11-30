@@ -1,44 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import Email from "./Email";
 import Header from "./Header";
 import { Box, COLORS, DIMENS } from "../../styles";
+import { AppContext } from "../../AppContext";
 
 const EmailList = ({
     categories,
     refreshEmails,
-    selectedEmail,
-    selectedTopic,
     setSelectedEmail,
     topics,
     topicsMap,
 }) => {
-    const [emails, setEmails] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        if (refreshEmails) {
-            fetchEmails();
-        }
-    }, [refreshEmails]);
-
-    async function fetchEmails() {
-        try {
-            const response = await axios.get("/api/get-emails");
-            if (response.data.status === "success") {
-                setEmails(response.data.emails);
-            } else {
-                setError(response.data.message || "Failed to fetch emails.");
-            }
-        } catch (err) {
-            console.log("Error: ", err);
-            setError("Error connecting to the server.");
-        } finally {
-            setLoading(false);
-        }
-    }
+    const { state } = useContext(AppContext);
+    const { emails, loading, selectedEmail, selectedTopic } = state;
 
     const getCategory = (email) => {
         try {
@@ -62,7 +38,6 @@ const EmailList = ({
     };
 
     if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
 
     return (
         <Box
@@ -84,7 +59,7 @@ const EmailList = ({
             {emails.map((email, idx) => (
                 <Email
                     key={idx}
-                    category={getCategory(email)}
+                    category={null}
                     email={email}
                     isSelected={selectedEmail?.id === email.id}
                     onClick={() => handleEmailClick(email)}

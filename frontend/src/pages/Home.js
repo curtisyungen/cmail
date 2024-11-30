@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { AppContext } from "../AppContext";
 import { ActionBar, Loading, Navbar, Sidebar, TopicsList } from "../components";
@@ -26,6 +27,7 @@ const Home = () => {
     const {
         setCategories,
         setEmails,
+        setLoading,
         setSelectedEmail,
         setSelectedTopic,
         setTopics,
@@ -40,7 +42,13 @@ const Home = () => {
         if (!authenticated) {
             navigate(PAGES.LOGIN);
         }
-    }, []);
+    }, [authenticated]);
+
+    useEffect(() => {
+        if (authenticated && emails.length === 0) {
+            fetchEmails();
+        }
+    }, [authenticated]);
 
     useEffect(() => {
         const savedCategories =
@@ -54,10 +62,32 @@ const Home = () => {
         }
     }, [refreshEmails]);
 
+    async function fetchEmails() {
+        setLoading(true);
+        try {
+            const response = await axios.get("/api/fetch-emails", {
+                params: { limit: 100 },
+            });
+            console.log("response: ", response);
+            if (response.status === 200) {
+                setEmails(response.data.emails);
+            } else {
+                console.log(response.data.message || "Failed to fetch emails.");
+            }
+        } catch (err) {
+            console.log("Error fetching emails: ", err);
+        } finally {
+            setLoading(false);
+        }
+    }
     const handleSetTopics = (topics) => {
         setTopics(topics);
         setRefreshEmails(true);
     };
+
+    if (!authenticated) {
+        return null;
+    }
 
     return (
         <Box

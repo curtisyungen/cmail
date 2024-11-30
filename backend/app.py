@@ -1,5 +1,6 @@
 import json
 import os
+import secrets
 from auth import exchange_code_for_token, get_creds
 from gmail_service import fetch_emails
 from flask import Flask, request, jsonify
@@ -7,8 +8,21 @@ from main import generate_new_data, run_kmeans_model
 from config import EMAILS
 
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(16)
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+@app.route("/api/check-authentication", methods=['GET'])
+def check_authentication():
+    try:
+        creds = get_creds()
+        if creds:
+            return jsonify({'authenticated': True})
+        else:
+            return jsonify({'authenticated': False})
+    except Exception as e:
+        print(f"Error checking authentication: {e}")
+        return jsonify({'authenticated': False}), 500
 
 @app.route("/api/authenticate", methods=['POST'])
 def authenticate():
@@ -25,16 +39,16 @@ def authenticate():
 
 @app.route("/api/fetch-emails", methods=['GET'])
 def fetch_emails_for_user():
-    limit = request.json.get("limit")
+    limit = request.args.get('limit', default=100, type=int)
     try:
         creds = get_creds()
-        if not creds or not creds.get('access_token') or not creds.get('refresh_token'):
+        if not creds:
             return jsonify({'error': 'Failed to get credentials.'}), 400
         emails = fetch_emails(creds, limit)
-        return jsonify({'messages': emails})
+        return jsonify({'emails': emails})
     except Exception as e:
         print(f"Error fetching emails: {e}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'message': str(e)}), 500
 
 @app.route('/api/run-kmeans', methods=['POST'])
 def run_kmeans():
