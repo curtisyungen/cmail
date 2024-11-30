@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { Box, Button } from "../styles";
+import { Box, Button, COLORS, FONT_SIZE, Text } from "../styles";
+import { useAppActions } from "../hooks";
 
 const CLIENT_ID =
     "1008869086899-bvd2s8dbfue092mho910baieelbr2btf.apps.googleusercontent.com";
@@ -25,6 +27,11 @@ const Login = () => {
 };
 
 const LoginButton = () => {
+    const navigate = useNavigate();
+    const [authenticating, setAuthenticating] = useState(false);
+
+    const { setEmails } = useAppActions();
+
     const onFailure = (error) => {
         console.error("Login failed: ", error);
     };
@@ -35,15 +42,20 @@ const LoginButton = () => {
             return;
         }
 
+        setAuthenticating(true);
         try {
             const result = await axios.post("/api/authenticate", {
                 code: response.code,
-                limit: 10,
+                limit: 500,
             });
             const messages = result.data.messages;
             console.log("messages: ", messages);
+            setEmails(messages);
+            navigate("/");
         } catch (e) {
             console.error("Error authenticating: ", e);
+        } finally {
+            setAuthenticating(false);
         }
     };
 
@@ -55,7 +67,52 @@ const LoginButton = () => {
         scope: SCOPES.join(" "),
     });
 
-    return <Button onClick={login}>Login</Button>;
+    return (
+        <Box
+            alignItems="center"
+            background={COLORS.GRAY_LIGHT}
+            height="100vh"
+            justifyContent="center"
+        >
+            <Box alignItems="center">
+                <Box alignItems="center" margin={{ bottom: 24 }}>
+                    <Text bold fontSize={FONT_SIZE.XXXL}>
+                        Kmail
+                    </Text>
+                </Box>
+                <Box
+                    background={COLORS.WHITE}
+                    height={338}
+                    margin="auto"
+                    padding={44}
+                    width={440}
+                >
+                    <Text bold fontSize={FONT_SIZE.XL}>
+                        Sign in
+                    </Text>
+                    <Text fontSize={FONT_SIZE.M}>to continue to Kmail</Text>
+                    <Button
+                        background={COLORS.BLUE_DARK}
+                        color={COLORS.WHITE}
+                        onClick={login}
+                        style={{
+                            border: "none",
+                            borderRadius: "0px",
+                            fontSize: "15px",
+                            fontWeight: 400,
+                            marginTop: "10px",
+                            padding: "4px 12px",
+                            width: "auto",
+                        }}
+                    >
+                        {authenticating
+                            ? "Signing in..."
+                            : "Sign in with Gmail"}
+                    </Button>
+                </Box>
+            </Box>
+        </Box>
+    );
 };
 
 export default Login;

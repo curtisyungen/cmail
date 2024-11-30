@@ -8,7 +8,7 @@ def fetch_emails(creds, limit = 10):
         creds.refresh(Request())
     
     service = build('gmail', 'v1', credentials=creds)
-    query='label:inbox -label:spam -label:sent -label:archive'
+    query='label:inbox OR -label:spam -label:sent -label:archive -label:trash'
     results = service.users().messages().list(userId='me', q=query, maxResults=limit).execute()
     messages = results.get('messages', [])
 

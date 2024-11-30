@@ -1,33 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { ActionBar, Navbar, Sidebar, TopicsList } from "../components";
+import { ActionBar, Loading, Navbar, Sidebar, TopicsList } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
-import { ALL_TOPICS, DEFAULT_CATEGORIES, LS } from "../res";
+import { useAppActions } from "../hooks";
+import { DEFAULT_CATEGORIES, LS } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 import { StorageUtils } from "../utils";
+import { AppContext } from "../AppContext";
 
 const Home = () => {
+    const { state } = useContext(AppContext);
+    const {
+        categories,
+        emails,
+        loading,
+        selectedEmail,
+        selectedTopic,
+        topics,
+        topicsMap,
+    } = state;
+
+    const {
+        setCategories,
+        setEmails,
+        setSelectedEmail,
+        setSelectedTopic,
+        setTopics,
+        setTopicsMap,
+    } = useAppActions();
+
     const [activeAction, setActiveAction] = useState(null);
-    const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
     const [emailTopics, setEmailTopics] = useState([]);
     const [refreshEmails, setRefreshEmails] = useState(true);
-    const [selectedTopic, setSelectedTopic] = useState(ALL_TOPICS);
-    const [selectedEmail, setSelectedEmail] = useState(null);
-    const [topics, setTopics] = useState([]);
 
     useEffect(() => {
         const savedCategories =
             StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
         setCategories(savedCategories);
     }, []);
-
-    useEffect(() => {
-        console.log("categories: ", categories);
-    }, [topics]);
-
-    useEffect(() => {
-        console.log("topics: ", topics);
-    }, [topics]);
 
     useEffect(() => {
         if (refreshEmails) {
@@ -47,6 +57,8 @@ const Home = () => {
             justifyContent="flex-start"
             overflow="hidden"
         >
+            {loading ? <Loading /> : <></>}
+
             <Navbar />
             <Flex alignItems="flex-start">
                 <Sidebar />
