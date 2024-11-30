@@ -1,10 +1,29 @@
 import json
 import os
+from auth import exchange_code_for_token
+from gmail_service import fetch_emails
 from flask import Flask, request, jsonify
 from main import generate_new_data, run_kmeans_model
 from config import EMAILS
 
 app = Flask(__name__)
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+@app.route("/api/authenticate", methods=['POST'])
+def authenticate():
+    try:
+        auth_code = request.json.get('code')
+        limit = request.json.get("limit")
+        if not auth_code:
+            return jsonify({'error': 'Authorization code is required'}), 400
+
+        creds = exchange_code_for_token(auth_code)
+        emails = fetch_emails(creds, limit)
+        return jsonify({'messages': emails})
+    except Exception as e:
+        print(f"Error authenticating: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/run-kmeans', methods=['POST'])
 def run_kmeans():
