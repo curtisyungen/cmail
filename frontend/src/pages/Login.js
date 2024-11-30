@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { Box, Button, COLORS, FONT_SIZE, Text } from "../styles";
-import { useAppActions, useAuthentication } from "../hooks";
+import { useAppActions, useAppContext, useAuthentication } from "../hooks";
 import { PAGES } from "../res";
 
 const CLIENT_ID =
@@ -30,6 +30,7 @@ const Login = () => {
 const LoginButton = () => {
     const navigate = useNavigate();
 
+    const { authenticated } = useAppContext();
     const { setAuthenticated } = useAppActions();
     const { checkAuthentication } = useAuthentication();
 
@@ -38,6 +39,12 @@ const LoginButton = () => {
     useEffect(() => {
         checkAuthentication();
     }, []);
+
+    useEffect(() => {
+        if (authenticated) {
+            navigate(PAGES.HOME);
+        }
+    }, [authenticated]);
 
     const onAuthComplete = () => {
         setAuthenticated(true);

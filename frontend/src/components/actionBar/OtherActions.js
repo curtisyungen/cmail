@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import CategoryActions from "./CategoryActions";
 import { Icon } from "../common";
@@ -15,9 +16,16 @@ const OtherActions = ({ activeAction, categories, setCategories }) => {
         setHasCachedData(!!cachedData);
     }, []);
 
-    const handleClearCache = () => {
+    const handleClearCache = async () => {
         StorageUtils.clearAll();
         setHasCachedData(false);
+
+        try {
+            const result = await axios.post("/api/clear-redis");
+            console.log("clear-redis result: ", result);
+        } catch (e) {
+            console.log("Error clearing Redis: ", e);
+        }
     };
 
     return (

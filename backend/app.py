@@ -1,12 +1,10 @@
-import json
 import os
 import secrets
 from auth import exchange_code_for_token, get_creds
 from gmail_service import fetch_emails
 from flask import Flask, request, jsonify
-from main import generate_new_data, run_kmeans_model
-from redis_cache import get_emails_from_redis, store_emails_in_redis
-from config import EMAILS
+from main import run_kmeans_model
+from redis_cache import clear_emails_from_redis, get_emails_from_redis, store_emails_in_redis
 from src.utils.preprocess import clean_body
 
 app = Flask(__name__)
@@ -83,28 +81,15 @@ def run_kmeans():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
     
-@app.route('/api/generate-data', methods=['POST'])
-def generate_data():
-    data = request.json
-    email_count = data.get("emailCount", 100)
+@app.route('/api/clear-redis', methods=['POST'])
+def clear_redis():
     try:
-        generate_new_data(email_count)
+        clear_emails_from_redis()
         response = {
             "status": "success",
-            "message": "Data generated successfully.",
+            "message": "Emails cleared from Redis.",
         }
         return jsonify(response), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
-@app.route('/api/get-emails', methods=['GET'])
-def get_emails():
-    try:
-        if not os.path.exists(EMAILS):
-            return jsonify({"status": "error", "message": "File not found"}), 404
-        with open(EMAILS, 'r', encoding="utf-8") as file:
-            email_data = json.load(file)
-        return jsonify({"status": "success", "emails": email_data}), 200
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500

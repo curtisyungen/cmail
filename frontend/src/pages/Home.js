@@ -66,7 +66,7 @@ const Home = () => {
         setLoading(true);
         try {
             const response = await axios.get("/api/fetch-emails", {
-                params: { limit: 100 },
+                params: { limit: 400 },
             });
             console.log("response: ", response);
             if (response.status === 200) {
@@ -96,8 +96,6 @@ const Home = () => {
             justifyContent="flex-start"
             overflow="hidden"
         >
-            {loading ? <Loading /> : <></>}
-
             <Navbar />
             <Flex alignItems="flex-start">
                 <Sidebar />
@@ -153,6 +151,7 @@ const Home = () => {
                     </Box>
                 </Box>
             </Flex>
+            {loading ? <Loading /> : <></>}
         </Box>
     );
 };
