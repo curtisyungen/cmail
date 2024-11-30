@@ -1,3 +1,4 @@
+import pandas as pd
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from utils import decode_base64url
@@ -42,4 +43,4 @@ def fetch_emails(creds, limit = 10):
         email_data['body'] = decode_base64url(email_data['body'])
         emails.append(email_data)
 
-    return emails
+    return pd.DataFrame(emails)

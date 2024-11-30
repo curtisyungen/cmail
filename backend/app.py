@@ -6,6 +6,7 @@ from gmail_service import fetch_emails
 from flask import Flask, request, jsonify
 from main import generate_new_data, run_kmeans_model
 from config import EMAILS
+from src.utils.preprocess import clean_body
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -44,8 +45,14 @@ def fetch_emails_for_user():
         creds = get_creds()
         if not creds:
             return jsonify({'error': 'Failed to get credentials.'}), 400
-        emails = fetch_emails(creds, limit)
-        return jsonify({'emails': emails})
+        
+        emails_df = fetch_emails(creds, limit)
+        if emails_df.empty:
+            return []
+        
+        emails_df = clean_body(emails_df)
+
+        return jsonify({'emails': emails_df.to_dict(orient='records')})
     except Exception as e:
         print(f"Error fetching emails: {e}")
         return jsonify({'message': str(e)}), 500

@@ -9,8 +9,8 @@ const Body = ({ body }) => {
     return <Text>{body}</Text>;
 };
 
-const Header = ({ date, from_name, to }) => {
-    const sender = from_name || UNKNOWN_SENDER;
+const Header = ({ date, from, to }) => {
+    const sender = from || UNKNOWN_SENDER;
     return (
         <Box margin={{ bottom: 20 }}>
             <Flex>
@@ -45,15 +45,14 @@ const Subject = ({ subject }) => {
 };
 
 const EmailReader = ({ selectedEmail }) => {
-    console.log("email: ", selectedEmail);
-    const { date, from_name, raw_body, raw_subject, to } = selectedEmail;
+    const { date, from, body, subject, to } = selectedEmail;
     return (
         <Box justifyContent="flex-start" style={{ flex: 1, height: "100%" }}>
-            <Subject subject={raw_subject} />
+            <Subject subject={subject} />
             <Spacer />
             <Box background={COLORS.WHITE} borderRadius={5} padding={10}>
-                <Header date={date} from_name={from_name} to={to} />
-                <Body body={raw_body} />
+                <Header date={date} from={from} to={to} />
+                <Body body={body} />
             </Box>
         </Box>
     );

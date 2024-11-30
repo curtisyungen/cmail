@@ -41,13 +41,13 @@ const Email = ({
             transition={0}
             width="100%"
         >
-            <TextEllipsis>{email.from_name || UNKNOWN_SENDER}</TextEllipsis>
+            <TextEllipsis>{email.from || UNKNOWN_SENDER}</TextEllipsis>
             <TextEllipsis fontSize={FONT_SIZE.S}>
-                {email.raw_subject || "No subject"}
+                {email.subject || "No subject"}
             </TextEllipsis>
             <TextEllipsis fontSize={FONT_SIZE.S}>
                 {getRawBody()}
-                {email.raw_body.length > CLIPPED_BODY_LENGTH ? "..." : ""}
+                {email.body.length > CLIPPED_BODY_LENGTH ? "..." : ""}
             </TextEllipsis>
             <Tag color={category?.color} tag={category?.name} />
         </Box>
