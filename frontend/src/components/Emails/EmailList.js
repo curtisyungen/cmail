@@ -26,23 +26,6 @@ const EmailList = ({ refreshEmails }) => {
         console.log("topicsMap: ", topicsMap);
     }, [topicsMap]);
 
-    const getCategory = (email) => {
-        try {
-            const { id } = email;
-            const clusterId = topicsMap[id].cluster_id;
-            let name = "";
-            for (const { label, topic_id } of topics) {
-                if (topic_id === clusterId) {
-                    name = label;
-                    break;
-                }
-            }
-            return { name };
-        } catch (e) {
-            console.log("Error getting category: ", e);
-        }
-    };
-
     const handleEmailClick = (email) => {
         setSelectedEmail(selectedEmail?.id === email.id ? null : email);
     };
@@ -69,7 +52,6 @@ const EmailList = ({ refreshEmails }) => {
             {emails.map((email, idx) => (
                 <Email
                     key={idx}
-                    category={null}
                     email={email}
                     isSelected={selectedEmail?.id === email.id}
                     onClick={() => handleEmailClick(email)}

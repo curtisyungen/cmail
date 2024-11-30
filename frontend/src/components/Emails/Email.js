@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Tag from "./Tag";
 import { useAppContext } from "../../hooks";
@@ -7,8 +7,29 @@ import { Box, COLORS, DIMENS, FONT_SIZE, TextEllipsis } from "../../styles";
 
 const CLIPPED_BODY_LENGTH = 50;
 
-const Email = ({ category, email, isSelected, onClick, topicId }) => {
-    const { selectedTopic } = useAppContext();
+const Email = ({ email, isSelected, onClick, topicId }) => {
+    const { selectedTopic, topics, topicsMap } = useAppContext();
+
+    const [category, setCategory] = useState(null);
+
+    useEffect(() => {
+        loadCategory();
+    }, [email, topicsMap]);
+
+    const loadCategory = () => {
+        try {
+            let category = null;
+            for (const { label, topic_id } of topics) {
+                if (topic_id === topicId) {
+                    category = { name: label };
+                    break;
+                }
+            }
+            setCategory(category);
+        } catch (e) {
+            console.log("Error getting category: ", e);
+        }
+    };
 
     const getClippedBody = () => {
         const body = typeof email.body === Array ? email.body[0] : email.body;

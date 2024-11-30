@@ -34,7 +34,7 @@ const KMeansActions = ({ ldaConfig }) => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
         const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
         setClusters(savedClusters || []);
-        setEmailClusters(savedEmailClusters || []);
+        setEmailClusters(savedEmailClusters || {});
     }, []);
 
     const handleRunKmeans = async () => {

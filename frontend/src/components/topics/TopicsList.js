@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 import Topic from "./Topic";
+import { useAppActions, useAppContext } from "../../hooks";
 import { ALL_TOPICS } from "../../res";
 import { Box } from "../../styles";
 import DIMENS from "../../styles/Dimens";
 
-const TopicsList = ({ selectedTopic, setSelectedTopic, topicsMap, topics }) => {
+const TopicsList = () => {
+    const { setSelectedTopic } = useAppActions();
+    const { selectedTopic, topics, topicsMap } = useAppContext();
+
     const [topicTotals, setTopicTotals] = useState({});
 
     useEffect(() => {

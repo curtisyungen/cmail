@@ -19,7 +19,7 @@ const Tag = ({ color, tag }) => {
                     borderRadius={10}
                     borderWidth={1}
                     margin={{ right: 5 }}
-                    padding={3}
+                    padding={4}
                 >
                     <Icon color={color} name={ICON.CATEGORY} size={8} />
                 </Box>
