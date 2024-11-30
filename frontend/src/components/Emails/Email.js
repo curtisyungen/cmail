@@ -24,7 +24,6 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
                     const matchingCategory = categories.find(
                         ({ name }) => name.toLowerCase() === label.toLowerCase()
                     );
-                    console.log("matchingCategory: ", matchingCategory);
                     if (matchingCategory) {
                         category = matchingCategory;
                     } else {
@@ -59,10 +58,10 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
             padding={10}
             style={{
                 borderBottomWidth: 1,
-                maxHeight: DIMENS.EMAIL_HEIGHT,
+                maxHeight: DIMENS.EMAIL_MAX_HEIGHT,
                 userSelect: "none",
             }}
-            transition={0}
+            transition={"0s"}
             width="100%"
         >
             <TextEllipsis>{email.from || UNKNOWN_SENDER}</TextEllipsis>
@@ -73,7 +72,11 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
                 {getClippedBody()}
                 {email.body.length > CLIPPED_BODY_LENGTH ? "..." : ""}
             </TextEllipsis>
-            <Tag color={category?.color} tag={category?.name} />
+            {category?.name ? (
+                <Tag color={category?.color} tag={category?.name} />
+            ) : (
+                <></>
+            )}
         </Box>
     );
 };

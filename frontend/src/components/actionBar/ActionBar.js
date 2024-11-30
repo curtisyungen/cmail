@@ -52,7 +52,7 @@ const ActionBar = () => {
                 </Section>
                 <Divider />
                 <Section>
-                    <OtherActions categories={[]} setCategories={() => {}} />
+                    <OtherActions disabled={isRunning} />
                 </Section>
             </Flex>
         </Box>

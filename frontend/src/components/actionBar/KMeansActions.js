@@ -20,8 +20,7 @@ const DEFAULT_NUM_CLUSTERS = 12;
 
 const KMeansActions = ({ isRunning, setIsRunning }) => {
     const { categories, emails, ldaConfig } = useAppContext();
-    const { setTopics: setClusters, setTopicsMap: setEmailClusters } =
-        useAppActions();
+    const { setTopics, setTopicsMap } = useAppActions();
 
     const [error, setError] = useState(null);
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
@@ -29,16 +28,28 @@ const KMeansActions = ({ isRunning, setIsRunning }) => {
     useEffect(() => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
         const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
-        setClusters(savedClusters || []);
-        setEmailClusters(savedEmailClusters || {});
+        setTopics(savedClusters || []);
+        setTopicsMap(savedEmailClusters || {});
     }, []);
+
+    const getClustersValid = (clusters) => {
+        if (!clusters || clusters.length === 0) {
+            return false;
+        }
+        for (const cluster in clusters) {
+            if (cluster === null) {
+                return false;
+            }
+        }
+        return true;
+    };
 
     const handleRunKmeans = async () => {
         if (isRunning) {
             return;
         }
         setIsRunning(true);
-        setClusters([]);
+        setTopics([]);
         setError("");
 
         try {
@@ -51,11 +62,17 @@ const KMeansActions = ({ isRunning, setIsRunning }) => {
 
             const { clusters, email_clusters } = res.data;
 
-            setClusters(clusters);
-            setEmailClusters(email_clusters);
+            console.log("clusters: ", clusters);
 
-            StorageUtils.setItem(LS.CLUSTERS, clusters);
-            StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
+            if (getClustersValid(clusters)) {
+                setTopics(clusters);
+                setTopicsMap(email_clusters);
+
+                StorageUtils.setItem(LS.CLUSTERS, clusters);
+                StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
+            } else {
+                console.log("Invalid clusters: ", clusters);
+            }
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         } finally {

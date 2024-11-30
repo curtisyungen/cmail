@@ -149,14 +149,14 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
     );
 };
 
-const CategoryActions = () => {
-    const { categories, loading } = useAppContext();
+const CategoryActions = ({ isRunning }) => {
+    const { categories } = useAppContext();
     const { setCategories } = useAppActions();
 
     const [showModal, setShowModal] = useState(false);
 
     const handleClick = () => {
-        if (!loading) {
+        if (!isRunning) {
             setShowModal(true);
         }
     };
@@ -181,10 +181,10 @@ const CategoryActions = () => {
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!loading}
+                    clickable={!isRunning}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        loading ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                        isRunning ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
                     onClick={handleClick}
@@ -192,7 +192,9 @@ const CategoryActions = () => {
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
-                        color={loading ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK}
+                        color={
+                            isRunning ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK
+                        }
                         name={ICON.CATEGORY}
                         size={24}
                         style={{ marginBottom: "5px" }}

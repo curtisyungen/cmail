@@ -3,12 +3,12 @@ import axios from "axios";
 
 import CategoryActions from "./CategoryActions";
 import { Icon } from "../common";
+import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
-import { LS } from "../../res";
 
-const OtherActions = ({ activeAction, categories, setCategories }) => {
+const OtherActions = ({ isRunning }) => {
     const [hasCachedData, setHasCachedData] = useState(false);
 
     useEffect(() => {
@@ -31,18 +31,14 @@ const OtherActions = ({ activeAction, categories, setCategories }) => {
     return (
         <>
             <Flex>
-                <CategoryActions
-                    activeAction={activeAction}
-                    categories={categories}
-                    setCategories={setCategories}
-                />
+                <CategoryActions isRunning={isRunning} />
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!activeAction && hasCachedData}
+                    clickable={!isRunning && hasCachedData}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        activeAction || !hasCachedData
+                        isRunning || !hasCachedData
                             ? COLORS.TRANSPARENT
                             : COLORS.GRAY_LIGHT
                     }
@@ -52,7 +48,7 @@ const OtherActions = ({ activeAction, categories, setCategories }) => {
                 >
                     <Icon
                         color={
-                            activeAction || !hasCachedData
+                            isRunning || !hasCachedData
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }
@@ -63,7 +59,7 @@ const OtherActions = ({ activeAction, categories, setCategories }) => {
                     <Text
                         center
                         color={
-                            activeAction || !hasCachedData
+                            isRunning || !hasCachedData
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLACK
                         }

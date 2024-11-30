@@ -54,7 +54,7 @@ def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
         return []
     try:
         dictionary = corpora.Dictionary([keywords])
-        # dictionary.filter_extremes(no_below=no_below, no_above=no_above)
+        dictionary.filter_extremes(no_below=no_below, no_above=no_above)
         corpus = [dictionary.doc2bow(keywords)]
 
         lda_model = gensim.models.LdaMulticore(corpus, num_topics=num_topics, id2word=dictionary, passes=10)

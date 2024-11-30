@@ -73,6 +73,7 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
 
     print(f"Running LDA...")
     print(f"Categories: {categories}")
+    print(f"Lda config: {lda_config}")
     clusters_with_labels = []
     for cluster in df['cluster_id'].unique():
         keywords = cluster_words[int(cluster)]
