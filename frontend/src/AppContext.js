@@ -5,6 +5,7 @@ import { ALL_TOPICS, DEFAULT_CATEGORIES } from "./res";
 export const AppContext = createContext();
 
 const initialState = {
+    authenticated: false,
     categories: DEFAULT_CATEGORIES,
     emails: [],
     loading: false,
@@ -15,6 +16,7 @@ const initialState = {
 };
 
 export const ACTIONS = {
+    SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
     SET_EMAILS: "set_email",
     SET_LOADING: "set_loading",
@@ -28,6 +30,8 @@ export const useAppContext = () => useContext(AppContext);
 
 export const appReducer = (state, action) => {
     switch (action.type) {
+        case ACTIONS.SET_AUTHENTICATED:
+            return { ...state, authenticated: action.payload };
         case ACTIONS.SET_CATEGORIES:
             return { ...state, categories: action.payload };
         case ACTIONS.SET_EMAILS:

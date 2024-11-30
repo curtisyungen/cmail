@@ -1,4 +1,3 @@
-from flask import jsonify
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from utils import decode_base64url

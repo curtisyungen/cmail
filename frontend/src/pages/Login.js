@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { Box, Button, COLORS, FONT_SIZE, Text } from "../styles";
 import { useAppActions } from "../hooks";
+import { PAGES } from "../res";
 
 const CLIENT_ID =
     "1008869086899-bvd2s8dbfue092mho910baieelbr2btf.apps.googleusercontent.com";
@@ -28,9 +29,10 @@ const Login = () => {
 
 const LoginButton = () => {
     const navigate = useNavigate();
+
     const [authenticating, setAuthenticating] = useState(false);
 
-    const { setEmails } = useAppActions();
+    const { setAuthenticated } = useAppActions();
 
     const onFailure = (error) => {
         console.error("Login failed: ", error);
@@ -46,12 +48,13 @@ const LoginButton = () => {
         try {
             const result = await axios.post("/api/authenticate", {
                 code: response.code,
-                limit: 500,
             });
-            const messages = result.data.messages;
-            console.log("messages: ", messages);
-            setEmails(messages);
-            navigate("/");
+            if (result.status === 200) {
+                setAuthenticated(true);
+                navigate(PAGES.HOME);
+            } else {
+                throw new Error(result.data.message);
+            }
         } catch (e) {
             console.error("Error authenticating: ", e);
         } finally {

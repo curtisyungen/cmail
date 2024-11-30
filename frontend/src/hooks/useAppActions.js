@@ -4,6 +4,10 @@ import { AppContext, ACTIONS } from "../AppContext";
 const useAppActions = () => {
     const { dispatch } = useContext(AppContext);
 
+    const setAuthenticated = (authenticated) => {
+        dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: authenticated });
+    };
+
     const setEmails = (emails) => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
@@ -33,6 +37,7 @@ const useAppActions = () => {
     };
 
     return {
+        setAuthenticated,
         setEmails,
         setSelectedEmail,
         setCategories,

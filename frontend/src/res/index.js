@@ -5,7 +5,9 @@ export const ACTION = {
     KMEANS: "Kmeans",
     LDA: "LDA",
 };
+
 export const ALL_TOPICS = "All";
+
 export const DEFAULT_CATEGORIES = [
     { name: "Apartments", color: COLORS.YELLOW },
     { name: "Health", color: COLORS.GREEN },
@@ -18,9 +20,16 @@ export const DEFAULT_CATEGORIES = [
     { name: "School", color: COLORS.GRAY_MEDIUM },
     { name: "Travel", color: COLORS.PINK },
 ];
+
 export const LS = {
     CATEGORIES: "categories",
     CLUSTERS: "clusters",
     EMAIL_CLUSTERS: "email_clusters",
 };
+
+export const PAGES = {
+    HOME: "/home",
+    LOGIN: "/",
+};
+
 export const UNKNOWN_SENDER = "Unknown Sender";

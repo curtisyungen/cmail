@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { AppContext } from "../AppContext";
 import { ActionBar, Loading, Navbar, Sidebar, TopicsList } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
 import { useAppActions } from "../hooks";
-import { DEFAULT_CATEGORIES, LS } from "../res";
+import { DEFAULT_CATEGORIES, LS, PAGES } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 import { StorageUtils } from "../utils";
-import { AppContext } from "../AppContext";
 
 const Home = () => {
+    const navigate = useNavigate();
     const { state } = useContext(AppContext);
     const {
+        authenticated,
         categories,
         emails,
         loading,
@@ -31,7 +34,13 @@ const Home = () => {
 
     const [activeAction, setActiveAction] = useState(null);
     const [emailTopics, setEmailTopics] = useState([]);
-    const [refreshEmails, setRefreshEmails] = useState(true);
+    const [refreshEmails, setRefreshEmails] = useState(false);
+
+    useEffect(() => {
+        if (!authenticated) {
+            navigate(PAGES.LOGIN);
+        }
+    }, []);
 
     useEffect(() => {
         const savedCategories =

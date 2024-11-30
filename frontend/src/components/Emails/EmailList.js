@@ -18,8 +18,6 @@ const EmailList = ({
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    console.log("topics: ", topics);
-
     useEffect(() => {
         if (refreshEmails) {
             fetchEmails();

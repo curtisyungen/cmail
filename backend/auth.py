@@ -1,6 +1,7 @@
 import json
 import requests
-from google.oauth2.credentials import Credentials
+from flask import jsonify, session
+from google.auth.credentials import Credentials
 
 CREDENTIALS_FILE = './credentials.json'
 
@@ -11,6 +12,7 @@ CLIENT_ID = creds_data['web']['client_id']
 CLIENT_SECRET = creds_data['web']['client_secret']
 TOKEN_URI = creds_data['web']['token_uri']
 REDIRECT_URI = creds_data['web']['redirect_uris'][1]
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 def exchange_code_for_token(auth_code):
     data = {
@@ -28,15 +30,35 @@ def exchange_code_for_token(auth_code):
     tokens = response.json()
     access_token = tokens.get("access_token")
     refresh_token = tokens.get("refresh_token")
-    token_uri = tokens.get("token_uri", TOKEN_URI)
-    scopes = tokens.get("scope", "").split(" ")
 
-    creds = Credentials(
-        token=access_token,
-        refresh_token=refresh_token,
-        token_uri=token_uri,
-        client_id=CLIENT_ID,
-        client_secret=CLIENT_SECRET,
-        scopes=scopes
-    )
-    return creds
+    store_tokens(access_token=access_token, refresh_token=refresh_token)
+
+def get_creds():
+    try:
+        access_token = session.get('access_token')
+        refresh_token = session.get('refresh_token')
+
+        if not access_token or not refresh_token:
+            return None
+        
+        return Credentials(
+            token=access_token,
+            refresh_token=refresh_token,
+            token_uri=TOKEN_URI,
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            scopes=SCOPES
+        )
+    except Exception as e:
+        print(f"Error retrieving credentials: {e}")
+        return None
+
+def store_tokens(access_token, refresh_token):
+    try:
+        session['access_token'] = access_token
+        session['refresh_token'] = refresh_token
+        print("Tokens successfully stored.")
+        return jsonify({'message': 'User authenticated.'})
+    except Exception as e:
+        print(f"Error storing tokens: {e}")
+        return jsonify({'message': 'Error storing tokens.'})
