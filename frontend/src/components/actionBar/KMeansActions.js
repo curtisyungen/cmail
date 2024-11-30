@@ -4,7 +4,7 @@ import axios from "axios";
 import { Icon } from "../common";
 import { useAppActions } from "../../hooks";
 import { AppContext } from "../../AppContext";
-import { ACTION, LS } from "../../res";
+import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,
@@ -21,11 +21,12 @@ const DEFAULT_NUM_CLUSTERS = 12;
 
 const KMeansActions = ({ ldaConfig, setEmailTopics: setEmailClusters }) => {
     const { state } = useContext(AppContext);
-    const { activeAction, categories } = state;
+    const { categories, emails } = state;
 
-    const { setActiveAction, setTopics: setClusters } = useAppActions();
+    const { setTopics: setClusters } = useAppActions();
 
     const [error, setError] = useState(null);
+    const [isRunning, setIsRunning] = useState(false);
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
 
     useEffect(() => {
@@ -36,10 +37,10 @@ const KMeansActions = ({ ldaConfig, setEmailTopics: setEmailClusters }) => {
     }, []);
 
     const handleRunKmeans = async () => {
-        if (activeAction) {
+        if (isRunning) {
             return;
         }
-        setActiveAction(ACTION.KMEANS);
+        setIsRunning(true);
         setClusters([]);
         setError("");
 
@@ -63,7 +64,7 @@ const KMeansActions = ({ ldaConfig, setEmailTopics: setEmailClusters }) => {
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred");
         } finally {
-            setActiveAction(null);
+            setIsRunning(false);
         }
     };
 
@@ -73,10 +74,12 @@ const KMeansActions = ({ ldaConfig, setEmailTopics: setEmailClusters }) => {
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!activeAction}
+                    clickable={!isRunning && emails?.length > 0}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        activeAction ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                        isRunning || emails?.length === 0
+                            ? COLORS.TRANSPARENT
+                            : COLORS.GRAY_LIGHT
                     }
                     onClick={handleRunKmeans}
                     margin={{ right: DIMENS.SPACING_STANDARD }}
@@ -85,19 +88,19 @@ const KMeansActions = ({ ldaConfig, setEmailTopics: setEmailClusters }) => {
                 >
                     <Icon
                         color={
-                            activeAction ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK
+                            isRunning ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK
                         }
                         name={ICON.RUN}
                         size={26}
                         style={{ marginBottom: "5px" }}
                     />
                     <Text center fontSize={FONT_SIZE.S}>
-                        {activeAction === ACTION.KMEANS ? "Running" : "Run"}
+                        {isRunning ? "Running" : "Run"}
                     </Text>
                 </Box>
                 <Box style={{ flex: 1 }}>
                     <Select
-                        disabled={activeAction}
+                        disabled={isRunning}
                         onChange={(e) =>
                             setNumClusters(parseInt(e.target.value))
                         }

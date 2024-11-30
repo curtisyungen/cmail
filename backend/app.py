@@ -5,6 +5,7 @@ from auth import exchange_code_for_token, get_creds
 from gmail_service import fetch_emails
 from flask import Flask, request, jsonify
 from main import generate_new_data, run_kmeans_model
+from redis_cache import get_emails_from_redis, store_emails_in_redis
 from config import EMAILS
 from src.utils.preprocess import clean_body
 
@@ -51,6 +52,7 @@ def fetch_emails_for_user():
             return []
         
         emails_df = clean_body(emails_df)
+        store_emails_in_redis(emails_df)
 
         return jsonify({'emails': emails_df.to_dict(orient='records')})
     except Exception as e:
@@ -65,7 +67,9 @@ def run_kmeans():
     lda_config = data.get("ldaConfig", {})
 
     try:
-        df, clusters = run_kmeans_model(num_clusters, categories, lda_config)
+        emails_df = get_emails_from_redis()
+
+        df, clusters = run_kmeans_model(emails_df, num_clusters, categories, lda_config)
         email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
         email_clusters['id'] = email_clusters.index
         email_clusters = email_clusters[['id', 'body', 'cluster_id']].to_dict(orient='records')

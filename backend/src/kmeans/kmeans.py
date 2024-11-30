@@ -1,7 +1,7 @@
 import numpy as np
 from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
-from ..utils.preprocess import clean_and_tokenize, load_data
+from ..utils.preprocess import clean_and_tokenize, clean_body, lemmatize_body
 
 class KMeans:
     def __init__(self, k, max_iterations=100, tolerance=1e-4, random_state=26):
@@ -47,8 +47,10 @@ class KMeans:
     def predict(self, X):
         return self.assign_clusters(X)
 
-def run_kmeans(num_clusters, categories, lda_config):
-    df = load_data()
+def run_kmeans(emails_df, num_clusters, categories, lda_config):
+    df = emails_df.copy()
+    df = clean_body(df)
+    df = lemmatize_body(df)
 
     features_df = extract_features_from_dataframe(df)
     X = np.array(features_df.values, dtype=float)
@@ -73,8 +75,10 @@ def run_kmeans(num_clusters, categories, lda_config):
     clusters_with_labels = []
     for cluster in df['cluster_id'].unique():
         keywords = cluster_words[int(cluster)]
-        lda_result = run_lda(cluster, keywords, categories, no_below=lda_config.get('no_below'), 
-                             no_above=lda_config.get('no_above'), num_topics=1)
+        lda_result = run_lda(cluster, keywords, categories, 
+                             no_below=lda_config.get('no_below'), 
+                             no_above=lda_config.get('no_above'), 
+                             num_topics=1)
         clusters_with_labels.append(lda_result)
     print("LDA complete.")
 

@@ -35,7 +35,6 @@ const DEFAULT_NO_BELOW = 2;
 const ActionBar = ({
     activeAction,
     categories,
-    setActiveAction,
     setCategories,
     setEmailTopics,
     setTopics,
@@ -56,9 +55,6 @@ const ActionBar = ({
             <Flex>
                 <Section>
                     <KMeansActions
-                        activeAction={activeAction}
-                        categories={categories}
-                        setActiveAction={setActiveAction}
                         ldaConfig={ldaConfig}
                         setEmailTopics={setEmailTopics}
                         setTopics={setTopics}

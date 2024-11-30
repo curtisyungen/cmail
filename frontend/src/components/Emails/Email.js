@@ -14,10 +14,9 @@ const Email = ({
     selectedTopic,
     topics,
 }) => {
-    const getRawBody = () => {
-        const raw_body =
-            typeof email.body === Array ? email.body[0] : email.body;
-        return raw_body.slice(0, CLIPPED_BODY_LENGTH);
+    const getClippedBody = () => {
+        const body = typeof email.body === Array ? email.body[0] : email.body;
+        return body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
     if (selectedTopic !== ALL_TOPICS && topics.cluster_id !== selectedTopic) {
@@ -46,7 +45,7 @@ const Email = ({
                 {email.subject || "No subject"}
             </TextEllipsis>
             <TextEllipsis fontSize={FONT_SIZE.S}>
-                {getRawBody()}
+                {getClippedBody()}
                 {email.body.length > CLIPPED_BODY_LENGTH ? "..." : ""}
             </TextEllipsis>
             <Tag color={category?.color} tag={category?.name} />

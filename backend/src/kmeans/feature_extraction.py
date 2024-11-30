@@ -62,7 +62,7 @@ def run_tfidf(df):
     return tfidf_df
 
 def extract_features(email_entry, sender_freqs):
-    sender = email_entry.get("from_email", "")
+    sender = email_entry.get("from", "")
     # timestamp = email_entry.get("date", None)
     subject = email_entry.get("subject", "")
 
@@ -75,7 +75,7 @@ def extract_features(email_entry, sender_freqs):
 
 def extract_features_from_dataframe(df):
     try:
-        sender_freqs = compute_sender_freqs(df['from_email'])
+        sender_freqs = compute_sender_freqs(df['from'])
 
         extracted_features = []
         total_rows = len(df)

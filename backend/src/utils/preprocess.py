@@ -1,10 +1,8 @@
 import html
-import json
-import pandas as pd
 import re
 from bs4 import BeautifulSoup
 from nltk.stem import WordNetLemmatizer
-from config import EMAILS, stopwords
+from config import stopwords
 
 lemmatizer = WordNetLemmatizer()
 
@@ -52,15 +50,7 @@ def lemmatize_body(df):
         return df
 
 def clean_and_tokenize(text):
+    if not isinstance(text, str):
+        return []
     words = text.lower().split()
-    return [word for word in words if word.isalpha()]
-
-def load_data():
-    print("Loading data...")
-    data = []
-    with open(EMAILS, 'r', encoding="utf-8") as file:
-        data = json.load(file)
-    cleaned_df = clean_body(pd.DataFrame(data))
-    final_df = lemmatize_body(cleaned_df)
-    print("Loading complete.")
-    return final_df
+    return [word for word in words if word.isalpha() and word not in stopwords]

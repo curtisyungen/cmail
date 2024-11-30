@@ -111,7 +111,6 @@ const Home = () => {
                     <ActionBar
                         activeAction={activeAction}
                         categories={categories}
-                        setActiveAction={setActiveAction}
                         setCategories={setCategories}
                         setEmailTopics={setEmailTopics}
                         setTopics={handleSetTopics}
