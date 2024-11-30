@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import { Icon } from "../common";
+import { useAppActions } from "../../hooks";
+import { AppContext } from "../../AppContext";
 import { ACTION, LS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
@@ -17,14 +19,12 @@ import { StorageUtils } from "../../utils";
 
 const DEFAULT_NUM_CLUSTERS = 12;
 
-const KMeansActions = ({
-    activeAction,
-    categories,
-    ldaConfig,
-    setActiveAction,
-    setEmailTopics: setEmailClusters,
-    setTopics: setClusters,
-}) => {
+const KMeansActions = ({ ldaConfig, setEmailTopics: setEmailClusters }) => {
+    const { state } = useContext(AppContext);
+    const { activeAction, categories } = state;
+
+    const { setActiveAction, setTopics: setClusters } = useAppActions();
+
     const [error, setError] = useState(null);
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
 

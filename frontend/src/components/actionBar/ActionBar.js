@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import DataActions from "./DataActions";
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
 import OtherActions from "./OtherActions";
@@ -63,13 +62,6 @@ const ActionBar = ({
                         ldaConfig={ldaConfig}
                         setEmailTopics={setEmailTopics}
                         setTopics={setTopics}
-                    />
-                </Section>
-                <Divider />
-                <Section>
-                    <DataActions
-                        activeAction={activeAction}
-                        setActiveAction={setActiveAction}
                     />
                 </Section>
                 <Divider />

@@ -1,9 +1,7 @@
 import { COLORS } from "../styles";
 
 export const ACTION = {
-    GENERATE: "Generate",
     KMEANS: "Kmeans",
-    LDA: "LDA",
 };
 
 export const ALL_TOPICS = "All";
