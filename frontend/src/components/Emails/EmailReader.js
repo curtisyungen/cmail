@@ -47,7 +47,10 @@ const Subject = ({ subject }) => {
 const EmailReader = ({ selectedEmail }) => {
     const { date, from, body, subject, to } = selectedEmail;
     return (
-        <Box justifyContent="flex-start" style={{ flex: 1, height: "100%" }}>
+        <Box
+            justifyContent="flex-start"
+            style={{ flex: 1, height: "100%", overflowY: "scroll" }}
+        >
             <Subject subject={subject} />
             <Spacer />
             <Box background={COLORS.WHITE} borderRadius={5} padding={10}>

@@ -1,25 +1,21 @@
 import React from "react";
 
 import Tag from "./Tag";
+import { useAppContext } from "../../hooks";
 import { ALL_TOPICS, UNKNOWN_SENDER } from "../../res";
 import { Box, COLORS, DIMENS, FONT_SIZE, TextEllipsis } from "../../styles";
 
 const CLIPPED_BODY_LENGTH = 50;
 
-const Email = ({
-    category,
-    email,
-    isSelected,
-    onClick,
-    selectedTopic,
-    topics,
-}) => {
+const Email = ({ category, email, isSelected, onClick, topicId }) => {
+    const { selectedTopic } = useAppContext();
+
     const getClippedBody = () => {
         const body = typeof email.body === Array ? email.body[0] : email.body;
         return body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
-    if (selectedTopic !== ALL_TOPICS && topics.cluster_id !== selectedTopic) {
+    if (selectedTopic !== ALL_TOPICS && selectedTopic !== topicId) {
         return null;
     }
 

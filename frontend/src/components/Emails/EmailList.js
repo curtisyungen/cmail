@@ -1,20 +1,30 @@
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 
 import Email from "./Email";
 import Header from "./Header";
+import { useAppActions, useAppContext } from "../../hooks";
 import { Box, COLORS, DIMENS } from "../../styles";
-import { AppContext } from "../../AppContext";
 
-const EmailList = ({
-    categories,
-    refreshEmails,
-    setSelectedEmail,
-    topics,
-    topicsMap,
-}) => {
-    const { state } = useContext(AppContext);
-    const { emails, loading, selectedEmail, selectedTopic } = state;
+const EmailList = ({ refreshEmails }) => {
+    const {
+        categories,
+        emails,
+        loading,
+        selectedEmail,
+        selectedTopic,
+        topics,
+        topicsMap,
+    } = useAppContext();
+
+    const { setSelectedEmail } = useAppActions();
+
+    useEffect(() => {
+        console.log("selectedTopic: ", selectedTopic);
+    }, [selectedTopic]);
+
+    useEffect(() => {
+        console.log("topicsMap: ", topicsMap);
+    }, [topicsMap]);
 
     const getCategory = (email) => {
         try {
@@ -63,8 +73,7 @@ const EmailList = ({
                     email={email}
                     isSelected={selectedEmail?.id === email.id}
                     onClick={() => handleEmailClick(email)}
-                    selectedTopic={selectedTopic}
-                    topics={topicsMap[email.id]}
+                    topicId={topicsMap[idx]?.cluster_id}
                 />
             ))}
         </Box>

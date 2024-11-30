@@ -45,12 +45,13 @@ def fetch_emails_for_user():
         if not creds:
             return jsonify({'error': 'Failed to get credentials.'}), 400
         
-        emails_df = fetch_emails(creds, limit)
+        emails_df, loaded_from_redis = fetch_emails(creds, limit)
         if emails_df.empty:
             return []
         
-        emails_df = clean_body(emails_df)
-        store_emails_in_redis(emails_df)
+        if not loaded_from_redis:
+            emails_df = clean_body(emails_df)
+            store_emails_in_redis(emails_df)
 
         return jsonify({'emails': emails_df.to_dict(orient='records')})
     except Exception as e:

@@ -11,9 +11,9 @@ def fetch_emails(creds, limit = 10):
     print(f"fetching {limit} emails...")
 
     emails = get_emails_from_redis()
-    if emails:
+    if not emails.empty:
         print(f"Emails loaded from Redis.")
-        return pd.DataFrame(emails)
+        return pd.DataFrame(emails), True
     
     service = build('gmail', 'v1', credentials=creds)
     query='label:inbox OR -label:spam -label:sent -label:archive -label:trash'
@@ -51,4 +51,4 @@ def fetch_emails(creds, limit = 10):
         email_data['body'] = decode_base64url(email_data['body'])
         emails.append(email_data)
 
-    return pd.DataFrame(emails)
+    return pd.DataFrame(emails), False

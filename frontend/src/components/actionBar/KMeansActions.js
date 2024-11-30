@@ -19,11 +19,12 @@ import { StorageUtils } from "../../utils";
 
 const DEFAULT_NUM_CLUSTERS = 12;
 
-const KMeansActions = ({ ldaConfig, setEmailTopics: setEmailClusters }) => {
+const KMeansActions = ({ ldaConfig }) => {
     const { state } = useContext(AppContext);
     const { categories, emails } = state;
 
-    const { setTopics: setClusters } = useAppActions();
+    const { setTopics: setClusters, setTopicsMap: setEmailClusters } =
+        useAppActions();
 
     const [error, setError] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
