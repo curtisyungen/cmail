@@ -1,9 +1,13 @@
 import React from "react";
 
+import { useAppContext, useKeywords } from "../../hooks";
 import { ALL_TOPICS } from "../../res";
 import { Box, COLORS, Flex, Text } from "../../styles";
 
-const Header = ({ selectedTopic, topics = [] }) => {
+const Header = () => {
+    const { selectedTopic, topics } = useAppContext();
+    const { keywords } = useKeywords();
+
     if (selectedTopic === ALL_TOPICS || topics.length === 0) {
         return null;
     }
@@ -21,12 +25,7 @@ const Header = ({ selectedTopic, topics = [] }) => {
             <Text bold>Top Keywords</Text>
             <Box margin={{ top: 5 }}>
                 <Flex flexWrap={true}>
-                    <Text capitalize>
-                        {topics
-                            .find(({ topic_id }) => topic_id === selectedTopic)
-                            ?.keywords.map(({ word }) => word)
-                            .join(", ")}
-                    </Text>
+                    <Text capitalize>{keywords?.join(", ")}</Text>
                 </Flex>
             </Box>
         </Box>

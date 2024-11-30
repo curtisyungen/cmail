@@ -5,17 +5,9 @@ import Header from "./Header";
 import { useAppActions, useAppContext } from "../../hooks";
 import { Box, COLORS, DIMENS } from "../../styles";
 
-const EmailList = ({ refreshEmails }) => {
-    const {
-        categories,
-        emails,
-        loading,
-        selectedEmail,
-        selectedTopic,
-        topics,
-        topicsMap,
-    } = useAppContext();
-
+const EmailList = () => {
+    const { emails, loading, selectedEmail, selectedTopic, topics, topicsMap } =
+        useAppContext();
     const { setSelectedEmail } = useAppActions();
 
     useEffect(() => {

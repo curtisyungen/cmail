@@ -4,9 +4,15 @@ import Avatar from "./Avatar";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { DateTimeUtils } from "../../utils";
 import { UNKNOWN_SENDER } from "../../res";
+import { useAppContext, useKeywords } from "../../hooks";
 
-const Body = ({ body }) => {
-    return <Text>{body}</Text>;
+const Body = ({ body, keywords = [] }) => {
+    const keywordPattern = new RegExp(`\\b(${keywords.join("|")})\\b`, "gi");
+    const highlightedBody = body.replace(
+        keywordPattern,
+        (match) => `<strong>${match}</strong>`
+    );
+    return <Text dangerouslySetInnerHTML={{ __html: highlightedBody }} />;
 };
 
 const Header = ({ date, from, to }) => {
@@ -44,7 +50,9 @@ const Subject = ({ subject }) => {
     );
 };
 
-const EmailReader = ({ selectedEmail }) => {
+const EmailReader = () => {
+    const { selectedEmail } = useAppContext();
+    const { keywords } = useKeywords();
     const { date, from, body, subject, to } = selectedEmail;
     return (
         <Box
@@ -55,7 +63,7 @@ const EmailReader = ({ selectedEmail }) => {
             <Spacer />
             <Box background={COLORS.WHITE} borderRadius={5} padding={10}>
                 <Header date={date} from={from} to={to} />
-                <Body body={body} />
+                <Body body={body} keywords={keywords} />
             </Box>
         </Box>
     );

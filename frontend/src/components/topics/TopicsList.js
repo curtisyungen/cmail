@@ -22,7 +22,7 @@ const TopicsList = () => {
         }
         const totals = {};
         let totalEmails = 0;
-        for (const { cluster_id } of topicsMap) {
+        for (const { cluster_id } of Object.values(topicsMap)) {
             if (!totals[cluster_id]) {
                 totals[cluster_id] = 0;
             }

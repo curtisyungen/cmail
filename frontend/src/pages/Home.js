@@ -123,27 +123,14 @@ const Home = () => {
                             alignItems="flex-start"
                             style={{ overflow: "hidden" }}
                         >
-                            <TopicsList
-                                selectedTopic={selectedTopic}
-                                setSelectedTopic={setSelectedTopic}
-                                topics={topics}
-                                topicsMap={emailTopics}
-                            />
-                            <EmailList
-                                categories={categories}
-                                refreshEmails={refreshEmails}
-                                selectedEmail={selectedEmail}
-                                selectedTopic={selectedTopic}
-                                setSelectedEmail={setSelectedEmail}
-                                topics={topics}
-                                topicsMap={emailTopics}
-                            />
+                            <TopicsList />
+                            <EmailList />
                             <Box
                                 height="100%"
                                 width={DIMENS.SPACING_STANDARD}
                             />
                             {selectedEmail ? (
-                                <EmailReader selectedEmail={selectedEmail} />
+                                <EmailReader />
                             ) : (
                                 <EmptyStateView />
                             )}
