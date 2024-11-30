@@ -27,6 +27,7 @@ def fetch_emails(creds, limit = 10):
             'id': msg['id'],
             'subject': '',
             'from': '',
+            'to': '',
             'date': '',
             'body': ''
         }
@@ -38,6 +39,8 @@ def fetch_emails(creds, limit = 10):
                 email_data['from'] = header['value']
             if header['name'] == 'Date':
                 email_data['date'] = header['value']
+            if header['name'] == 'To':
+                email_data['to'] = header['value']
 
         if 'parts' in msg['payload']:
             for part in msg['payload']['parts']:
