@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 
-import { ALL_TOPICS, DEFAULT_CATEGORIES } from "./res";
+import { ALL_TOPICS, DEFAULT_CATEGORIES, DEFAULT_LDA_CONFIG } from "./res";
 
 export const AppContext = createContext();
 
@@ -8,6 +8,7 @@ const initialState = {
     authenticated: false,
     categories: DEFAULT_CATEGORIES,
     emails: [],
+    ldaConfig: DEFAULT_LDA_CONFIG,
     loading: false,
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
@@ -19,6 +20,7 @@ export const ACTIONS = {
     SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
     SET_EMAILS: "set_email",
+    SET_LDA_CONFIG: "set_lda_config",
     SET_LOADING: "set_loading",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
@@ -36,6 +38,8 @@ export const appReducer = (state, action) => {
             return { ...state, categories: action.payload };
         case ACTIONS.SET_EMAILS:
             return { ...state, emails: action.payload };
+        case ACTIONS.SET_LDA_CONFIG:
+            return { ...state, ldaConfig: action.payload };
         case ACTIONS.SET_LOADING:
             return { ...state, loading: action.payload };
         case ACTIONS.SET_SELECTED_EMAIL:

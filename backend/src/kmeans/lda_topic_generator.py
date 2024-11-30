@@ -19,7 +19,7 @@ def generate_label(keywords):
         print(f"Error generating label: {e}")
         return "Unknown"
 
-def run_lda(cluster, keywords, categories, no_below, no_above, num_topics=5):
+def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
     print(f"cluster {cluster}, keywords: {len(keywords)}")
     if not keywords:
         return []
@@ -33,11 +33,11 @@ def run_lda(cluster, keywords, categories, no_below, no_above, num_topics=5):
         for _, words in lda_model.show_topics(num_topics=num_topics, formatted=False):
             sorted_keywords = [word for word, _ in words]
             label = generate_label(sorted_keywords)
-            lda_topics = {
+            lda_topics.append({
                 'topic_id': int(cluster),
                 'keywords': [{'word': word, 'weight': float(weight)} for word, weight in words],
                 'label': label
-            }
+            })
         return lda_topics
     except Exception as e:
         print(f"Error running LDA: {e}")

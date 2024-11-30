@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { Icon } from "../common";
-import { useAppActions } from "../../hooks";
-import { AppContext } from "../../AppContext";
+import { useAppActions, useAppContext } from "../../hooks";
 import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
@@ -19,10 +18,8 @@ import { StorageUtils } from "../../utils";
 
 const DEFAULT_NUM_CLUSTERS = 12;
 
-const KMeansActions = ({ ldaConfig }) => {
-    const { state } = useContext(AppContext);
-    const { categories, emails } = state;
-
+const KMeansActions = () => {
+    const { emails, ldaConfig } = useAppContext();
     const { setTopics: setClusters, setTopicsMap: setEmailClusters } =
         useAppActions();
 
@@ -45,12 +42,10 @@ const KMeansActions = ({ ldaConfig }) => {
         setClusters([]);
         setError("");
 
-        console.log("lda_config: ", ldaConfig);
-
         try {
             const res = await axios.post("/api/run-kmeans", {
                 numClusters,
-                categories: categories.map(({ name }) => name),
+                categories: [],
                 ldaConfig,
             });
             console.log("response: ", res.data);

@@ -1,11 +1,16 @@
 import React from "react";
 
+import { useAppActions, useAppContext } from "../../hooks";
 import { Box, DIMENS, Flex, FONT_SIZE, Select, Text } from "../../styles";
 
 const MAX_NO_ABOVE = 10; // will be * 10
 const MAX_NO_BELOW = 6;
+const MAX_NUM_TOPICS = 5;
 
-const LdaActions = ({ disabled, ldaConfig, setLdaConfig }) => {
+const LdaActions = ({ disabled }) => {
+    const { ldaConfig } = useAppContext();
+    const { setLdaConfig } = useAppActions();
+
     const handleConfigChange = (e) => {
         const { name, value } = e.target;
         setLdaConfig({
@@ -34,6 +39,34 @@ const LdaActions = ({ disabled, ldaConfig, setLdaConfig }) => {
                     >
                         {Array.from(
                             { length: MAX_NO_BELOW },
+                            (_, index) => index
+                        ).map((num) => (
+                            <option key={num} value={num}>
+                                {num}
+                            </option>
+                        ))}
+                    </Select>
+                    <Text center fontSize={FONT_SIZE.S}>
+                        Topics / Cluster
+                    </Text>
+                </Box>
+                <Box
+                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                    margin={{ right: 5 }}
+                    style={{ flex: 1 }}
+                >
+                    <Select
+                        disabled={disabled}
+                        name="num_topics"
+                        onChange={handleConfigChange}
+                        style={{
+                            marginBottom: "5px",
+                        }}
+                        value={ldaConfig.num_topics}
+                        width={DIMENS.SELECT_WIDTH}
+                    >
+                        {Array.from(
+                            { length: MAX_NUM_TOPICS },
                             (_, index) => index
                         ).map((num) => (
                             <option key={num} value={num}>

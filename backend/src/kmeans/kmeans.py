@@ -78,7 +78,7 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
         lda_result = run_lda(cluster, keywords, categories, 
                              no_below=lda_config.get('no_below'), 
                              no_above=lda_config.get('no_above'), 
-                             num_topics=1)
+                             num_topics=3)
         clusters_with_labels.append(lda_result)
     print("LDA complete.")
 

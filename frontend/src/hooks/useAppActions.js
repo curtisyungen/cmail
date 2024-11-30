@@ -12,6 +12,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
 
+    const setLdaConfig = (ldaConfig) => {
+        dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
+    };
+
     const setLoading = (loading) => {
         dispatch({ type: ACTIONS.SET_LOADING, payload: loading });
     };
@@ -41,6 +45,7 @@ const useAppActions = () => {
         setEmails,
         setSelectedEmail,
         setCategories,
+        setLdaConfig,
         setLoading,
         setTopics,
         setSelectedTopic,

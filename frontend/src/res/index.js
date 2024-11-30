@@ -19,6 +19,12 @@ export const DEFAULT_CATEGORIES = [
     { name: "Travel", color: COLORS.PINK },
 ];
 
+export const DEFAULT_LDA_CONFIG = Object.freeze({
+    no_below: 2,
+    no_above: 0.5,
+    num_topics: 1,
+});
+
 export const LS = {
     CATEGORIES: "categories",
     CLUSTERS: "clusters",

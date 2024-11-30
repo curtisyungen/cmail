@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
@@ -29,15 +29,7 @@ const Section = ({ children }) => {
     );
 };
 
-const DEFAULT_NO_ABOVE = 0.5; // %
-const DEFAULT_NO_BELOW = 2;
-
 const ActionBar = () => {
-    const [ldaConfig, setLdaConfig] = useState({
-        no_below: DEFAULT_NO_BELOW,
-        no_above: DEFAULT_NO_ABOVE,
-    });
-
     return (
         <Box
             background={COLORS.WHITE}
@@ -48,14 +40,11 @@ const ActionBar = () => {
         >
             <Flex>
                 <Section>
-                    <KMeansActions ldaConfig={ldaConfig} />
+                    <KMeansActions />
                 </Section>
                 <Divider />
                 <Section>
-                    <LdaActions
-                        ldaConfig={ldaConfig}
-                        setLdaConfig={setLdaConfig}
-                    />
+                    <LdaActions />
                 </Section>
                 <Divider />
                 <Section>
