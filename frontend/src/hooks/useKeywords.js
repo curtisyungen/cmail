@@ -7,17 +7,16 @@ const useKeywords = () => {
     const [keywords, setKeywords] = useState([]);
 
     useEffect(() => {
-        const keywords = topics
-            .find(({ topic_id }) => topic_id === selectedTopic)
-            ?.keywords.map(({ word }) => word);
+        const keywords = topics.find(
+            ({ topic_id }) => topic_id === selectedTopic
+        )?.keywords;
         console.log("keywords: ", keywords);
-        console.log("topics: ", topics);
-        console.log("selectedTopic: ", selectedTopic);
-        setKeywords(keywords);
+        setKeywords(keywords || []);
     }, [selectedTopic, topics]);
 
     return {
-        keywords,
+        keywords: keywords.map(({ word }) => word),
+        keywordsWithWeights: keywords,
     };
 };
 

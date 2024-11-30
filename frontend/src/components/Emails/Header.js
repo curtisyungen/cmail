@@ -2,11 +2,11 @@ import React from "react";
 
 import { useAppContext, useKeywords } from "../../hooks";
 import { ALL_TOPICS } from "../../res";
-import { Box, COLORS, Flex, Text } from "../../styles";
+import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
 
 const Header = () => {
     const { selectedTopic, topics } = useAppContext();
-    const { keywords } = useKeywords();
+    const { keywordsWithWeights } = useKeywords();
 
     if (selectedTopic === ALL_TOPICS || topics.length === 0) {
         return null;
@@ -25,7 +25,18 @@ const Header = () => {
             <Text bold>Top Keywords</Text>
             <Box margin={{ top: 5 }}>
                 <Flex flexWrap={true}>
-                    <Text capitalize>{keywords?.join(", ")}</Text>
+                    <Text capitalize fontSize={FONT_SIZE.S}>
+                        {keywordsWithWeights
+                            .reduce((array, { weight, word }) => {
+                                array.push(
+                                    `${word} (${
+                                        Math.round(weight * 100 * 10) / 10
+                                    }%)`
+                                );
+                                return array;
+                            }, [])
+                            .join(", ")}
+                    </Text>
                 </Flex>
             </Box>
         </Box>
