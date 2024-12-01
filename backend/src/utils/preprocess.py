@@ -1,13 +1,14 @@
 import html
 import re
+import emoji
 from bs4 import BeautifulSoup
 from nltk.stem import WordNetLemmatizer
 from config import stopwords
 
 lemmatizer = WordNetLemmatizer()
 
-def clean_body(df):
-    print("Cleaning body...")
+def clean_text(df, column):
+    print(f"Cleaning {column} column...")
     try: 
         def clean(text):
             if not isinstance(text, str): return ""
@@ -19,6 +20,7 @@ def clean_body(df):
                 soup = BeautifulSoup(text, 'html.parser')
                 text = soup.get_text()
 
+            text = emoji.replace_emoji(text, replace='')
             text = re.sub(r'http\S+|www\S+|https\S+', '', text) # URLs
             text = re.sub(r'\S+@\S+', '', text) # emails
             text = re.sub(r'=\S+', ' ', text) # encodings
@@ -26,16 +28,16 @@ def clean_body(df):
             text = re.sub(r'\s+', ' ', text).strip() # whitespaces
 
             return text
-        df['raw_body'] = df['body']
-        df['body'] = df['body'].apply(clean)
-        print("Cleaning complete.")
+        df[f'raw_{column}'] = df[column]
+        df[column] = df[column].apply(clean)
+        print(f"Cleaning {column} complete.")
         return df
     except Exception as e:
-        print(f"Error cleaning body: {e}")
+        print(f"Error cleaning {column}: {e}")
         return df
-    
+
 def lemmatize_body(df):
-    print("Lemmatizing body...")
+    print("Lemmatizing bodies...")
     try:
         def lemmatize(body):
             if not body:

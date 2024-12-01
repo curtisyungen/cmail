@@ -3,7 +3,7 @@ from sklearn.decomposition import PCA
 from .silhouette_score import calculate_silhouette_score
 from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
-from ..utils.preprocess import clean_and_tokenize, clean_body, lemmatize_body
+from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_body
 
 class KMeans:
     def __init__(self, k, max_iterations=100, tolerance=1e-4, random_state=26):
@@ -65,14 +65,17 @@ class KMeans:
 
 def run_kmeans(emails_df, categories, kmeans_config, lda_config):
     print(f"Setting up K-means with config {kmeans_config} and {len(emails_df)} emails...")
-    df = emails_df.copy()
-    df = clean_body(df)
-    df = lemmatize_body(df)
-
     include_labels = kmeans_config.get('include_labels')
     include_senders = kmeans_config.get('include_senders')
     include_subject = kmeans_config.get('include_subject')
     num_clusters = kmeans_config.get('num_clusters')
+    
+    df = emails_df.copy()
+    df = clean_text(df, 'body')
+    df = lemmatize_body(df)
+
+    if include_subject:
+        df = clean_text(df, 'subject')
 
     features_df = extract_features_from_dataframe(df, include_labels, include_senders, include_subject)
     X = np.array(features_df.values, dtype=float)

@@ -1,12 +1,8 @@
 from collections import Counter
 from datetime import datetime
-import emoji
 import pandas as pd
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
-
-def clean_subject(subject):
-    return emoji.replace_emoji(subject, replace='').lower().strip()
 
 def compute_sender_freqs(sender_column):
     try:
@@ -73,50 +69,44 @@ def process_time(timestamp):
             }
     except Exception as e:
         print(f"Error processing time: {e}")
-    
-def run_tfidf(df):
-    if df['body'].isnull().any():
-        print("Warning: Found null values in 'body' column")
-        df = df.dropna(subset=['body'])
-    vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 3))
-    tfidf_matrix = vectorizer.fit_transform(df['body'])
-    tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
-    return tfidf_df
 
-def extract_features(email_entry, sender_freqs, include_senders, include_subject):
+def run_tfidf(df, column):
+    try:
+        if df[column].isnull().any():
+            print(f"Warning: Found null values in '{column}' column")
+            df = df.dropna(subset=[column])
+        vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 3))
+        tfidf_matrix = vectorizer.fit_transform(df[column])
+        tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
+        return tfidf_df
+    except Exception as e:
+        print(f"Error running tfidf on {column}: {e}")
+
+def extract_features(email_entry, sender_freqs, include_senders):
     features = {}
     if include_senders:
         sender = email_entry.get("from", "")
         features["sender_freq"] = sender_freqs.get(sender, 0)
-    if include_subject:
-        subject = email_entry.get("subject", "")
-        features["subject"] = clean_subject(subject)
     return features
 
 def extract_features_from_dataframe(df, include_labels, include_senders, include_subject):
     try:
         print("Extract features...")
-        total_rows = len(df)
         extracted_features = []
         
-        labels_df = pd.DataFrame()
-        if include_labels:
-            labels_df = encode_labels(df)
-
-        sender_freqs = compute_sender_freqs(df['from'])
+        labels_df = encode_labels(df) if include_labels else pd.DataFrame()
+        sender_freqs = compute_sender_freqs(df['from']) if include_senders else {}
         
-        for idx, row in df.iterrows():
-            if idx % 100 == 0 and idx > 0:
-                print(f"Processed {idx}/{total_rows} rows")
-            features = extract_features(row, sender_freqs, include_senders, include_subject)
-            extracted_features.append(features)
-
-        tfidf_df = run_tfidf(df)
+        extracted_features = df.apply(lambda row: extract_features(row, sender_freqs, include_senders), axis=1).tolist()
         features_df = pd.DataFrame(extracted_features).fillna(0)
-        if not labels_df is None and not labels_df.empty:
-            final_df = pd.concat([tfidf_df, features_df, labels_df], axis=1)
+
+        tfidf_body_df = run_tfidf(df, 'body')
+        tfidf_subject_df = run_tfidf(df, 'subject') if include_subject else pd.DataFrame()
+
+        if include_labels and not labels_df.empty:
+            final_df = pd.concat([features_df, tfidf_body_df, tfidf_subject_df, labels_df], axis=1)
         else:
-            final_df = pd.concat([tfidf_df, features_df], axis=1)
+            final_df = pd.concat([features_df, tfidf_body_df, tfidf_subject_df], axis=1)
 
         print(f"Feature extraction complete.")
         return final_df

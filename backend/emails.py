@@ -5,7 +5,7 @@ from io import StringIO
 from redis_cache import get_value_from_redis, store_value_in_redis
 from utils import decode_base64url
 from config import REDIS_KEYS
-from src.utils.preprocess import clean_body
+from src.utils.preprocess import clean_text
 
 def fetch_emails(creds, limit):
     print(f"Fetching emails from API...")
@@ -68,7 +68,8 @@ def get_emails(creds, limit):
         if emails_df is None or emails_df.empty:
             return None
 
-        emails_df = clean_body(emails_df)
+        emails_df = clean_text(emails_df, 'body')
+        emails_df = clean_text(emails_df, 'subject')
         store_value_in_redis(REDIS_KEYS.EMAILS, emails_df.to_json(orient='records'))
 
         return emails_df
