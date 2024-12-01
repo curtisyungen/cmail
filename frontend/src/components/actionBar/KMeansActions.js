@@ -45,7 +45,7 @@ const KMeansActions = () => {
                         kmeansDisabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
-                    onClick={runKMeans}
+                    onClick={() => runKMeans({ numClusters })}
                     style={{ flex: 1 }}
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >

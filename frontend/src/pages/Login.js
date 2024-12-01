@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
 import { Box, Button, COLORS, FONT_SIZE, Text } from "../styles";
-import {
-    useApi,
-    useAppActions,
-    useAppContext,
-    useAuthentication,
-} from "../hooks";
-import { PAGES } from "../res";
+import { useApi, useAppContext, useAuthentication } from "../hooks";
+import { PAGES, STATUS } from "../res";
 
 const CLIENT_ID =
     "1008869086899-bvd2s8dbfue092mho910baieelbr2btf.apps.googleusercontent.com";
@@ -35,11 +30,8 @@ const LoginButton = () => {
     const navigate = useNavigate();
 
     const { authenticateUser } = useApi();
-    const { authenticated } = useAppContext();
-    const { setAuthenticated } = useAppActions();
+    const { authenticated, status } = useAppContext();
     const { checkAuthentication } = useAuthentication();
-
-    const [authenticating, setAuthenticating] = useState(false);
 
     useEffect(() => {
         checkAuthentication();
@@ -60,10 +52,7 @@ const LoginButton = () => {
             console.error("Error logging in: ", response.error);
             return;
         }
-        authenticateUser(response.code, () => {
-            setAuthenticated(true);
-            navigate(PAGES.HOME);
-        });
+        authenticateUser(response.code);
     };
 
     const login = useGoogleLogin({
@@ -112,7 +101,7 @@ const LoginButton = () => {
                             width: "auto",
                         }}
                     >
-                        {authenticating
+                        {status === STATUS.AUTHENTICATING
                             ? "Signing in..."
                             : "Sign in with Gmail"}
                     </Button>

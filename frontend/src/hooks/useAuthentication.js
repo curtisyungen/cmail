@@ -8,6 +8,7 @@ const useAuthentication = () => {
     const checkAuthentication = async () => {
         try {
             const result = await axios.get("/api/check-authentication");
+            console.log("check-authentication result: ", result);
             if (result.data?.authenticated) {
                 setAuthenticated(true);
             } else {

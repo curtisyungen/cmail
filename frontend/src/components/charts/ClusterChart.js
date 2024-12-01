@@ -6,7 +6,9 @@ import { useAppContext } from "../../hooks";
 import { Box } from "../../styles";
 
 const ClusterChart = ({ onClose, open }) => {
-    const { clustersData } = useAppContext();
+    const {
+        kmeansData: { clusters_data },
+    } = useAppContext();
 
     const [plotData, setPlotData] = useState([]);
 
@@ -15,7 +17,7 @@ const ClusterChart = ({ onClose, open }) => {
             return;
         }
 
-        const traceData = clustersData.map((cluster, idx) => {
+        const traceData = clusters_data.map((cluster, idx) => {
             return {
                 x: cluster.x,
                 y: cluster.y,

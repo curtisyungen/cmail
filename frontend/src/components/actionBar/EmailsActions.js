@@ -66,6 +66,7 @@ const EmailsActions = () => {
                 </Box>
                 <Box style={{ flex: 1 }}>
                     <Select
+                        defaultValue={numEmails}
                         disabled={false}
                         onChange={(e) => setNumEmails(parseInt(e.target.value))}
                         style={{

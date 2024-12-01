@@ -7,17 +7,23 @@ import { StorageUtils } from "../utils";
 
 const useApi = () => {
     const { categories, ldaConfig, numEmails, status } = useAppContext();
-    const { setEmails, setKMeansData, setStatus, setTopics, setTopicsMap } =
-        useAppActions();
+    const {
+        setAuthenticated,
+        setEmails,
+        setKMeansData,
+        setStatus,
+        setTopics,
+        setTopicsMap,
+    } = useAppActions();
 
-    const authenticateUser = async (code, onComplete) => {
+    const authenticateUser = async (code) => {
         setStatus(STATUS.AUTHENTICATING);
         try {
             const result = await axios.post("/api/authenticate", {
                 code,
             });
             if (result.status === 200) {
-                onComplete();
+                setAuthenticated(true);
             } else {
                 throw new Error(result.data.message);
             }

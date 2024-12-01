@@ -6,13 +6,15 @@ import { useAppContext } from "../../hooks";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 
-const ChartActions = () => {
+const AnalysisActions = () => {
     const { kmeansData, status } = useAppContext();
-    const { clustersData, silhouetteScore } = kmeansData;
+    const { clusters_data, silhouette_score } = kmeansData;
+
+    console.log("kmeansData: ", kmeansData);
 
     const [showModal, setShowModal] = useState(false);
 
-    const disabled = status || !clustersData || clustersData.length === 0;
+    const disabled = status || !clusters_data || clusters_data.length === 0;
 
     return (
         <>
@@ -62,9 +64,9 @@ const ChartActions = () => {
                             color={disabled ? COLORS.GRAY_MEDIUM : COLORS.BLACK}
                             fontSize={FONT_SIZE.XXL}
                         >
-                            {isNaN(silhouetteScore)
+                            {isNaN(silhouette_score)
                                 ? "N/A"
-                                : Math.round(silhouetteScore * 100) / 100}
+                                : Math.round(silhouette_score * 100) / 100}
                         </Text>
                     </Box>
                     <Text
@@ -86,4 +88,4 @@ const ChartActions = () => {
     );
 };
 
-export default ChartActions;
+export default AnalysisActions;

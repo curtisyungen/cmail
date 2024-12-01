@@ -1,11 +1,13 @@
 import os
+import pandas as pd
 import secrets
 from flask import Flask, request, jsonify
+from io import StringIO
 from auth import exchange_code_for_token, get_creds
 from main import run_kmeans_model
 from config import REDIS_KEYS
 from emails import get_emails
-from redis_cache import clear_redis_values, remove_value_from_redis
+from redis_cache import clear_redis_values, get_value_from_redis, remove_value_from_redis
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -62,13 +64,12 @@ def run_kmeans():
     lda_config = data.get("ldaConfig", {})
 
     try:
-        creds = get_creds()
-        if not creds:
-            return jsonify({'error': 'Failed to get credentials.'}), 400
+        # Emails should always be loaded/stored before run_kmeans() is called
+        emails = get_value_from_redis(REDIS_KEYS.EMAILS)
+        if not emails:
+            return jsonify({'error', 'No emails found.'}), 404
         
-        emails_df = get_emails(creds, num_emails)
-        if emails_df is None or emails_df.empty:
-            return jsonify({'error': 'No emails found'}), 404
+        emails_df = pd.read_json(StringIO(emails))
 
         df, clusters, silhouette_score = run_kmeans_model(emails_df, num_clusters, categories, lda_config)
         

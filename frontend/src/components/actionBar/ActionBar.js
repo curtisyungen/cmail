@@ -1,6 +1,6 @@
 import React from "react";
 
-import ChartActions from "./ChartActions";
+import AnalysisActions from "./AnalysisActions";
 import EmailsActions from "./EmailsActions";
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
@@ -61,7 +61,7 @@ const ActionBar = () => {
                 </Section>
                 <Divider />
                 <Section>
-                    <ChartActions />
+                    <AnalysisActions />
                 </Section>
             </Flex>
         </Box>
