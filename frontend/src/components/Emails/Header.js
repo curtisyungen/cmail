@@ -28,11 +28,7 @@ const Header = () => {
                     <Text capitalize fontSize={FONT_SIZE.S}>
                         {keywordsWithWeights
                             .reduce((array, { weight, word }) => {
-                                array.push(
-                                    `${word} (${
-                                        Math.round(weight * 100 * 10) / 10
-                                    }%)`
-                                );
+                                array.push(`${word}`);
                                 return array;
                             }, [])
                             .join(", ")}

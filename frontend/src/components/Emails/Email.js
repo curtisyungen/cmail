@@ -3,7 +3,16 @@ import React, { useEffect, useState } from "react";
 import Tag from "./Tag";
 import { useAppContext } from "../../hooks";
 import { ALL_TOPICS, UNKNOWN_SENDER } from "../../res";
-import { Box, COLORS, DIMENS, FONT_SIZE, TextEllipsis } from "../../styles";
+import {
+    Box,
+    COLORS,
+    DIMENS,
+    Flex,
+    FONT_SIZE,
+    Text,
+    TextEllipsis,
+} from "../../styles";
+import { DateTimeUtils } from "../../utils";
 
 const CLIPPED_BODY_LENGTH = 50;
 
@@ -64,10 +73,22 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
             transition={"0s"}
             width="100%"
         >
-            <TextEllipsis>{email.from || UNKNOWN_SENDER}</TextEllipsis>
-            <TextEllipsis fontSize={FONT_SIZE.S}>
-                {email.subject || "No subject"}
+            <TextEllipsis>
+                {email.from.split("<")[0]?.trim() || UNKNOWN_SENDER}
             </TextEllipsis>
+            <Box style={{ height: "2px" }} />
+            <Flex justifyContent="space-between">
+                <TextEllipsis
+                    fontSize={FONT_SIZE.S}
+                    style={{ marginRight: "13px" }}
+                >
+                    {email.subject || "No subject"}
+                </TextEllipsis>
+                <Text fontSize={FONT_SIZE.S}>
+                    {DateTimeUtils.millisToSimpleDate(email.date)}
+                </Text>
+            </Flex>
+            <Box style={{ height: "2px" }} />
             <TextEllipsis fontSize={FONT_SIZE.S}>
                 {getClippedBody()}
                 {email.body.length > CLIPPED_BODY_LENGTH ? "..." : ""}

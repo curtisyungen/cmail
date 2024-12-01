@@ -14,6 +14,11 @@ class DateTimeUtils {
         const formattedTime = `${hours % 12 || 12}:${minutes}${amPm}`;
         return `${formattedDate} ${formattedTime}`;
     }
+
+    static millisToSimpleDate(millis) {
+        const date = new Date(millis);
+        return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    }
 }
 
 export default DateTimeUtils;
