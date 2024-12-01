@@ -18,15 +18,6 @@ const EmailList = () => {
         setSelectedEmail(selectedEmail?.id === email.id ? null : email);
     };
 
-    if (loading)
-        return (
-            <Box margin={{ top: 10 }}>
-                <Text center fontSize={FONT_SIZE.S}>
-                    Loading emails...
-                </Text>
-            </Box>
-        );
-
     return (
         <Box
             borderColor={COLORS.BORDER}
@@ -43,16 +34,26 @@ const EmailList = () => {
             }}
             width={DIMENS.EMAIL_WIDTH}
         >
-            <Header selectedTopic={selectedTopic} topics={topics} />
-            {emails.map((email, idx) => (
-                <Email
-                    key={idx}
-                    email={email}
-                    isSelected={selectedEmail?.id === email.id}
-                    onClick={() => handleEmailClick(email)}
-                    topicId={topicsMap[idx]?.cluster_id}
-                />
-            ))}
+            {loading ? (
+                <Box margin={{ top: 10 }} width={DIMENS.EMAIL_WIDTH}>
+                    <Text center fontSize={FONT_SIZE.S}>
+                        Loading emails...
+                    </Text>
+                </Box>
+            ) : (
+                <>
+                    <Header selectedTopic={selectedTopic} topics={topics} />
+                    {emails.map((email, idx) => (
+                        <Email
+                            key={idx}
+                            email={email}
+                            isSelected={selectedEmail?.id === email.id}
+                            onClick={() => handleEmailClick(email)}
+                            topicId={topicsMap[idx]?.cluster_id}
+                        />
+                    ))}
+                </>
+            )}
         </Box>
     );
 };

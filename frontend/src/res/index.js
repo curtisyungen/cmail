@@ -20,8 +20,8 @@ export const DEFAULT_CATEGORIES = [
 ];
 
 export const DEFAULT_LDA_CONFIG = Object.freeze({
-    no_below: 2,
-    no_above: 0.5,
+    no_below: 1,
+    no_above: 1,
     num_topics: 1,
 });
 

@@ -34,7 +34,7 @@ def generate_label(keywords, categories):
         if categories:
             matched_topic = match_topic(keywords, categories)
             if matched_topic:
-                return matched_topic
+                return matched_topic, False
         
         # Otherwise come up with a new category
         topic_representation = ' '.join(keywords)
@@ -43,7 +43,7 @@ def generate_label(keywords, categories):
         similiarities = util.pytorch_cos_sim(topic_embedding, keyword_embeddings).numpy().flatten()
         best_idx = similiarities.argmax()
         final_keyword = keywords[best_idx].title()
-        return final_keyword
+        return final_keyword, True
     except Exception as e:
         print(f"Error generating label: {e}")
         return "Unknown"
@@ -61,11 +61,12 @@ def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
         lda_topics = []
         for _, words in lda_model.show_topics(num_topics=num_topics, formatted=False):
             sorted_keywords = [word for word, _ in words]
-            label = generate_label(sorted_keywords, categories)
+            label, generated = generate_label(sorted_keywords, categories)
             lda_topics.append({
                 'topic_id': int(cluster),
                 'keywords': [{'word': word, 'weight': float(weight)} for word, weight in words],
-                'label': label
+                'label': label,
+                'generated': generated
             })
         return lda_topics
     except Exception as e:
