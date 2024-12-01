@@ -15,8 +15,12 @@ class KMeans:
 
     def initialize_centroids(self, X):
         np.random.seed(self.random_state)
-        initial_centroids_indices = np.random.choice(X.shape[0], self.k, replace=False)
-        self.centroids = X[initial_centroids_indices]
+        centroids = [X[np.random.choice(X.shape[0])]]
+        for _ in range(1, self.k):
+            distances = np.min(np.linalg.norm(X[:, np.newaxis] - np.array(centroids), axis=2), axis=1)
+            next_centroid = X[np.random.choice(X.shape[0], p=distances / np.sum(distances))]
+            centroids.append(next_centroid)
+        self.centroids = np.array(centroids)
 
     def assign_clusters(self, X):
         distances = np.linalg.norm(X[:, np.newaxis] - self.centroids, axis=2)
@@ -35,19 +39,14 @@ class KMeans:
         
     def fit(self, X):
         self.initialize_centroids(X)
-
         for _ in range(self.max_iterations):
             labels = self.assign_clusters(X)
             new_centroids = self.update_centroids(X, labels)
-            if np.linalg.norm(new_centroids - self.centroids) < self.tolerance:
+            if np.all(labels == self.labels) and np.linalg.norm(new_centroids - self.centroids) < self.tolerance:
                 break
             self.centroids = new_centroids
-
-        self.labels = labels
+            self.labels = labels
         return self
-    
-    def predict(self, X):
-        return self.assign_clusters(X)
 
 def run_kmeans(emails_df, num_clusters, categories, lda_config):
     print(f"Running K-means with {num_clusters} clusters and {len(emails_df)} emails...")
@@ -75,13 +74,15 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
     print("PCA complete.")
 
     print("Extracting keywords...")
+    cluster_emails = {}
     cluster_words = {}
     for cluster in df['cluster_id'].unique():
-        cluster_emails = df[df['cluster_id'] == cluster]['body']
+        emails = df[df['cluster_id'] == cluster]['body']
         all_words = []
-        for email in cluster_emails:
+        for email in emails:
             all_words.extend(clean_and_tokenize(email))
         cluster_words[int(cluster)] = all_words
+        cluster_emails[int(cluster)] = emails
     print("Extraction complete.")
 
     print(f"Running LDA...")
@@ -89,6 +90,7 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
     print(f"Lda config: {lda_config}")
     clusters_with_labels = []
     for cluster in df['cluster_id'].unique():
+        cluster_emails = df[df['cluster_id'] == cluster]['body']
         keywords = cluster_words[int(cluster)]
         lda_result = run_lda(cluster, keywords, categories, 
                              no_below=lda_config.get('no_below'), 
