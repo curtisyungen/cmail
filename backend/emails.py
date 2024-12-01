@@ -24,7 +24,8 @@ def fetch_emails(creds, limit):
             'from': '',
             'to': '',
             'date': '',
-            'body': ''
+            'body': '',
+            'labelIds': msg['labelIds']
         }
 
         for header in msg['payload']['headers']:

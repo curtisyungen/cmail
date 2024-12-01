@@ -26,6 +26,7 @@ def clean_body(df):
             text = re.sub(r'\s+', ' ', text).strip() # whitespaces
 
             return text
+        df['raw_body'] = df['body']
         df['body'] = df['body'].apply(clean)
         print("Cleaning complete.")
         return df

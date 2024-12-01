@@ -12,7 +12,7 @@ const Body = ({ body, keywords = [] }) => {
         keywordPattern,
         (match) => `<strong>${match}</strong>`
     );
-    return <Text dangerouslySetInnerHTML={{ __html: highlightedBody }} />;
+    return <Text dangerouslySetInnerHTML={{ __html: body }} />;
 };
 
 const Header = ({ date, from, to }) => {
@@ -53,7 +53,7 @@ const Subject = ({ subject }) => {
 const EmailReader = () => {
     const { selectedEmail } = useAppContext();
     const { keywords } = useKeywords();
-    const { date, from, body, subject, to } = selectedEmail;
+    const { date, from, body, raw_body, subject, to } = selectedEmail;
     return (
         <Box
             justifyContent="flex-start"
@@ -63,7 +63,7 @@ const EmailReader = () => {
             <Spacer />
             <Box background={COLORS.WHITE} borderRadius={5} padding={10}>
                 <Header date={date} from={from} to={to} />
-                <Body body={body} keywords={keywords} />
+                <Body body={raw_body} keywords={keywords} />
             </Box>
         </Box>
     );

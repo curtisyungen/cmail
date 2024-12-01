@@ -3,10 +3,11 @@ import React, { useEffect } from "react";
 import Email from "./Email";
 import Header from "./Header";
 import { useAppActions, useAppContext } from "../../hooks";
+import { STATUS } from "../../res";
 import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../styles";
 
 const EmailList = () => {
-    const { emails, loading, selectedEmail, selectedTopic, topics, topicsMap } =
+    const { emails, selectedEmail, selectedTopic, status, topics, topicsMap } =
         useAppContext();
     const { setSelectedEmail } = useAppActions();
 
@@ -34,7 +35,7 @@ const EmailList = () => {
             }}
             width={DIMENS.EMAIL_WIDTH}
         >
-            {loading ? (
+            {status === STATUS.FETCHING_EMAILS ? (
                 <Box margin={{ top: 10 }} width={DIMENS.EMAIL_WIDTH}>
                     <Text center fontSize={FONT_SIZE.S}>
                         Loading emails...
