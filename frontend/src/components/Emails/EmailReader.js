@@ -53,13 +53,13 @@ const Subject = ({ subject }) => {
 const EmailReader = () => {
     const { selectedEmail } = useAppContext();
     const { keywords } = useKeywords();
-    const { date, from, body, raw_body, subject, to } = selectedEmail;
+    const { date, from, raw_body, raw_subject, to } = selectedEmail;
     return (
         <Box
             justifyContent="flex-start"
             style={{ flex: 1, height: "100%", overflowY: "scroll" }}
         >
-            <Subject subject={subject} />
+            <Subject subject={raw_subject} />
             <Spacer />
             <Box background={COLORS.WHITE} borderRadius={5} padding={10}>
                 <Header date={date} from={from} to={to} />

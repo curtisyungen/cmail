@@ -82,7 +82,7 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
                     fontSize={FONT_SIZE.S}
                     style={{ marginRight: "13px" }}
                 >
-                    {email.subject || "No subject"}
+                    {email.raw_subject || "No subject"}
                 </TextEllipsis>
                 <Text fontSize={FONT_SIZE.S}>
                     {DateTimeUtils.millisToSimpleDate(email.date)}
