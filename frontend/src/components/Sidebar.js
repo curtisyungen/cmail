@@ -18,6 +18,7 @@ const Sidebar = () => {
             background={COLORS.SIDEBAR}
             height="100%"
             justifyContent="flex-start"
+            style={{ minWidth: DIMENS.SIDEBAR_WIDTH }}
             width={DIMENS.SIDEBAR_WIDTH}
         >
             <SidebarItem icon={ICON.MAIL} />

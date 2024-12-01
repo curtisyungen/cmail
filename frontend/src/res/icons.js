@@ -10,6 +10,7 @@ import {
     FaFileAlt,
     FaFolder,
     FaInbox,
+    FaMarker,
     FaRegEnvelope,
     FaRegFolder,
     FaRegTrashAlt,
@@ -39,6 +40,7 @@ export const ICON = {
     RUN: "RUN",
     SENDER: "SENDER",
     STROOP: "STROOP",
+    SUBJECT: "SUBJECT",
     TABLE: "TABLE",
     TRASH: "TRASH",
     USERS: "USERS",
@@ -61,9 +63,8 @@ export const FA_COMPONENTS = {
     [ICON.RUN]: FaAtom,
     [ICON.SENDER]: FaUser,
     [ICON.STROOP]: FaStroopwafel,
+    [ICON.SUBJECT]: FaMarker,
     [ICON.TABLE]: FaTh,
     [ICON.TRASH]: FaRegTrashAlt,
     [ICON.USERS]: FaUserFriends,
 };
-
-export const MDI_COMPONENTS = {};

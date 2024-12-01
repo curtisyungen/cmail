@@ -20,6 +20,9 @@ export const DEFAULT_CATEGORIES = [
 ];
 
 export const DEFAULT_KMEANS_CONFIG = Object.freeze({
+    include_labels: false,
+    include_senders: false,
+    include_subject: false,
     num_clusters: 12,
 });
 

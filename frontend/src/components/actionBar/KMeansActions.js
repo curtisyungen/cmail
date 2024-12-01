@@ -142,6 +142,28 @@ const KMeansActions = () => {
                             }
                         />
                     </Flex>
+                    <Flex
+                        justifyContent="space-between"
+                        style={{ marginTop: "2px" }}
+                    >
+                        <Flex>
+                            <Icon
+                                name={ICON.SUBJECT}
+                                size={12}
+                                style={{ marginRight: "5px" }}
+                            />
+                            <Text fontSize={FONT_SIZE.S}>Subject</Text>
+                        </Flex>
+                        <Switch
+                            enabled={kmeansConfig.include_subject}
+                            onClick={() =>
+                                handleConfigChange(
+                                    "include_subject",
+                                    !kmeansConfig.include_subject
+                                )
+                            }
+                        />
+                    </Flex>
                 </Box>
             </Flex>
             <Text fontSize={FONT_SIZE.XS}>K-means</Text>

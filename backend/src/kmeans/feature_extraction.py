@@ -1,8 +1,12 @@
 from collections import Counter
 from datetime import datetime
+import emoji
 import pandas as pd
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+def clean_subject(subject):
+    return emoji.replace_emoji(subject, replace='').lower().strip()
 
 def compute_sender_freqs(sender_column):
     try:
@@ -29,18 +33,22 @@ def compute_sender_freqs(sender_column):
         return {}
     
 def encode_labels(df):
-    all_labels = set()
-    for labels in df['labelIds']:
-        all_labels.update(labels)
-    label_to_index = {label: idx for idx, label in enumerate(all_labels)}
-    encoded_labels = []
-    for labels in df['labelIds']:
-        encoded_vector = [0] * len(label_to_index)
-        for label in labels:
-            if label in label_to_index:
-                encoded_vector[label_to_index[label]] = 1
-        encoded_labels.append(encoded_vector)
-    return pd.DataFrame(encoded_labels, columns=label_to_index.keys())
+    try:
+        all_labels = set()
+        for labels in df['labelIds']:
+            all_labels.update(labels)
+        label_to_index = {label: idx for idx, label in enumerate(sorted(all_labels))}
+        encoded_labels = []
+        for labels in df['labelIds']:
+            vector = [0] * len(label_to_index)
+            for label in labels:
+                if label in label_to_index:
+                    vector[label_to_index[label]] = 1
+            encoded_labels.append(vector)
+        return pd.DataFrame(encoded_labels, columns=list(label_to_index.keys()))
+    except Exception as e:
+        print(f"Error encoding labels: {e}")
+        return None
 
 def process_time(timestamp):
     try:
@@ -67,30 +75,32 @@ def process_time(timestamp):
         print(f"Error processing time: {e}")
     
 def run_tfidf(df):
+    if df['body'].isnull().any():
+        print("Warning: Found null values in 'body' column")
+        df = df.dropna(subset=['body'])
     vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 3))
     tfidf_matrix = vectorizer.fit_transform(df['body'])
     tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
     return tfidf_df
 
-def extract_features(email_entry, sender_freqs, config):
+def extract_features(email_entry, sender_freqs, include_senders, include_subject):
     features = {}
-    # timestamp = email_entry.get("date", None)
-    # features.update(process_time(timestamp))
-    if config.include_senders:
+    if include_senders:
         sender = email_entry.get("from", "")
         features["sender_freq"] = sender_freqs.get(sender, 0)
-    
-    subject = email_entry.get("subject", "")
-    features["subject"] = subject.lower().strip()
-
+    if include_subject:
+        subject = email_entry.get("subject", "")
+        features["subject"] = clean_subject(subject)
     return features
 
-def extract_features_from_dataframe(df, config):
+def extract_features_from_dataframe(df, include_labels, include_senders, include_subject):
     try:
+        print("Extract features...")
         total_rows = len(df)
         extracted_features = []
         
-        if config.include_labels:
+        labels_df = pd.DataFrame()
+        if include_labels:
             labels_df = encode_labels(df)
 
         sender_freqs = compute_sender_freqs(df['from'])
@@ -98,14 +108,17 @@ def extract_features_from_dataframe(df, config):
         for idx, row in df.iterrows():
             if idx % 100 == 0 and idx > 0:
                 print(f"Processed {idx}/{total_rows} rows")
-            features = extract_features(row, sender_freqs, config)
+            features = extract_features(row, sender_freqs, include_senders, include_subject)
             extracted_features.append(features)
-        print(f"Processing complete.")
 
         tfidf_df = run_tfidf(df)
         features_df = pd.DataFrame(extracted_features).fillna(0)
-        final_df = pd.concat([tfidf_df, features_df, labels_df], axis=1)
+        if not labels_df is None and not labels_df.empty:
+            final_df = pd.concat([tfidf_df, features_df, labels_df], axis=1)
+        else:
+            final_df = pd.concat([tfidf_df, features_df], axis=1)
 
+        print(f"Feature extraction complete.")
         return final_df
     except Exception as e:
         print(f"Error extracting features: {e}")

@@ -2,8 +2,8 @@ import React from "react";
 
 import { Box, COLORS } from "../../styles";
 
-const HEIGHT = 18;
-const WIDTH = 36;
+const HEIGHT = 16;
+const WIDTH = 32;
 
 const Switch = ({ enabled, onClick }) => {
     return (
@@ -15,7 +15,14 @@ const Switch = ({ enabled, onClick }) => {
             clickable
             height={HEIGHT}
             onClick={onClick}
-            style={{ cursor: "pointer", overflow: "hidden" }}
+            style={{
+                cursor: "pointer",
+                maxHeight: HEIGHT,
+                minHeight: HEIGHT,
+                maxWidth: WIDTH,
+                minWidth: WIDTH,
+                overflow: "hidden",
+            }}
             width={WIDTH}
         >
             <Box
@@ -23,9 +30,10 @@ const Switch = ({ enabled, onClick }) => {
                 hoverBackground={
                     enabled ? COLORS.BLUE_DARK : COLORS.GRAY_MEDIUM
                 }
+                height="100%"
                 style={{
                     bottom: 0,
-                    left: enabled ? WIDTH - HEIGHT + 1 : 0,
+                    left: enabled ? WIDTH - HEIGHT : 0,
                     position: "absolute",
                     top: 0,
                 }}
@@ -37,7 +45,7 @@ const Switch = ({ enabled, onClick }) => {
                     borderRadius={HEIGHT / 2}
                     borderWidth={1}
                     clickable
-                    height={HEIGHT - 2}
+                    height={HEIGHT - 1}
                     style={{ cursor: "pointer" }}
                     width={HEIGHT - 2}
                 />
