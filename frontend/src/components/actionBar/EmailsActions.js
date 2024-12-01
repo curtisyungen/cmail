@@ -58,7 +58,13 @@ const EmailsActions = () => {
                         size={26}
                         style={{ marginBottom: "5px" }}
                     />
-                    <Text center fontSize={FONT_SIZE.S}>
+                    <Text
+                        center
+                        color={
+                            fetchDisabled ? COLORS.GRAY_MEDIUM : COLORS.BLACK
+                        }
+                        fontSize={FONT_SIZE.S}
+                    >
                         {status === STATUS.FETCHING_EMAILS
                             ? "Fetching"
                             : "Fetch"}

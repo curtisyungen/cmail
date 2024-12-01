@@ -201,7 +201,15 @@ const CategoryActions = () => {
                         size={24}
                         style={{ marginBottom: "5px" }}
                     />
-                    <Text center fontSize={FONT_SIZE.S}>
+                    <Text
+                        center
+                        color={
+                            status === STATUS.RUNNING_KMEANS
+                                ? COLORS.GRAY_MEDIUM
+                                : COLORS.BLUE_DARK
+                        }
+                        fontSize={FONT_SIZE.S}
+                    >
                         Categories
                     </Text>
                 </Box>
