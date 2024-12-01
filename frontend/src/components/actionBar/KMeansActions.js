@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { Icon } from "../common";
+import { Icon, Switch } from "../common";
 import { useApi, useAppActions, useAppContext } from "../../hooks";
 import { LS, STATUS } from "../../res";
 import { ICON } from "../../res/icons";
@@ -15,14 +15,10 @@ import {
 } from "../../styles";
 import { StorageUtils } from "../../utils";
 
-const DEFAULT_NUM_CLUSTERS = 12;
-
 const KMeansActions = () => {
     const { runKMeans } = useApi();
-    const { emails, status } = useAppContext();
-    const { setTopics, setTopicsMap } = useAppActions();
-
-    const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
+    const { emails, kmeansConfig, status } = useAppContext();
+    const { setKMeansConfig, setTopics, setTopicsMap } = useAppActions();
 
     useEffect(() => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
@@ -30,6 +26,13 @@ const KMeansActions = () => {
         setTopics(savedClusters || []);
         setTopicsMap(savedEmailClusters || {});
     }, []);
+
+    const handleConfigChange = (name, value) => {
+        setKMeansConfig({
+            ...kmeansConfig,
+            [name]: value,
+        });
+    };
 
     const kmeansDisabled = status || emails.length === 0;
 
@@ -45,8 +48,11 @@ const KMeansActions = () => {
                         kmeansDisabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
-                    onClick={() => runKMeans({ numClusters })}
-                    style={{ flex: 1 }}
+                    onClick={runKMeans}
+                    style={{
+                        flex: 1,
+                        minWidth: DIMENS.ACTION_BAR_SECTION_HEIGHT,
+                    }}
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
@@ -70,12 +76,15 @@ const KMeansActions = () => {
                     <Select
                         disabled={status === STATUS.RUNNING_KMEANS}
                         onChange={(e) =>
-                            setNumClusters(parseInt(e.target.value))
+                            handleConfigChange(
+                                "num_clusters",
+                                parseInt(e.target.value)
+                            )
                         }
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={numClusters}
+                        value={kmeansConfig.num_clusters}
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
@@ -90,6 +99,49 @@ const KMeansActions = () => {
                     <Text center fontSize={FONT_SIZE.S}>
                         No. Clusters
                     </Text>
+                </Box>
+                <Box clickable width={100}>
+                    <Flex justifyContent="space-between">
+                        <Flex>
+                            <Icon
+                                name={ICON.LABEL}
+                                size={12}
+                                style={{ marginRight: "5px" }}
+                            />
+                            <Text fontSize={FONT_SIZE.S}>Labels</Text>
+                        </Flex>
+                        <Switch
+                            enabled={kmeansConfig.include_labels}
+                            onClick={() =>
+                                handleConfigChange(
+                                    "include_labels",
+                                    !kmeansConfig.include_labels
+                                )
+                            }
+                        />
+                    </Flex>
+                    <Flex
+                        justifyContent="space-between"
+                        style={{ marginTop: "2px" }}
+                    >
+                        <Flex>
+                            <Icon
+                                name={ICON.SENDER}
+                                size={12}
+                                style={{ marginRight: "5px" }}
+                            />
+                            <Text fontSize={FONT_SIZE.S}>Senders</Text>
+                        </Flex>
+                        <Switch
+                            enabled={kmeansConfig.include_senders}
+                            onClick={() =>
+                                handleConfigChange(
+                                    "include_senders",
+                                    !kmeansConfig.include_senders
+                                )
+                            }
+                        />
+                    </Flex>
                 </Box>
             </Flex>
             <Text fontSize={FONT_SIZE.XS}>K-means</Text>

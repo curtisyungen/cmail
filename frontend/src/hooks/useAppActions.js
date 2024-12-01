@@ -16,6 +16,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
 
+    const setKMeansConfig = (config) => {
+        dispatch({ type: ACTIONS.SET_KMEANS_CONFIG, payload: config });
+    };
+
     const setKMeansData = (data) => {
         dispatch({ type: ACTIONS.SET_KMEANS_DATA, payload: data });
     };
@@ -52,6 +56,7 @@ const useAppActions = () => {
         setAuthenticated,
         setCategories,
         setEmails,
+        setKMeansConfig,
         setKMeansData,
         setLdaConfig,
         setNumEmails,

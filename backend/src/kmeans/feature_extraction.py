@@ -28,8 +28,19 @@ def compute_sender_freqs(sender_column):
         print(f"Error computing sender frequencies: {e}")
         return {}
     
-def process_subject(subject):
-    return subject.lower().strip()
+def encode_labels(df):
+    all_labels = set()
+    for labels in df['labelIds']:
+        all_labels.update(labels)
+    label_to_index = {label: idx for idx, label in enumerate(all_labels)}
+    encoded_labels = []
+    for labels in df['labelIds']:
+        encoded_vector = [0] * len(label_to_index)
+        for label in labels:
+            if label in label_to_index:
+                encoded_vector[label_to_index[label]] = 1
+        encoded_labels.append(encoded_vector)
+    return pd.DataFrame(encoded_labels, columns=label_to_index.keys())
 
 def process_time(timestamp):
     try:
@@ -61,35 +72,39 @@ def run_tfidf(df):
     tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
     return tfidf_df
 
-def extract_features(email_entry, sender_freqs):
-    sender = email_entry.get("from", "")
-    # timestamp = email_entry.get("date", None)
-    subject = email_entry.get("subject", "")
-
+def extract_features(email_entry, sender_freqs, config):
     features = {}
-    features["sender_freq"] = sender_freqs.get(sender, 0)
+    # timestamp = email_entry.get("date", None)
     # features.update(process_time(timestamp))
-    subject = process_subject(subject)
+    if config.include_senders:
+        sender = email_entry.get("from", "")
+        features["sender_freq"] = sender_freqs.get(sender, 0)
+    
+    subject = email_entry.get("subject", "")
+    features["subject"] = subject.lower().strip()
 
     return features
 
-def extract_features_from_dataframe(df):
+def extract_features_from_dataframe(df, config):
     try:
-        sender_freqs = compute_sender_freqs(df['from'])
-
-        extracted_features = []
         total_rows = len(df)
+        extracted_features = []
+        
+        if config.include_labels:
+            labels_df = encode_labels(df)
+
+        sender_freqs = compute_sender_freqs(df['from'])
         
         for idx, row in df.iterrows():
             if idx % 100 == 0 and idx > 0:
                 print(f"Processed {idx}/{total_rows} rows")
-            features = extract_features(row, sender_freqs)
+            features = extract_features(row, sender_freqs, config)
             extracted_features.append(features)
         print(f"Processing complete.")
 
         tfidf_df = run_tfidf(df)
         features_df = pd.DataFrame(extracted_features).fillna(0)
-        final_df = pd.concat([tfidf_df, features_df], axis=1)
+        final_df = pd.concat([tfidf_df, features_df, labels_df], axis=1)
 
         return final_df
     except Exception as e:

@@ -48,16 +48,16 @@ class KMeans:
             self.labels = labels
         return self
 
-def run_kmeans(emails_df, num_clusters, categories, lda_config):
-    print(f"Running K-means with {num_clusters} clusters and {len(emails_df)} emails...")
+def run_kmeans(emails_df, categories, kmeans_config, lda_config):
+    print(f"Running K-means with {kmeans_config.num_clusters} clusters and {len(emails_df)} emails...")
     df = emails_df.copy()
     df = clean_body(df)
     df = lemmatize_body(df)
 
-    features_df = extract_features_from_dataframe(df)
+    features_df = extract_features_from_dataframe(df, kmeans_config)
     X = np.array(features_df.values, dtype=float)
 
-    kmeans = KMeans(k = num_clusters, random_state=26)
+    kmeans = KMeans(k = kmeans_config.num_clusters, random_state=26)
     kmeans.fit(X)
     df['cluster_id'] = kmeans.labels
     print("K-means complete.")

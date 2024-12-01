@@ -19,6 +19,10 @@ export const DEFAULT_CATEGORIES = [
     { name: "Travel", color: COLORS.PINK },
 ];
 
+export const DEFAULT_KMEANS_CONFIG = Object.freeze({
+    num_clusters: 12,
+});
+
 export const DEFAULT_LDA_CONFIG = Object.freeze({
     no_below: 1,
     no_above: 1,
@@ -42,6 +46,7 @@ export const PAGES = {
 export const STATUS = {
     AUTHENTICATING: "authenticating",
     FETCHING_EMAILS: "fetching_emails",
+    FETCHING_LABELS: "fetching_labels",
     RUNNING_KMEANS: "running_kmeans",
 };
 

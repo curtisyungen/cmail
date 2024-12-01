@@ -17,7 +17,7 @@ import { StorageUtils } from "../utils";
 const Home = () => {
     const navigate = useNavigate();
 
-    const { fetchEmails } = useApi();
+    const { fetchEmails, fetchLabels } = useApi();
     const { authenticated, emails, selectedEmail, status } = useAppContext();
     const { setCategories } = useAppActions();
 
@@ -30,6 +30,7 @@ const Home = () => {
     useEffect(() => {
         if (authenticated && emails.length === 0 && !status) {
             fetchEmails();
+            fetchLabels();
             StorageUtils.removeItem(LS.CLUSTERS);
             StorageUtils.removeItem(LS.EMAIL_CLUSTERS);
         }

@@ -6,7 +6,8 @@ import { LS, STATUS } from "../res";
 import { StorageUtils } from "../utils";
 
 const useApi = () => {
-    const { categories, ldaConfig, numEmails, status } = useAppContext();
+    const { categories, kmeansConfig, ldaConfig, numEmails, status } =
+        useAppContext();
     const {
         setAuthenticated,
         setEmails,
@@ -67,14 +68,29 @@ const useApi = () => {
             } else {
                 console.log(response.data.message || "Failed to fetch emails.");
             }
-        } catch (err) {
-            console.error("Error fetching emails: ", err);
+        } catch (e) {
+            console.error("Error fetching emails: ", e);
         } finally {
             setStatus(null);
         }
     };
 
-    const runKMeans = async ({ numClusters }) => {
+    const fetchLabels = async () => {
+        if (status) {
+            return;
+        }
+        setStatus(STATUS.FETCHING_LABELS);
+        try {
+            const response = await axios.get("/api/fetch-labels");
+            console.log("fetch-labels response: ", response);
+        } catch (e) {
+            console.error("Error fetching labels: ", e);
+        } finally {
+            setStatus(null);
+        }
+    };
+
+    const runKMeans = async () => {
         function getClustersValid(clusters) {
             if (!clusters || clusters.length === 0) {
                 return false;
@@ -92,8 +108,8 @@ const useApi = () => {
 
         try {
             const res = await axios.post("/api/run-kmeans", {
-                numClusters,
                 categories: categories.map(({ name }) => name),
+                kmeansConfig,
                 ldaConfig,
             });
             console.log("response: ", res.data);
@@ -110,8 +126,8 @@ const useApi = () => {
             } else {
                 console.error("Invalid clusters: ", clusters);
             }
-        } catch (error) {
-            console.error(error.response?.data?.message || "An error occurred");
+        } catch (e) {
+            console.error(e.response?.data?.message || "An error occurred");
         } finally {
             setStatus(null);
         }
@@ -122,6 +138,7 @@ const useApi = () => {
         clearEmailsFromRedis,
         clearRedis,
         fetchEmails,
+        fetchLabels,
         runKMeans,
     };
 };

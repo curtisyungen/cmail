@@ -3,6 +3,7 @@ import React, { createContext, useContext, useReducer } from "react";
 import {
     ALL_TOPICS,
     DEFAULT_CATEGORIES,
+    DEFAULT_KMEANS_CONFIG,
     DEFAULT_LDA_CONFIG,
     DEFAULT_NUM_EMAILS,
 } from "./res";
@@ -14,6 +15,7 @@ const initialState = {
     categories: DEFAULT_CATEGORIES,
     emails: [],
     kmeansData: {},
+    kmeansConfig: DEFAULT_KMEANS_CONFIG,
     ldaConfig: DEFAULT_LDA_CONFIG,
     numEmails: DEFAULT_NUM_EMAILS,
     selectedEmail: null,
@@ -27,6 +29,7 @@ export const ACTIONS = {
     SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
     SET_EMAILS: "set_email",
+    SET_KMEANS_CONFIG: "set_kmeans_config",
     SET_KMEANS_DATA: "set_kmeans_data",
     SET_LDA_CONFIG: "set_lda_config",
     SET_NUM_EMAILS: "set_num_emails",
@@ -47,6 +50,8 @@ export const appReducer = (state, action) => {
             return { ...state, categories: action.payload };
         case ACTIONS.SET_EMAILS:
             return { ...state, emails: action.payload };
+        case ACTIONS.SET_KMEANS_CONFIG:
+            return { ...state, kmeansConfig: action.payload };
         case ACTIONS.SET_KMEANS_DATA:
             return { ...state, kmeansData: action.payload };
         case ACTIONS.SET_LDA_CONFIG:

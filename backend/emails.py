@@ -75,3 +75,13 @@ def get_emails(creds, limit):
     except Exception as e:
         print(f"Error getting emails: {e}")
         return None
+    
+def fetch_labels(creds):
+    try:
+        service = build('gmail', 'v1', credentials=creds)
+        results = service.users().labels().list(userId='me').execute()
+        labels = results.get('labels', [])
+        return labels
+    except Exception as e:
+        print(f"Error fetching labels: {e}")
+        return []

@@ -6,7 +6,7 @@ from io import StringIO
 from auth import exchange_code_for_token, get_creds
 from main import run_kmeans_model
 from config import REDIS_KEYS
-from emails import get_emails
+from emails import get_emails, fetch_labels
 from redis_cache import clear_redis_values, get_value_from_redis, remove_value_from_redis
 
 app = Flask(__name__)
@@ -55,11 +55,23 @@ def fetch_emails_for_user():
     except Exception as e:
         print(f"Error fetching emails: {e}")
         return jsonify({'message': str(e)}), 500
+    
+@app.route("/api/fetch-labels", methods=['GET'])
+def fetch_labels_for_user():
+    try:
+        creds = get_creds()
+        if not creds:
+            return jsonify({'error': 'Failed to get credentials.'}), 400
+        labels = fetch_labels(creds)
+        return jsonify({'labels': labels})
+    except Exception as e:
+        print(f"Error fetching labels: {e}")
+        return jsonify({'message': str(e)}), 500
 
 @app.route('/api/run-kmeans', methods=['POST'])
 def run_kmeans():
     data = request.json
-    num_clusters = data.get("numClusters", 12)
+    kmeans_config = data.get("kmeansConfig", {})
     categories = data.get("categories", [])
     lda_config = data.get("ldaConfig", {})
 
@@ -71,7 +83,7 @@ def run_kmeans():
         
         emails_df = pd.read_json(StringIO(emails))
 
-        df, clusters, silhouette_score = run_kmeans_model(emails_df, num_clusters, categories, lda_config)
+        df, clusters, silhouette_score = run_kmeans_model(emails_df, categories, kmeans_config, lda_config)
         
         email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
         email_clusters['id'] = email_clusters.index
