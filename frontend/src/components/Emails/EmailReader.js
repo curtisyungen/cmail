@@ -16,7 +16,7 @@ const Body = ({ body, keywords = [] }) => {
 };
 
 const Header = ({ date, from, to }) => {
-    const sender = from || UNKNOWN_SENDER;
+    const sender = from.split("<")[0]?.trim() || UNKNOWN_SENDER;
     return (
         <Box margin={{ bottom: 20 }}>
             <Flex>

@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { ActionBar, Loading, Navbar, Sidebar, TopicsList } from "../components";
+import {
+    ActionBar,
+    Navbar,
+    Sidebar,
+    TitleBar,
+    TopicsList,
+} from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
 import { useAppActions, useAppContext } from "../hooks";
 import { DEFAULT_CATEGORIES, LS, PAGES } from "../res";
@@ -65,7 +71,7 @@ const Home = () => {
             justifyContent="flex-start"
             overflow="hidden"
         >
-            <Navbar />
+            <TitleBar />
             <Flex alignItems="flex-start">
                 <Sidebar />
                 <Box
@@ -75,6 +81,7 @@ const Home = () => {
                     style={{ flex: 1 }}
                     width="unset"
                 >
+                    <Navbar />
                     <ActionBar />
                     <Box height={DIMENS.SPACING_STANDARD} width="100%" />
                     <Box

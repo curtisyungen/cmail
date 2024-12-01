@@ -5,6 +5,7 @@ const COLORS = {
     BLUE_LIGHT: "#CFE4FA",
     GRAY_DARK: "#7E7E7E",
     GRAY_LIGHT: "#F5F5F5",
+    GRAY_LIGHT2: "#F0F0F0",
     GRAY_MEDIUM: "#C2C2C2",
     GREEN: "#31de57",
     ORANGE: "#FC4C02",

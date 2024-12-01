@@ -2,6 +2,7 @@ import {} from "@mdi/js";
 
 import {
     FaAtom,
+    FaBars,
     FaCalendarAlt,
     FaCheck,
     FaCloud,
@@ -29,6 +30,7 @@ export const ICON = {
     GENERATE: "GENERATE",
     INBOX: "INBOX",
     MAIL: "MAIL",
+    MENU: "MENU",
     NEWS: "NEWS",
     NETWORK: "NETWORK",
     RUN: "RUN",
@@ -48,6 +50,7 @@ export const FA_COMPONENTS = {
     [ICON.GENERATE]: FaRegEnvelope,
     [ICON.INBOX]: FaInbox,
     [ICON.MAIL]: FaEnvelopeOpenText,
+    [ICON.MENU]: FaBars,
     [ICON.NETWORK]: FaSitemap,
     [ICON.NEWS]: FaFileAlt,
     [ICON.RUN]: FaAtom,
