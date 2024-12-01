@@ -7,12 +7,12 @@ export const AppContext = createContext();
 const initialState = {
     authenticated: false,
     categories: DEFAULT_CATEGORIES,
-    clustersData: [],
     emails: [],
+    kmeansData: {},
     ldaConfig: DEFAULT_LDA_CONFIG,
-    loading: false,
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
+    status: null,
     topics: [],
     topicsMap: {},
 };
@@ -20,12 +20,12 @@ const initialState = {
 export const ACTIONS = {
     SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
-    SET_CLUSTERS_DATA: "set_clusters_data",
     SET_EMAILS: "set_email",
+    SET_KMEANS_DATA: "set_kmeans_data",
     SET_LDA_CONFIG: "set_lda_config",
-    SET_LOADING: "set_loading",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
+    SET_STATUS: "set_status",
     SET_TOPICS: "set_topics",
     SET_TOPICS_MAP: "set_topics_map",
 };
@@ -38,18 +38,18 @@ export const appReducer = (state, action) => {
             return { ...state, authenticated: action.payload };
         case ACTIONS.SET_CATEGORIES:
             return { ...state, categories: action.payload };
-        case ACTIONS.SET_CLUSTERS_DATA:
-            return { ...state, clustersData: action.payload };
         case ACTIONS.SET_EMAILS:
             return { ...state, emails: action.payload };
+        case ACTIONS.SET_KMEANS_DATA:
+            return { ...state, kmeansData: action.payload };
         case ACTIONS.SET_LDA_CONFIG:
             return { ...state, ldaConfig: action.payload };
-        case ACTIONS.SET_LOADING:
-            return { ...state, loading: action.payload };
         case ACTIONS.SET_SELECTED_EMAIL:
             return { ...state, selectedEmail: action.payload };
         case ACTIONS.SET_SELECTED_TOPIC:
             return { ...state, selectedTopic: action.payload };
+        case ACTIONS.SET_STATUS:
+            return { ...state, status: action.payload };
         case ACTIONS.SET_TOPICS:
             return { ...state, topics: action.payload };
         case ACTIONS.SET_TOPICS_MAP:

@@ -28,13 +28,19 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
 export const LS = {
     CATEGORIES: "categories",
     CLUSTERS: "clusters",
-    CLUSTERS_DATA: "clusters_data",
     EMAIL_CLUSTERS: "email_clusters",
+    KMEANS_DATA: "kmeans_data",
 };
 
 export const PAGES = {
     HOME: "/home",
     LOGIN: "/",
+};
+
+export const STATUS = {
+    AUTHENTICATING: "authenticating",
+    FETCHING_EMAILS: "fetching_emails",
+    RUNNING_KMEANS: "running_kmeans",
 };
 
 export const UNKNOWN_SENDER = "Unknown Sender";

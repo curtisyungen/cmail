@@ -3,12 +3,15 @@ import axios from "axios";
 
 import CategoryActions from "./CategoryActions";
 import { Icon } from "../common";
+import { useAppContext } from "../../hooks";
 import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
 
-const OtherActions = ({ isRunning }) => {
+const OtherActions = () => {
+    const { status } = useAppContext();
+
     const [hasCachedData, setHasCachedData] = useState(false);
 
     useEffect(() => {
@@ -31,14 +34,14 @@ const OtherActions = ({ isRunning }) => {
     return (
         <>
             <Flex>
-                <CategoryActions isRunning={isRunning} />
+                <CategoryActions />
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!isRunning && hasCachedData}
+                    clickable={!status && hasCachedData}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        isRunning || !hasCachedData
+                        status || !hasCachedData
                             ? COLORS.TRANSPARENT
                             : COLORS.GRAY_LIGHT
                     }
@@ -48,7 +51,7 @@ const OtherActions = ({ isRunning }) => {
                 >
                     <Icon
                         color={
-                            isRunning || !hasCachedData
+                            status || !hasCachedData
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }
@@ -59,7 +62,7 @@ const OtherActions = ({ isRunning }) => {
                     <Text
                         center
                         color={
-                            isRunning || !hasCachedData
+                            status || !hasCachedData
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLACK
                         }

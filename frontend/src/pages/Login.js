@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import { Box, Button, COLORS, FONT_SIZE, Text } from "../styles";
-import { useAppActions, useAppContext, useAuthentication } from "../hooks";
+import {
+    useApi,
+    useAppActions,
+    useAppContext,
+    useAuthentication,
+} from "../hooks";
 import { PAGES } from "../res";
 
 const CLIENT_ID =
@@ -30,6 +34,7 @@ const Login = () => {
 const LoginButton = () => {
     const navigate = useNavigate();
 
+    const { authenticateUser } = useApi();
     const { authenticated } = useAppContext();
     const { setAuthenticated } = useAppActions();
     const { checkAuthentication } = useAuthentication();
@@ -46,36 +51,19 @@ const LoginButton = () => {
         }
     }, [authenticated]);
 
-    const onAuthComplete = () => {
-        setAuthenticated(true);
-        navigate(PAGES.HOME);
-    };
-
     const onFailure = (error) => {
         console.error("Login failed: ", error);
     };
 
-    const onSuccess = async (response) => {
+    const onSuccess = (response) => {
         if (response.error) {
             console.error("Error logging in: ", response.error);
             return;
         }
-
-        setAuthenticating(true);
-        try {
-            const result = await axios.post("/api/authenticate", {
-                code: response.code,
-            });
-            if (result.status === 200) {
-                onAuthComplete();
-            } else {
-                throw new Error(result.data.message);
-            }
-        } catch (e) {
-            console.error("Error authenticating: ", e);
-        } finally {
-            setAuthenticating(false);
-        }
+        authenticateUser(response.code, () => {
+            setAuthenticated(true);
+            navigate(PAGES.HOME);
+        });
     };
 
     const login = useGoogleLogin({

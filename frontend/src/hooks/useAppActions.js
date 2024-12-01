@@ -12,20 +12,16 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_CATEGORIES, payload: categories });
     };
 
-    const setClustersData = (clustersData) => {
-        dispatch({ type: ACTIONS.SET_CLUSTERS_DATA, payload: clustersData });
-    };
-
     const setEmails = (emails) => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
 
-    const setLdaConfig = (ldaConfig) => {
-        dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
+    const setKMeansData = (data) => {
+        dispatch({ type: ACTIONS.SET_KMEANS_DATA, payload: data });
     };
 
-    const setLoading = (loading) => {
-        dispatch({ type: ACTIONS.SET_LOADING, payload: loading });
+    const setLdaConfig = (ldaConfig) => {
+        dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
     };
 
     const setSelectedEmail = (email) => {
@@ -34,6 +30,10 @@ const useAppActions = () => {
 
     const setSelectedTopic = (topic) => {
         dispatch({ type: ACTIONS.SET_SELECTED_TOPIC, payload: topic });
+    };
+
+    const setStatus = (status) => {
+        dispatch({ type: ACTIONS.SET_STATUS, payload: status });
     };
 
     const setTopics = (topics) => {
@@ -47,12 +47,12 @@ const useAppActions = () => {
     return {
         setAuthenticated,
         setCategories,
-        setClustersData,
         setEmails,
+        setKMeansData,
         setLdaConfig,
-        setLoading,
         setSelectedEmail,
         setSelectedTopic,
+        setStatus,
         setTopics,
         setTopicsMap,
     };

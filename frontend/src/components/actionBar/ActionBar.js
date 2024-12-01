@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 
 import ChartActions from "./ChartActions";
+import EmailsActions from "./EmailsActions";
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
 import OtherActions from "./OtherActions";
@@ -31,7 +32,6 @@ const Section = ({ children }) => {
 };
 
 const ActionBar = () => {
-    const [isRunning, setIsRunning] = useState(false);
     return (
         <Box
             background={COLORS.WHITE}
@@ -45,18 +45,19 @@ const ActionBar = () => {
         >
             <Flex>
                 <Section>
-                    <KMeansActions
-                        isRunning={isRunning}
-                        setIsRunning={setIsRunning}
-                    />
+                    <KMeansActions />
                 </Section>
                 <Divider />
                 <Section>
-                    <LdaActions disabled={isRunning} />
+                    <EmailsActions />
                 </Section>
                 <Divider />
                 <Section>
-                    <OtherActions disabled={isRunning} />
+                    <LdaActions />
+                </Section>
+                <Divider />
+                <Section>
+                    <OtherActions />
                 </Section>
                 <Divider />
                 <Section>

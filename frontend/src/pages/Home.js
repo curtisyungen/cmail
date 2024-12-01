@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import {
     ActionBar,
@@ -10,15 +9,17 @@ import {
     TopicsList,
 } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
-import { useAppActions, useAppContext } from "../hooks";
+import { useApi, useAppActions, useAppContext } from "../hooks";
 import { DEFAULT_CATEGORIES, LS, PAGES } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 import { StorageUtils } from "../utils";
 
 const Home = () => {
     const navigate = useNavigate();
-    const { authenticated, emails, loading, selectedEmail } = useAppContext();
-    const { setCategories, setEmails, setLoading } = useAppActions();
+
+    const { fetchEmails } = useApi();
+    const { authenticated, emails, selectedEmail, status } = useAppContext();
+    const { setCategories } = useAppActions();
 
     useEffect(() => {
         if (!authenticated) {
@@ -27,7 +28,7 @@ const Home = () => {
     }, [authenticated]);
 
     useEffect(() => {
-        if (authenticated && emails.length === 0 && !loading) {
+        if (authenticated && emails.length === 0 && !status) {
             fetchEmails();
             StorageUtils.removeItem(LS.CLUSTERS);
             StorageUtils.removeItem(LS.EMAIL_CLUSTERS);
@@ -39,28 +40,6 @@ const Home = () => {
             StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
         setCategories(savedCategories);
     }, []);
-
-    async function fetchEmails() {
-        if (loading) {
-            return;
-        }
-        setLoading(true);
-        try {
-            const response = await axios.get("/api/fetch-emails", {
-                params: { limit: 400 },
-            });
-            console.log("fetch_emails response: ", response);
-            if (response.status === 200) {
-                setEmails(response.data.emails);
-            } else {
-                console.log(response.data.message || "Failed to fetch emails.");
-            }
-        } catch (err) {
-            console.log("Error fetching emails: ", err);
-        } finally {
-            setLoading(false);
-        }
-    }
 
     if (!authenticated) {
         return null;
@@ -110,7 +89,6 @@ const Home = () => {
                     </Box>
                 </Box>
             </Flex>
-            {/* {loading ? <Loading /> : <></>} */}
         </Box>
     );
 };

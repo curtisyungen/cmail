@@ -7,8 +7,8 @@ const MAX_NO_ABOVE = 100;
 const MAX_NO_BELOW = 5;
 const MAX_NUM_TOPICS = 5;
 
-const LdaActions = ({ disabled }) => {
-    const { ldaConfig } = useAppContext();
+const LdaActions = () => {
+    const { ldaConfig, status } = useAppContext();
     const { setLdaConfig } = useAppActions();
 
     const handleConfigChange = (e) => {
@@ -31,7 +31,7 @@ const LdaActions = ({ disabled }) => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={disabled}
+                        disabled={status}
                         name="num_topics"
                         onChange={handleConfigChange}
                         style={{
@@ -59,7 +59,7 @@ const LdaActions = ({ disabled }) => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={disabled}
+                        disabled={status}
                         name="no_below"
                         onChange={handleConfigChange}
                         style={{
@@ -86,7 +86,7 @@ const LdaActions = ({ disabled }) => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={disabled}
+                        disabled={status}
                         name="no_above"
                         onChange={handleConfigChange}
                         style={{

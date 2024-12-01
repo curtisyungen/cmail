@@ -6,12 +6,13 @@ import { useAppContext } from "../../hooks";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 
-const ChartActions = ({ isRunning }) => {
-    const { clustersData } = useAppContext();
+const ChartActions = () => {
+    const { kmeansData, status } = useAppContext();
+    const { clustersData, silhouetteScore } = kmeansData;
 
     const [showModal, setShowModal] = useState(false);
 
-    const disabled = isRunning || !clustersData || clustersData.length === 0;
+    const disabled = status || !clustersData || clustersData.length === 0;
 
     return (
         <>
@@ -24,6 +25,7 @@ const ChartActions = ({ isRunning }) => {
                     hoverBackground={
                         disabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
+                    margin={{ right: DIMENS.SPACING_STANDARD }}
                     onClick={() => setShowModal(true)}
                     style={{ flex: 1 }}
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
@@ -39,11 +41,42 @@ const ChartActions = ({ isRunning }) => {
                         color={disabled ? COLORS.GRAY_MEDIUM : COLORS.BLACK}
                         fontSize={FONT_SIZE.S}
                     >
-                        View chart
+                        Cluster chart
+                    </Text>
+                </Box>
+                <Box
+                    alignItems="center"
+                    borderRadius={5}
+                    clickable={!disabled}
+                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                    hoverBackground={
+                        disabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                    }
+                    onClick={() => setShowModal(true)}
+                    style={{ flex: 1 }}
+                    width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                >
+                    <Box height={24} margin={{ bottom: 5 }}>
+                        <Text
+                            center
+                            color={disabled ? COLORS.GRAY_MEDIUM : COLORS.BLACK}
+                            fontSize={FONT_SIZE.XXL}
+                        >
+                            {isNaN(silhouetteScore)
+                                ? "N/A"
+                                : Math.round(silhouetteScore * 100) / 100}
+                        </Text>
+                    </Box>
+                    <Text
+                        center
+                        color={disabled ? COLORS.GRAY_MEDIUM : COLORS.BLACK}
+                        fontSize={FONT_SIZE.S}
+                    >
+                        Silhouette
                     </Text>
                 </Box>
             </Flex>
-            <Text fontSize={FONT_SIZE.XS}>Chart</Text>
+            <Text fontSize={FONT_SIZE.XS}>Analysis</Text>
 
             <ClusterChart
                 onClose={() => setShowModal(false)}

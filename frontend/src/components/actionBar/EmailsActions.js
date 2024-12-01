@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { Icon } from "../common";
-import { useApi, useAppActions, useAppContext } from "../../hooks";
-import { LS, STATUS } from "../../res";
+import { useApi, useAppContext } from "../../hooks";
+import { STATUS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,
@@ -13,25 +13,27 @@ import {
     Select,
     Text,
 } from "../../styles";
-import { StorageUtils } from "../../utils";
 
-const DEFAULT_NUM_CLUSTERS = 12;
+const DEFAULT_NUM_EMAILS = 400;
 
-const KMeansActions = () => {
-    const { runKMeans } = useApi();
+const EmailsActions = () => {
+    const { clearEmailsFromRedis, fetchEmails } = useApi();
     const { emails, status } = useAppContext();
-    const { setTopics, setTopicsMap } = useAppActions();
 
-    const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
+    const [numEmails, setNumEmails] = useState(DEFAULT_NUM_EMAILS);
 
     useEffect(() => {
-        const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
-        const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
-        setTopics(savedClusters || []);
-        setTopicsMap(savedEmailClusters || {});
+        if (emails.length > 0 && emails.length !== numEmails) {
+            setNumEmails(emails.length);
+        }
     }, []);
 
-    const kmeansDisabled = status || emails.length === 0;
+    const handleFetchEmails = async () => {
+        await clearEmailsFromRedis();
+        fetchEmails();
+    };
+
+    const fetchDisabled = emails.length === numEmails || status;
 
     return (
         <>
@@ -39,48 +41,45 @@ const KMeansActions = () => {
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!kmeansDisabled}
+                    clickable={!fetchDisabled}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        kmeansDisabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                        fetchDisabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
-                    onClick={runKMeans}
+                    onClick={handleFetchEmails}
                     style={{ flex: 1 }}
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
                         color={
-                            kmeansDisabled
+                            fetchDisabled
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }
-                        name={ICON.RUN}
+                        name={ICON.ENVELOPE}
                         size={26}
                         style={{ marginBottom: "5px" }}
                     />
                     <Text center fontSize={FONT_SIZE.S}>
-                        {status === STATUS.RUNNING_KMEANS ? "Running" : "Run"}
+                        {status === STATUS.FETCHING_EMAILS
+                            ? "Fetching"
+                            : "Fetch"}
                     </Text>
                 </Box>
-                <Box
-                    margin={{ right: DIMENS.SPACING_STANDARD }}
-                    style={{ flex: 1 }}
-                >
+                <Box style={{ flex: 1 }}>
                     <Select
-                        disabled={status === STATUS.RUNNING_KMEANS}
-                        onChange={(e) =>
-                            setNumClusters(parseInt(e.target.value))
-                        }
+                        disabled={fetchDisabled}
+                        onChange={(e) => setNumEmails(parseInt(e.target.value))}
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={numClusters}
+                        value={numEmails}
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
-                            { length: 20 },
-                            (_, index) => index + 1
+                            { length: 10 },
+                            (_, index) => (index + 1) * 100
                         ).map((num) => (
                             <option key={num} value={num}>
                                 {num}
@@ -88,13 +87,13 @@ const KMeansActions = () => {
                         ))}
                     </Select>
                     <Text center fontSize={FONT_SIZE.S}>
-                        No. Clusters
+                        No. Emails
                     </Text>
                 </Box>
             </Flex>
-            <Text fontSize={FONT_SIZE.XS}>K-means</Text>
+            <Text fontSize={FONT_SIZE.XS}>Data</Text>
         </>
     );
 };
 
-export default KMeansActions;
+export default EmailsActions;

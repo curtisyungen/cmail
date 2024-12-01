@@ -1,14 +1,11 @@
 import os
-import pandas as pd
 import secrets
-from auth import exchange_code_for_token, get_creds
 from flask import Flask, request, jsonify
-from gmail_service import fetch_emails
-from io import StringIO
+from auth import exchange_code_for_token, get_creds
 from main import run_kmeans_model
-from redis_cache import clear_redis_values, get_value_from_redis, store_value_in_redis
-from src.utils.preprocess import clean_body
 from config import REDIS_KEYS
+from emails import get_emails
+from redis_cache import clear_redis_values, remove_value_from_redis
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -48,13 +45,9 @@ def fetch_emails_for_user():
         if not creds:
             return jsonify({'error': 'Failed to get credentials.'}), 400
         
-        emails_df, loaded_from_redis = fetch_emails(creds, limit)
+        emails_df = get_emails(creds, limit)
         if emails_df is None or emails_df.empty:
-            return []
-        
-        if not loaded_from_redis:
-            emails_df = clean_body(emails_df)
-            store_value_in_redis(REDIS_KEYS.EMAILS, emails_df.to_json(orient='records'))
+            return jsonify({'error': 'No emails found.'}), 404
 
         return jsonify({'emails': emails_df.to_dict(orient='records')})
     except Exception as e:
@@ -65,13 +58,18 @@ def fetch_emails_for_user():
 def run_kmeans():
     data = request.json
     num_clusters = data.get("numClusters", 12)
+    num_emails = data.get("numEmails", 400)
     categories = data.get("categories", [])
     lda_config = data.get("ldaConfig", {})
 
     try:
-        # Emails should be fetched/stored before run_kmeans() is ever called
-        emails = get_value_from_redis(REDIS_KEYS.EMAILS)
-        emails_df = pd.read_json(StringIO(emails))
+        creds = get_creds()
+        if not creds:
+            return jsonify({'error': 'Failed to get credentials.'}), 400
+        
+        emails_df = get_emails(creds, num_emails)
+        if emails_df is None or emails_df.empty:
+            return jsonify({'error': 'No emails found'}), 404
 
         df, clusters, silhouette_score = run_kmeans_model(emails_df, num_clusters, categories, lda_config)
         
@@ -104,6 +102,18 @@ def run_kmeans():
 def clear_redis():
     try:
         clear_redis_values()
+        response = {
+            "status": "success",
+            "message": "All values cleared from Redis.",
+        }
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    
+@app.route('/api/remove-emails-from-redis', methods=['POST'])
+def remove_emails_from_redis():
+    try:
+        remove_value_from_redis(REDIS_KEYS.EMAILS)
         response = {
             "status": "success",
             "message": "Emails cleared from Redis.",
