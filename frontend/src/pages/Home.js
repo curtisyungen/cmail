@@ -27,8 +27,10 @@ const Home = () => {
     }, [authenticated]);
 
     useEffect(() => {
-        if (authenticated && emails.length === 0) {
+        if (authenticated && emails.length === 0 && !loading) {
             fetchEmails();
+            StorageUtils.removeItem(LS.CLUSTERS);
+            StorageUtils.removeItem(LS.EMAIL_CLUSTERS);
         }
     }, [authenticated]);
 

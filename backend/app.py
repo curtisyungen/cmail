@@ -1,11 +1,13 @@
 import os
+import pandas as pd
 import secrets
 from auth import exchange_code_for_token, get_creds
 from gmail_service import fetch_emails
 from flask import Flask, request, jsonify
 from main import run_kmeans_model
-from redis_cache import clear_emails_from_redis, get_emails_from_redis, store_emails_in_redis
+from redis_cache import clear_redis_values, get_value_from_redis, store_value_in_redis
 from src.utils.preprocess import clean_body
+from config import REDIS_KEYS
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -51,7 +53,7 @@ def fetch_emails_for_user():
         
         if not loaded_from_redis:
             emails_df = clean_body(emails_df)
-            store_emails_in_redis(emails_df)
+            store_value_in_redis(REDIS_KEYS.EMAILS, emails_df.to_json(orient='records'))
 
         return jsonify({'emails': emails_df.to_dict(orient='records')})
     except Exception as e:
@@ -66,7 +68,9 @@ def run_kmeans():
     lda_config = data.get("ldaConfig", {})
 
     try:
-        emails_df = get_emails_from_redis()
+        # Emails should be fetched/stored before run_kmeans() is ever called
+        emails = get_value_from_redis(REDIS_KEYS.EMAILS)
+        emails_df = pd.read_json(emails)
 
         df, clusters = run_kmeans_model(emails_df, num_clusters, categories, lda_config)
         email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
@@ -85,7 +89,7 @@ def run_kmeans():
 @app.route('/api/clear-redis', methods=['POST'])
 def clear_redis():
     try:
-        clear_emails_from_redis()
+        clear_redis_values()
         response = {
             "status": "success",
             "message": "Emails cleared from Redis.",

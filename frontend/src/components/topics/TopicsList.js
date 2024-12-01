@@ -8,19 +8,25 @@ import { SortUtils } from "../../utils";
 
 const TopicsList = () => {
     const { setSelectedEmail, setSelectedTopic } = useAppActions();
-    const { selectedTopic, topics, topicsMap } = useAppContext();
+    const { emails, selectedTopic, topics, topicsMap } = useAppContext();
 
     const [groupedTopics, setGroupedTopics] = useState({
         generated: [],
         custom: [],
     });
+    const [topicTotals, setTopicTotals] = useState({});
+
+    useEffect(() => {
+        setTopicTotals({
+            ...topicTotals,
+            [ALL_TOPICS]: emails.length,
+        });
+    }, [emails]);
 
     useEffect(() => {
         console.log("topics: ", topics);
         sortTopics();
     }, [topics]);
-
-    const [topicTotals, setTopicTotals] = useState({});
 
     useEffect(() => {
         calculateTopicTotals();

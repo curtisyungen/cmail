@@ -1,21 +1,17 @@
 import redis
-import pandas as pd
 
 redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
-EMAILS_KEY = "emails"
+def clear_redis_values():
+    redis_client.flushall()
+    print("Redis cleared.")
 
-def clear_emails_from_redis():
-    redis_client.delete(EMAILS_KEY)
-    print(f"Emails cleared from Redis.")
+def get_value_from_redis(key):
+    return redis_client.get(key)
 
-def get_emails_from_redis():
-    emails_json = redis_client.get(EMAILS_KEY)
-    if not emails_json:
-        return None
-    return pd.read_json(emails_json)
-
-def store_emails_in_redis(emails_df):
-    redis_client.set(EMAILS_KEY, emails_df.to_json(orient='records'))
-    redis_client.expire(EMAILS_KEY, 3600)
-    print(f"Emails stored in Redis.")
+def store_value_in_redis(key, value, expiration = 3600):
+    try:
+        redis_client.set(key, value)
+        redis_client.expire(key, expiration)
+    except Exception as e:
+        print(f"Error storing value in Redis: {e}")

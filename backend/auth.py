@@ -1,8 +1,10 @@
 import json
 import requests
-from flask import jsonify, session
+from flask import jsonify
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from redis_cache import get_value_from_redis, store_value_in_redis
+from config import REDIS_KEYS
 
 CREDENTIALS_FILE = './credentials.json'
 
@@ -36,8 +38,8 @@ def exchange_code_for_token(auth_code):
 
 def get_creds():
     try:
-        access_token = session.get('access_token')
-        refresh_token = session.get('refresh_token')
+        access_token = get_value_from_redis(REDIS_KEYS.ACCESS_TOKEN)
+        refresh_token = get_value_from_redis(REDIS_KEYS.REFRESH_TOKEN)
 
         if not access_token or not refresh_token:
             return None
@@ -60,8 +62,8 @@ def get_creds():
 
 def store_tokens(access_token, refresh_token):
     try:
-        session['access_token'] = access_token
-        session['refresh_token'] = refresh_token
+        store_value_in_redis(REDIS_KEYS.ACCESS_TOKEN, access_token)
+        store_value_in_redis(REDIS_KEYS.REFRESH_TOKEN, refresh_token)
         print("Tokens successfully stored.")
         return jsonify({'message': 'User authenticated.'})
     except Exception as e:

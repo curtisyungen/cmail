@@ -26,6 +26,7 @@ def clean_body(df):
 
             return text
         df['body'] = df['body'].apply(clean)
+        print("Cleaning complete.")
         return df
     except Exception as e:
         print(f"Error cleaning body: {e}")
@@ -44,6 +45,7 @@ def lemmatize_body(df):
             ]
             return ' '.join(lemmatized_words)
         df['body'] = df['body'].apply(lemmatize)
+        print("Lemmatizing complete.")
         return df
     except Exception as e:
         print(f"Error lemmatizing body: {e}")

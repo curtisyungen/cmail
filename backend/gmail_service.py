@@ -2,7 +2,8 @@ import pandas as pd
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from utils import decode_base64url
-from redis_cache import get_emails_from_redis
+from redis_cache import get_value_from_redis
+from config import REDIS_KEYS
 
 def fetch_emails(creds, limit = 10):
     if creds and creds.expired and creds.refresh_token:
@@ -10,10 +11,15 @@ def fetch_emails(creds, limit = 10):
 
     print(f"fetching {limit} emails...")
 
-    emails = get_emails_from_redis()
-    if not emails is None and not emails.empty:
+    emails = get_value_from_redis(REDIS_KEYS.EMAILS)
+    if emails:
+        emails_df = pd.read_json(emails)
+    else:
+        emails_df = None
+
+    if emails_df is not None and not emails_df.empty:
         print(f"Emails loaded from Redis.")
-        return pd.DataFrame(emails), True
+        return emails, True
     
     service = build('gmail', 'v1', credentials=creds)
     query='label:inbox OR -label:spam -label:sent -label:archive -label:trash'
