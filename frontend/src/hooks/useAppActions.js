@@ -8,6 +8,14 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: authenticated });
     };
 
+    const setCategories = (categories) => {
+        dispatch({ type: ACTIONS.SET_CATEGORIES, payload: categories });
+    };
+
+    const setClustersData = (clustersData) => {
+        dispatch({ type: ACTIONS.SET_CLUSTERS_DATA, payload: clustersData });
+    };
+
     const setEmails = (emails) => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
@@ -24,16 +32,12 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_SELECTED_EMAIL, payload: email });
     };
 
-    const setCategories = (categories) => {
-        dispatch({ type: ACTIONS.SET_CATEGORIES, payload: categories });
+    const setSelectedTopic = (topic) => {
+        dispatch({ type: ACTIONS.SET_SELECTED_TOPIC, payload: topic });
     };
 
     const setTopics = (topics) => {
         dispatch({ type: ACTIONS.SET_TOPICS, payload: topics });
-    };
-
-    const setSelectedTopic = (topic) => {
-        dispatch({ type: ACTIONS.SET_SELECTED_TOPIC, payload: topic });
     };
 
     const setTopicsMap = (topicsMap) => {
@@ -42,13 +46,14 @@ const useAppActions = () => {
 
     return {
         setAuthenticated,
-        setEmails,
-        setSelectedEmail,
         setCategories,
+        setClustersData,
+        setEmails,
         setLdaConfig,
         setLoading,
-        setTopics,
+        setSelectedEmail,
         setSelectedTopic,
+        setTopics,
         setTopicsMap,
     };
 };

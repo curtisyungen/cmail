@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import ChartActions from "./ChartActions";
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
 import OtherActions from "./OtherActions";
@@ -56,6 +57,10 @@ const ActionBar = () => {
                 <Divider />
                 <Section>
                     <OtherActions disabled={isRunning} />
+                </Section>
+                <Divider />
+                <Section>
+                    <ChartActions />
                 </Section>
             </Flex>
         </Box>

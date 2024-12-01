@@ -2,8 +2,9 @@ import os
 import pandas as pd
 import secrets
 from auth import exchange_code_for_token, get_creds
-from gmail_service import fetch_emails
 from flask import Flask, request, jsonify
+from gmail_service import fetch_emails
+from io import StringIO
 from main import run_kmeans_model
 from redis_cache import clear_redis_values, get_value_from_redis, store_value_in_redis
 from src.utils.preprocess import clean_body
@@ -70,17 +71,30 @@ def run_kmeans():
     try:
         # Emails should be fetched/stored before run_kmeans() is ever called
         emails = get_value_from_redis(REDIS_KEYS.EMAILS)
-        emails_df = pd.read_json(emails)
+        emails_df = pd.read_json(StringIO(emails))
 
-        df, clusters = run_kmeans_model(emails_df, num_clusters, categories, lda_config)
+        df, clusters, silhouette_score = run_kmeans_model(emails_df, num_clusters, categories, lda_config)
+        
         email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
         email_clusters['id'] = email_clusters.index
         email_clusters = email_clusters[['id', 'body', 'cluster_id']].to_dict(orient='records')
+        
+        clusters_data = []
+        for cluster_id in df['cluster_id'].unique():
+            cluster_points = df[df['cluster_id'] == cluster_id]
+            clusters_data.append({
+                'cluster_id': int(cluster_id),
+                'x': cluster_points['x'].tolist(),
+                'y': cluster_points['y'].tolist()
+            })
+
         response = {
             "status": "success",
             "message": "Ran K-means model.",
             "clusters": clusters,
-            "email_clusters": email_clusters
+            "email_clusters": email_clusters,
+            "clusters_data": clusters_data,
+            "silhouette_score": silhouette_score
         }
         return jsonify(response), 200
     except Exception as e:

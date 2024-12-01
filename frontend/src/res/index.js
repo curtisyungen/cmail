@@ -28,6 +28,7 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
 export const LS = {
     CATEGORIES: "categories",
     CLUSTERS: "clusters",
+    CLUSTERS_DATA: "clusters_data",
     EMAIL_CLUSTERS: "email_clusters",
 };
 

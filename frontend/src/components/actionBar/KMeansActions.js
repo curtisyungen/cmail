@@ -20,14 +20,16 @@ const DEFAULT_NUM_CLUSTERS = 12;
 
 const KMeansActions = ({ isRunning, setIsRunning }) => {
     const { categories, emails, ldaConfig } = useAppContext();
-    const { setTopics, setTopicsMap } = useAppActions();
+    const { setClustersData, setTopics, setTopicsMap } = useAppActions();
 
     const [error, setError] = useState(null);
     const [numClusters, setNumClusters] = useState(DEFAULT_NUM_CLUSTERS);
 
     useEffect(() => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
+        const savedClustersData = StorageUtils.getItem(LS.CLUSTERS_DATA);
         const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
+        setClustersData(savedClustersData || []);
         setTopics(savedClusters || []);
         setTopicsMap(savedEmailClusters || {});
     }, []);
@@ -60,15 +62,17 @@ const KMeansActions = ({ isRunning, setIsRunning }) => {
             });
             console.log("response: ", res.data);
 
-            const { clusters, email_clusters } = res.data;
+            const { clusters, clusters_data, email_clusters } = res.data;
 
             console.log("clusters: ", clusters);
 
             if (getClustersValid(clusters)) {
+                setClustersData(clusters_data);
                 setTopics(clusters);
                 setTopicsMap(email_clusters);
 
                 StorageUtils.setItem(LS.CLUSTERS, clusters);
+                StorageUtils.setItem(LS.CLUSTERS_DATA, clusters_data);
                 StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
             } else {
                 console.log("Invalid clusters: ", clusters);

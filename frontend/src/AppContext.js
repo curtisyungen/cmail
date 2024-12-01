@@ -7,6 +7,7 @@ export const AppContext = createContext();
 const initialState = {
     authenticated: false,
     categories: DEFAULT_CATEGORIES,
+    clustersData: [],
     emails: [],
     ldaConfig: DEFAULT_LDA_CONFIG,
     loading: false,
@@ -19,6 +20,7 @@ const initialState = {
 export const ACTIONS = {
     SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
+    SET_CLUSTERS_DATA: "set_clusters_data",
     SET_EMAILS: "set_email",
     SET_LDA_CONFIG: "set_lda_config",
     SET_LOADING: "set_loading",
@@ -36,6 +38,8 @@ export const appReducer = (state, action) => {
             return { ...state, authenticated: action.payload };
         case ACTIONS.SET_CATEGORIES:
             return { ...state, categories: action.payload };
+        case ACTIONS.SET_CLUSTERS_DATA:
+            return { ...state, clustersData: action.payload };
         case ACTIONS.SET_EMAILS:
             return { ...state, emails: action.payload };
         case ACTIONS.SET_LDA_CONFIG:

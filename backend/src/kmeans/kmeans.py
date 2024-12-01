@@ -1,4 +1,6 @@
 import numpy as np
+from sklearn.decomposition import PCA
+from .silhouette_score import calculate_silhouette_score
 from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
 from ..utils.preprocess import clean_and_tokenize, clean_body, lemmatize_body
@@ -61,6 +63,17 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
     df['cluster_id'] = kmeans.labels
     print("K-means complete.")
 
+    print("Calculating silhouette score...")
+    silhouette_score = calculate_silhouette_score(X, kmeans.labels)
+    print("Calculation complete.")
+
+    print("Running PCA...")
+    pca = PCA(n_components=2)
+    X_2d = pca.fit_transform(X)
+    df['x'] = X_2d[:, 0]
+    df['y'] = X_2d[:, 1]
+    print("PCA complete.")
+
     print("Extracting keywords...")
     cluster_words = {}
     for cluster in df['cluster_id'].unique():
@@ -84,4 +97,4 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
         clusters_with_labels.append(lda_result)
     print("LDA complete.")
 
-    return df, clusters_with_labels
+    return df, clusters_with_labels, silhouette_score
