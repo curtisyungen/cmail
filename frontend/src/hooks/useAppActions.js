@@ -24,6 +24,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
     };
 
+    const setNumEmails = (numEmails) => {
+        dispatch({ type: ACTIONS.SET_NUM_EMAILS, payload: numEmails });
+    };
+
     const setSelectedEmail = (email) => {
         dispatch({ type: ACTIONS.SET_SELECTED_EMAIL, payload: email });
     };
@@ -50,6 +54,7 @@ const useAppActions = () => {
         setEmails,
         setKMeansData,
         setLdaConfig,
+        setNumEmails,
         setSelectedEmail,
         setSelectedTopic,
         setStatus,

@@ -15,8 +15,9 @@ def clean_body(df):
             text = html.unescape(text)
 
             # Trying to remove HTML tags
-            soup = BeautifulSoup(text, 'html.parser')
-            text = soup.get_text()
+            if "<" in text and ">" in text: 
+                soup = BeautifulSoup(text, 'html.parser')
+                text = soup.get_text()
 
             text = re.sub(r'http\S+|www\S+|https\S+', '', text) # URLs
             text = re.sub(r'\S+@\S+', '', text) # emails

@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useReducer } from "react";
 
-import { ALL_TOPICS, DEFAULT_CATEGORIES, DEFAULT_LDA_CONFIG } from "./res";
+import {
+    ALL_TOPICS,
+    DEFAULT_CATEGORIES,
+    DEFAULT_LDA_CONFIG,
+    DEFAULT_NUM_EMAILS,
+} from "./res";
 
 export const AppContext = createContext();
 
@@ -10,6 +15,7 @@ const initialState = {
     emails: [],
     kmeansData: {},
     ldaConfig: DEFAULT_LDA_CONFIG,
+    numEmails: DEFAULT_NUM_EMAILS,
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
     status: null,
@@ -23,6 +29,7 @@ export const ACTIONS = {
     SET_EMAILS: "set_email",
     SET_KMEANS_DATA: "set_kmeans_data",
     SET_LDA_CONFIG: "set_lda_config",
+    SET_NUM_EMAILS: "set_num_emails",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
     SET_STATUS: "set_status",
@@ -44,6 +51,8 @@ export const appReducer = (state, action) => {
             return { ...state, kmeansData: action.payload };
         case ACTIONS.SET_LDA_CONFIG:
             return { ...state, ldaConfig: action.payload };
+        case ACTIONS.SET_NUM_EMAILS:
+            return { ...state, numEmails: action.payload };
         case ACTIONS.SET_SELECTED_EMAIL:
             return { ...state, selectedEmail: action.payload };
         case ACTIONS.SET_SELECTED_TOPIC:

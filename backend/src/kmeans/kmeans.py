@@ -50,6 +50,7 @@ class KMeans:
         return self.assign_clusters(X)
 
 def run_kmeans(emails_df, num_clusters, categories, lda_config):
+    print(f"Running K-means with {num_clusters} clusters and {len(emails_df)} emails...")
     df = emails_df.copy()
     df = clean_body(df)
     df = lemmatize_body(df)
@@ -57,7 +58,6 @@ def run_kmeans(emails_df, num_clusters, categories, lda_config):
     features_df = extract_features_from_dataframe(df)
     X = np.array(features_df.values, dtype=float)
 
-    print("Running K-means...")
     kmeans = KMeans(k = num_clusters, random_state=26)
     kmeans.fit(X)
     df['cluster_id'] = kmeans.labels

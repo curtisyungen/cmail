@@ -3,7 +3,7 @@ import Modal from "react-modal";
 
 import { Icon } from "../common";
 import { useAppActions, useAppContext } from "../../hooks";
-import { LS } from "../../res";
+import { LS, STATUS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,
@@ -156,7 +156,7 @@ const CategoryActions = () => {
     const [showModal, setShowModal] = useState(false);
 
     const handleClick = () => {
-        if (!status) {
+        if (status !== STATUS.RUNNING_KMEANS) {
             setShowModal(true);
         }
     };
@@ -181,7 +181,7 @@ const CategoryActions = () => {
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!status}
+                    clickable={status !== STATUS.RUNNING_KMEANS}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
                         status ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
@@ -192,7 +192,11 @@ const CategoryActions = () => {
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
-                        color={status ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK}
+                        color={
+                            status === STATUS.RUNNING_KMEANS
+                                ? COLORS.GRAY_MEDIUM
+                                : COLORS.BLUE_DARK
+                        }
                         name={ICON.CATEGORY}
                         size={24}
                         style={{ marginBottom: "5px" }}

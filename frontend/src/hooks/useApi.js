@@ -1,12 +1,12 @@
 import axios from "axios";
 
 import useAppActions from "./useAppActions";
-import { useAppContext } from "../AppContext";
+import useAppContext from "./useAppContext";
 import { LS, STATUS } from "../res";
 import { StorageUtils } from "../utils";
 
 const useApi = () => {
-    const { categories, ldaConfig, status } = useAppContext();
+    const { categories, ldaConfig, numEmails, status } = useAppContext();
     const { setEmails, setKMeansData, setStatus, setTopics, setTopicsMap } =
         useAppActions();
 
@@ -53,7 +53,7 @@ const useApi = () => {
         setStatus(STATUS.FETCHING_EMAILS);
         try {
             const response = await axios.get("/api/fetch-emails", {
-                params: { limit: 400 },
+                params: { limit: numEmails },
             });
             console.log("fetch_emails response: ", response);
             if (response.status === 200) {

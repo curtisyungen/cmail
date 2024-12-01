@@ -58,7 +58,6 @@ def fetch_emails_for_user():
 def run_kmeans():
     data = request.json
     num_clusters = data.get("numClusters", 12)
-    num_emails = data.get("numEmails", 400)
     categories = data.get("categories", [])
     lda_config = data.get("ldaConfig", {})
 

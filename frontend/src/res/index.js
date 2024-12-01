@@ -25,6 +25,8 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
     num_topics: 1,
 });
 
+export const DEFAULT_NUM_EMAILS = 400;
+
 export const LS = {
     CATEGORIES: "categories",
     CLUSTERS: "clusters",

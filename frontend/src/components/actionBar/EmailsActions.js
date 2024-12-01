@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { Icon } from "../common";
-import { useApi, useAppContext } from "../../hooks";
+import { useApi, useAppActions, useAppContext } from "../../hooks";
 import { STATUS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
@@ -14,13 +14,10 @@ import {
     Text,
 } from "../../styles";
 
-const DEFAULT_NUM_EMAILS = 400;
-
 const EmailsActions = () => {
     const { clearEmailsFromRedis, fetchEmails } = useApi();
-    const { emails, status } = useAppContext();
-
-    const [numEmails, setNumEmails] = useState(DEFAULT_NUM_EMAILS);
+    const { emails, numEmails, status } = useAppContext();
+    const { setNumEmails } = useAppActions();
 
     useEffect(() => {
         if (emails.length > 0 && emails.length !== numEmails) {
@@ -69,7 +66,7 @@ const EmailsActions = () => {
                 </Box>
                 <Box style={{ flex: 1 }}>
                     <Select
-                        disabled={fetchDisabled}
+                        disabled={false}
                         onChange={(e) => setNumEmails(parseInt(e.target.value))}
                         style={{
                             marginBottom: "5px",

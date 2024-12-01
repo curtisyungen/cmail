@@ -2,6 +2,7 @@ import React from "react";
 
 import { useAppActions, useAppContext } from "../../hooks";
 import { Box, DIMENS, Flex, FONT_SIZE, Select, Text } from "../../styles";
+import { STATUS } from "../../res";
 
 const MAX_NO_ABOVE = 100;
 const MAX_NO_BELOW = 5;
@@ -31,7 +32,7 @@ const LdaActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status}
+                        disabled={status === STATUS.RUNNING_KMEANS}
                         name="num_topics"
                         onChange={handleConfigChange}
                         style={{
@@ -59,7 +60,7 @@ const LdaActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status}
+                        disabled={status === STATUS.RUNNING_KMEANS}
                         name="no_below"
                         onChange={handleConfigChange}
                         style={{
@@ -86,7 +87,7 @@ const LdaActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status}
+                        disabled={status === STATUS.RUNNING_KMEANS}
                         name="no_above"
                         onChange={handleConfigChange}
                         style={{

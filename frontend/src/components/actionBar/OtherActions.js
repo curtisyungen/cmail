@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 
 import CategoryActions from "./CategoryActions";
 import { Icon } from "../common";
-import { useAppContext } from "../../hooks";
+import { useApi, useAppContext } from "../../hooks";
 import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
 
 const OtherActions = () => {
+    const { clearRedis } = useApi();
     const { status } = useAppContext();
 
     const [hasCachedData, setHasCachedData] = useState(false);
@@ -22,13 +22,7 @@ const OtherActions = () => {
     const handleClearCache = async () => {
         StorageUtils.clearAll();
         setHasCachedData(false);
-
-        try {
-            const result = await axios.post("/api/clear-redis");
-            console.log("clear-redis result: ", result);
-        } catch (e) {
-            console.log("Error clearing Redis: ", e);
-        }
+        clearRedis();
     };
 
     return (
