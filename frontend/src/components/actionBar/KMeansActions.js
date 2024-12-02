@@ -17,6 +17,25 @@ import { StorageUtils } from "../../utils";
 
 const MAX_CLUSTERS = 30;
 
+const SettingSwitch = ({ disabled, enabled, icon, label, onClick }) => {
+    return (
+        <Flex justifyContent="space-between" style={{ marginTop: "2px" }}>
+            <Flex>
+                <Icon
+                    disabled={disabled}
+                    name={icon}
+                    size={12}
+                    style={{ marginRight: "5px" }}
+                />
+                <Text disabled={disabled} fontSize={FONT_SIZE.S}>
+                    {label}
+                </Text>
+            </Flex>
+            <Switch disabled={disabled} enabled={enabled} onClick={onClick} />
+        </Flex>
+    );
+};
+
 const KMeansActions = () => {
     const { runKMeans } = useApi();
     const { emails, kmeansConfig, status } = useAppContext();
@@ -103,69 +122,42 @@ const KMeansActions = () => {
                     </Text>
                 </Box>
                 <Box clickable width={100}>
-                    <Flex justifyContent="space-between">
-                        <Flex>
-                            <Icon
-                                name={ICON.LABEL}
-                                size={12}
-                                style={{ marginRight: "5px" }}
-                            />
-                            <Text fontSize={FONT_SIZE.S}>Labels</Text>
-                        </Flex>
-                        <Switch
-                            enabled={kmeansConfig.include_labels}
-                            onClick={() =>
-                                handleConfigChange(
-                                    "include_labels",
-                                    !kmeansConfig.include_labels
-                                )
-                            }
-                        />
-                    </Flex>
-                    <Flex
-                        justifyContent="space-between"
-                        style={{ marginTop: "2px" }}
-                    >
-                        <Flex>
-                            <Icon
-                                name={ICON.SENDER}
-                                size={12}
-                                style={{ marginRight: "5px" }}
-                            />
-                            <Text fontSize={FONT_SIZE.S}>Senders</Text>
-                        </Flex>
-                        <Switch
-                            enabled={kmeansConfig.include_senders}
-                            onClick={() =>
-                                handleConfigChange(
-                                    "include_senders",
-                                    !kmeansConfig.include_senders
-                                )
-                            }
-                        />
-                    </Flex>
-                    <Flex
-                        justifyContent="space-between"
-                        style={{ marginTop: "2px" }}
-                    >
-                        <Flex>
-                            <Icon
-                                name={ICON.SUBJECT}
-                                size={12}
-                                style={{ marginRight: "5px" }}
-                            />
-                            <Text fontSize={FONT_SIZE.S}>Subject</Text>
-                        </Flex>
-                        <Switch
-                            enabled={kmeansConfig.include_subject}
-                            onClick={() =>
-                                handleConfigChange(
-                                    "include_subject",
-                                    !kmeansConfig.include_subject
-                                )
-                            }
-                        />
-                    </Flex>
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={kmeansConfig.include_labels}
+                        icon={ICON.LABEL}
+                        label="Labels"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_labels",
+                                !kmeansConfig.include_labels
+                            )
+                        }
+                    />
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={kmeansConfig.include_senders}
+                        icon={ICON.SENDER}
+                        label="Senders"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_senders",
+                                !kmeansConfig.include_senders
+                            )
+                        }
+                    />
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={kmeansConfig.include_subject}
+                        icon={ICON.SUBJECT}
+                        label="Subject"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_subject",
+                                !kmeansConfig.include_subject
+                            )
+                        }
+                    />
                 </Box>
             </Flex>
             <Text fontSize={FONT_SIZE.XS}>K-means</Text>

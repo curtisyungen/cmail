@@ -2,6 +2,7 @@ import {} from "@mdi/js";
 
 import {
     FaAtom,
+    FaBan,
     FaBars,
     FaBraille,
     FaCalendarAlt,
@@ -25,6 +26,7 @@ import {
 } from "react-icons/fa";
 
 export const ICON = {
+    BAN: "BAN",
     CALENDAR: "CALENDAR",
     CATEGORY: "CATEGORY",
     CHART: "CHART",
@@ -49,6 +51,7 @@ export const ICON = {
 };
 
 export const FA_COMPONENTS = {
+    [ICON.BAN]: FaBan,
     [ICON.CALENDAR]: FaCalendarAlt,
     [ICON.CATEGORY]: FaTag,
     [ICON.CHART]: FaBraille,

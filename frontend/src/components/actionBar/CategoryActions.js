@@ -242,6 +242,22 @@ const CategoryActions = () => {
                         size={24}
                         style={{ marginBottom: "5px" }}
                     />
+                    {!ldaConfig.use_categories ? (
+                        <Box
+                            style={{
+                                left: 7,
+                                position: "absolute",
+                            }}
+                        >
+                            <Icon
+                                color={COLORS.RED}
+                                name={ICON.BAN}
+                                size={14}
+                            />
+                        </Box>
+                    ) : (
+                        <></>
+                    )}
                     <Text
                         center
                         color={

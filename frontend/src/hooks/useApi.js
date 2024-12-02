@@ -114,6 +114,7 @@ const useApi = () => {
         }
 
         setStatus(STATUS.RUNNING_KMEANS);
+        setKMeansData({});
         setSelectedTopic(ALL_TOPICS);
         setTopics([]);
 

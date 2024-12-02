@@ -5,18 +5,18 @@ import { Box, COLORS } from "../../styles";
 const HEIGHT = 16;
 const WIDTH = 32;
 
-const Switch = ({ enabled, onClick }) => {
+const Switch = ({ disabled, enabled, onClick }) => {
     return (
         <Box
             background={enabled ? COLORS.BLUE_DARK : COLORS.GRAY_LIGHT}
             borderColor={COLORS.GRAY_DARK}
             borderRadius={HEIGHT / 2}
             borderWidth={1}
-            clickable
+            clickable={!disabled}
             height={HEIGHT}
             onClick={onClick}
             style={{
-                cursor: "pointer",
+                cursor: disabled ? "default" : "pointer",
                 maxHeight: HEIGHT,
                 minHeight: HEIGHT,
                 maxWidth: WIDTH,
@@ -26,9 +26,13 @@ const Switch = ({ enabled, onClick }) => {
             width={WIDTH}
         >
             <Box
-                clickable
+                clickable={!disabled}
                 hoverBackground={
-                    enabled ? COLORS.BLUE_DARK : COLORS.GRAY_MEDIUM
+                    disabled
+                        ? COLORS.GRAY_LIGHT
+                        : enabled
+                        ? COLORS.BLUE_DARK
+                        : COLORS.GRAY_MEDIUM
                 }
                 height="100%"
                 style={{
@@ -44,7 +48,7 @@ const Switch = ({ enabled, onClick }) => {
                     borderColor={COLORS.GRAY_DARK}
                     borderRadius={HEIGHT / 2}
                     borderWidth={1}
-                    clickable
+                    clickable={!disabled}
                     height={HEIGHT - 1}
                     style={{ cursor: "pointer" }}
                     width={HEIGHT - 2}

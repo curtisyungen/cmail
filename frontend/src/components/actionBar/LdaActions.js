@@ -33,6 +33,34 @@ const LdaActions = () => {
                 >
                     <Select
                         disabled={status === STATUS.RUNNING_KMEANS}
+                        name="num_topics"
+                        onChange={handleConfigChange}
+                        style={{
+                            marginBottom: "5px",
+                        }}
+                        value={ldaConfig.num_topics}
+                        width={DIMENS.SELECT_WIDTH}
+                    >
+                        {Array.from(
+                            { length: MAX_NUM_TOPICS },
+                            (_, index) => index + 1
+                        ).map((num) => (
+                            <option key={num} value={num}>
+                                {num}
+                            </option>
+                        ))}
+                    </Select>
+                    <Text center fontSize={FONT_SIZE.S}>
+                        Topics / Cluster
+                    </Text>
+                </Box>
+                <Box
+                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                    margin={{ right: 5 }}
+                    style={{ flex: 1 }}
+                >
+                    <Select
+                        disabled={status === STATUS.RUNNING_KMEANS}
                         name="no_below"
                         onChange={handleConfigChange}
                         style={{

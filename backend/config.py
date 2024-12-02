@@ -21,6 +21,6 @@ stopwords = set(stopwords_list.decode().splitlines())
 stopwords.update([
     "com", "completed", "curtis", 
     "curtisyungen", "email", "gmail", 
-    "need", "subject", "thing", 
+    "need", "san", "subject", "thing", 
     "today", "unsubscribe", "yungen"
 ])

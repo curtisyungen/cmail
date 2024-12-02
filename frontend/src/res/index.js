@@ -33,7 +33,7 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
     use_categories: true,
 });
 
-export const DEFAULT_NUM_EMAILS = 400;
+export const DEFAULT_NUM_EMAILS = 500;
 
 export const LS = {
     CATEGORIES: "categories",
