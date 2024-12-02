@@ -26,7 +26,7 @@ const LdaActions = () => {
     return (
         <>
             <Flex>
-                <Box
+                {/* <Box
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     margin={{ right: 5 }}
                     style={{ flex: 1 }}
@@ -53,7 +53,7 @@ const LdaActions = () => {
                     <Text center fontSize={FONT_SIZE.S}>
                         Topics / Cluster
                     </Text>
-                </Box>
+                </Box> */}
                 <Box
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     margin={{ right: 5 }}

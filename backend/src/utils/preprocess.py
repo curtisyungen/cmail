@@ -7,53 +7,40 @@ from config import stopwords
 
 lemmatizer = WordNetLemmatizer()
 
-def clean_text(df, column):
-    print(f"Cleaning {column} column...")
+def clean_text(text):
     try: 
-        def clean(text):
-            if not isinstance(text, str): return ""
+        if not isinstance(text, str): return ""
+        text = html.unescape(text)
 
-            text = html.unescape(text)
+        # Trying to remove HTML tags
+        if "<" in text and ">" in text: 
+            soup = BeautifulSoup(text, 'html.parser')
+            text = soup.get_text()
 
-            # Trying to remove HTML tags
-            if "<" in text and ">" in text: 
-                soup = BeautifulSoup(text, 'html.parser')
-                text = soup.get_text()
-
-            text = emoji.replace_emoji(text, replace='')
-            text = re.sub(r'http\S+|www\S+|https\S+', '', text) # URLs
-            text = re.sub(r'\S+@\S+', '', text) # emails
-            text = re.sub(r'=\S+', ' ', text) # encodings
-            text = re.sub(r'[^\w\s]', '', text) # punctuation and special chars
-            text = re.sub(r'\s+', ' ', text).strip() # whitespaces
-
-            return text
-        df[f'raw_{column}'] = df[column]
-        df[column] = df[column].apply(clean)
-        print(f"Cleaning {column} complete.")
-        return df
+        text = emoji.replace_emoji(text, replace='')
+        text = re.sub(r'http\S+|www\S+|https\S+', '', text) # URLs
+        text = re.sub(r'\S+@\S+', '', text) # emails
+        text = re.sub(r'=\S+', ' ', text) # encodings
+        text = re.sub(r'[^\w\s]', '', text) # punctuation and special chars
+        text = re.sub(r'\s+', ' ', text).strip() # whitespaces
+        return text
     except Exception as e:
-        print(f"Error cleaning {column}: {e}")
-        return df
+        print(f"Error cleaning text: {e}")
+        return text
 
-def lemmatize_body(df):
-    print("Lemmatizing bodies...")
+def lemmatize_text(text):
     try:
-        def lemmatize(body):
-            if not body:
-                return ""
-            words = body.split()
-            lemmatized_words = [
-                lemmatizer.lemmatize(word.lower()) for word in words 
-                if word.lower() not in stopwords
-            ]
-            return ' '.join(lemmatized_words)
-        df['body'] = df['body'].apply(lemmatize)
-        print("Lemmatizing complete.")
-        return df
+        if not text:
+            return ""
+        words = text.split()
+        lemmatized_words = [
+            lemmatizer.lemmatize(word.lower()) for word in words 
+            if word.lower() not in stopwords
+        ]
+        return ' '.join(lemmatized_words)
     except Exception as e:
-        print(f"Error lemmatizing body: {e}")
-        return df
+        print(f"Error lemmatizing text: {e}")
+        return text
 
 def clean_and_tokenize(text):
     if not isinstance(text, str):

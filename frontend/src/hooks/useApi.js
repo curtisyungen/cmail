@@ -8,9 +8,9 @@ import { StorageUtils } from "../utils";
 const useApi = () => {
     const {
         categories,
+        featureConfig,
         kmeansConfig,
         ldaConfig,
-        neuralConfig,
         numEmails,
         status,
     } = useAppContext();
@@ -137,9 +137,9 @@ const useApi = () => {
                 categories: ldaConfig.use_categories
                     ? categories.map(({ name }) => name)
                     : [],
+                featureConfig,
                 kmeansConfig,
                 ldaConfig,
-                neuralConfig,
             });
             console.log("response: ", res.data);
 

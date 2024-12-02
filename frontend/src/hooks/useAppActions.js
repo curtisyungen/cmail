@@ -16,6 +16,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
 
+    const setFeatureConfig = (featureConfig) => {
+        dispatch({ type: ACTIONS.SET_FEATURE_CONFIG, payload: featureConfig });
+    };
+
     const setKMeansConfig = (config) => {
         dispatch({ type: ACTIONS.SET_KMEANS_CONFIG, payload: config });
     };
@@ -26,10 +30,6 @@ const useAppActions = () => {
 
     const setLdaConfig = (ldaConfig) => {
         dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
-    };
-
-    const setNeuralConfig = (neuralConfig) => {
-        dispatch({ type: ACTIONS.SET_NEURAL_CONFIG, payload: neuralConfig });
     };
 
     const setNumEmails = (numEmails) => {
@@ -48,6 +48,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_STATUS, payload: status });
     };
 
+    const setTab = (tab) => {
+        dispatch({ type: ACTIONS.SET_TAB, payload: tab });
+    };
+
     const setTopics = (topics) => {
         dispatch({ type: ACTIONS.SET_TOPICS, payload: topics });
     };
@@ -60,14 +64,15 @@ const useAppActions = () => {
         setAuthenticated,
         setCategories,
         setEmails,
+        setFeatureConfig,
         setKMeansConfig,
         setKMeansData,
         setLdaConfig,
-        setNeuralConfig,
         setNumEmails,
         setSelectedEmail,
         setSelectedTopic,
         setStatus,
+        setTab,
         setTopics,
         setTopicsMap,
     };

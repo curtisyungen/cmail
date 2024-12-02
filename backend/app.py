@@ -72,9 +72,9 @@ def fetch_labels_for_user():
 def run_kmeans():
     data = request.json
     categories = data.get("categories", [])
+    feature_config = data.get("featureConfig", {})
     kmeans_config = data.get("kmeansConfig", {})
     lda_config = data.get("ldaConfig", {})
-    neural_config = data.get("neuralConfig", {})
 
     try:
         # Emails should always be loaded/stored before run_kmeans() is called
@@ -89,7 +89,7 @@ def run_kmeans():
             categories, 
             kmeans_config, 
             lda_config,
-            neural_config
+            feature_config
         )
         
         email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})

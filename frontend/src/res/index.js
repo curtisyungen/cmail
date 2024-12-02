@@ -1,8 +1,14 @@
 import { COLORS } from "../styles";
 
 export const MODEL = {
-    AUTOENCODER: "Autoencoder",
-    BERT: "BERT",
+    CLUSTERING: {
+        KMEANS: "K-means",
+        HDBSCAN: "HDBSCAN",
+    },
+    FEATURE_EXTRACTION: {
+        AUTOENCODER: "Autoencoder",
+        BERT: "BERT",
+    },
 };
 
 export const ALL_TOPICS = "All";
@@ -21,9 +27,6 @@ export const DEFAULT_CATEGORIES = [
 ];
 
 export const DEFAULT_KMEANS_CONFIG = Object.freeze({
-    include_labels: false,
-    include_senders: false,
-    include_subject: false,
     num_clusters: 12,
 });
 
@@ -34,8 +37,11 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
     use_categories: true,
 });
 
-export const DEFAULT_NEURAL_CONFIG = Object.freeze({
+export const DEFAULT_FEATURE_CONFIG = Object.freeze({
     encoding_dim: 256,
+    include_labels: false,
+    include_senders: false,
+    include_subject: false,
     model: MODEL.AUTOENCODER,
     num_epochs: 50,
 });
@@ -59,6 +65,11 @@ export const STATUS = {
     FETCHING_EMAILS: "fetching_emails",
     FETCHING_LABELS: "fetching_labels",
     RUNNING_KMEANS: "running_kmeans",
+};
+
+export const TABS = {
+    MODEL: "Model",
+    DATA: "Data",
 };
 
 export const UNKNOWN_SENDER = "Unknown Sender";

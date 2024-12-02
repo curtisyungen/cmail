@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Icon } from "./common";
+import { useAppActions, useAppContext } from "../hooks";
+import { TABS } from "../res";
 import { ICON } from "../res/icons";
-import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../styles";
-
-const TABS = {
-    HOME: "Home",
-    ABOUT: "About",
-};
+import { Box, COLORS, DIMENS, Flex, Text } from "../styles";
 
 const SelectionIndicator = ({ active }) => {
     return (
@@ -22,12 +19,14 @@ const SelectionIndicator = ({ active }) => {
 };
 
 const Navbar = () => {
-    const [selectedTab, setSelectedTab] = useState(TABS.HOME);
+    const { tab: selectedTab } = useAppContext();
+    const { setTab } = useAppActions();
 
     return (
         <Box
             height={DIMENS.NAVBAR_HEIGHT}
             padding={{ left: 15, right: 20, top: 5 }}
+            style={{ userSelect: "none" }}
         >
             <Flex alignItems="center" justifyContent="flex-start">
                 <Box margin={{ bottom: 6, right: 8 }} style={{ flex: 0 }}>
@@ -41,9 +40,9 @@ const Navbar = () => {
                         clickable
                         hoverBackground={COLORS.GRAY_LIGHT2}
                         margin={{ bottom: 5, left: 8 }}
-                        onClick={() => setSelectedTab(tab)}
+                        onClick={() => setTab(tab)}
                         padding={5}
-                        width={50}
+                        width={DIMENS.TAB_WIDTH}
                     >
                         <Text bold={selectedTab === tab}>{tab}</Text>
                         <SelectionIndicator active={selectedTab === tab} />

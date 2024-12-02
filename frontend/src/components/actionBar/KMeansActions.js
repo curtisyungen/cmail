@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 
-import { Icon, Switch } from "../common";
+import { Icon } from "../common";
 import { useApi, useAppActions, useAppContext } from "../../hooks";
-import { LS, STATUS } from "../../res";
+import { MODEL, LS, STATUS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,
@@ -17,25 +17,6 @@ import { StorageUtils } from "../../utils";
 
 const MAX_CLUSTERS = 30;
 
-const SettingSwitch = ({ disabled, enabled, icon, label, onClick }) => {
-    return (
-        <Flex justifyContent="space-between" style={{ marginTop: "2px" }}>
-            <Flex>
-                <Icon
-                    disabled={disabled}
-                    name={icon}
-                    size={12}
-                    style={{ marginRight: "5px" }}
-                />
-                <Text disabled={disabled} fontSize={FONT_SIZE.S}>
-                    {label}
-                </Text>
-            </Flex>
-            <Switch disabled={disabled} enabled={enabled} onClick={onClick} />
-        </Flex>
-    );
-};
-
 const KMeansActions = () => {
     const { runKMeans } = useApi();
     const { emails, kmeansConfig, status } = useAppContext();
@@ -49,6 +30,7 @@ const KMeansActions = () => {
     }, []);
 
     const handleConfigChange = (name, value) => {
+        console.log("name: ", name, "value: ", value);
         setKMeansConfig({
             ...kmeansConfig,
             [name]: value,
@@ -82,7 +64,11 @@ const KMeansActions = () => {
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }
-                        name={ICON.RUN}
+                        name={
+                            kmeansConfig.model === MODEL.CLUSTERING.KMEANS
+                                ? ICON.KMEANS
+                                : ICON.HDBSCAN
+                        }
                         size={26}
                         style={{ marginBottom: "5px" }}
                     />
@@ -91,76 +77,71 @@ const KMeansActions = () => {
                     </Text>
                 </Box>
                 <Box
-                    margin={{ right: DIMENS.SPACING_STANDARD }}
+                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     style={{ flex: 1 }}
                 >
                     <Select
                         disabled={status === STATUS.RUNNING_KMEANS}
+                        name="model"
                         onChange={(e) =>
-                            handleConfigChange(
-                                "num_clusters",
-                                parseInt(e.target.value)
-                            )
+                            handleConfigChange("model", e.target.value)
                         }
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={kmeansConfig.num_clusters}
-                        width={DIMENS.SELECT_WIDTH}
+                        value={kmeansConfig.model}
+                        width="100px"
                     >
-                        {Array.from(
-                            { length: MAX_CLUSTERS },
-                            (_, index) => index + 1
-                        ).map((num) => (
-                            <option key={num} value={num}>
-                                {num}
-                            </option>
-                        ))}
+                        {Object.entries(MODEL.CLUSTERING).map(
+                            ([key, value]) => (
+                                <option key={key} value={value}>
+                                    {value}
+                                </option>
+                            )
+                        )}
                     </Select>
                     <Text center fontSize={FONT_SIZE.S}>
-                        No. Clusters
+                        Model
                     </Text>
                 </Box>
-                <Box clickable width={100}>
-                    <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
-                        enabled={kmeansConfig.include_labels}
-                        icon={ICON.LABEL}
-                        label="Labels"
-                        onClick={() =>
-                            handleConfigChange(
-                                "include_labels",
-                                !kmeansConfig.include_labels
-                            )
-                        }
-                    />
-                    <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
-                        enabled={kmeansConfig.include_senders}
-                        icon={ICON.SENDER}
-                        label="Senders"
-                        onClick={() =>
-                            handleConfigChange(
-                                "include_senders",
-                                !kmeansConfig.include_senders
-                            )
-                        }
-                    />
-                    <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
-                        enabled={kmeansConfig.include_subject}
-                        icon={ICON.SUBJECT}
-                        label="Subject"
-                        onClick={() =>
-                            handleConfigChange(
-                                "include_subject",
-                                !kmeansConfig.include_subject
-                            )
-                        }
-                    />
-                </Box>
+                {kmeansConfig.model === MODEL.CLUSTERING.KMEANS ? (
+                    <Box
+                        height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                        margin={{ left: 5 }}
+                        style={{ flex: 1 }}
+                    >
+                        <Select
+                            disabled={status === STATUS.RUNNING_KMEANS}
+                            onChange={(e) =>
+                                handleConfigChange(
+                                    "num_clusters",
+                                    parseInt(e.target.value)
+                                )
+                            }
+                            style={{
+                                marginBottom: "5px",
+                            }}
+                            value={kmeansConfig.num_clusters}
+                            width={DIMENS.SELECT_WIDTH}
+                        >
+                            {Array.from(
+                                { length: MAX_CLUSTERS },
+                                (_, index) => index + 1
+                            ).map((num) => (
+                                <option key={num} value={num}>
+                                    {num}
+                                </option>
+                            ))}
+                        </Select>
+                        <Text center fontSize={FONT_SIZE.S}>
+                            No. Clusters
+                        </Text>
+                    </Box>
+                ) : (
+                    <></>
+                )}
             </Flex>
-            <Text fontSize={FONT_SIZE.XS}>K-means</Text>
+            <Text fontSize={FONT_SIZE.XS}>Model</Text>
         </>
     );
 };

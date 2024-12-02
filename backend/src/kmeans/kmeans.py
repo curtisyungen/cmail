@@ -1,3 +1,4 @@
+import hdbscan
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -6,7 +7,7 @@ from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
 from ..neural.autoencoder import construct_autoencoder
 from ..neural.bert import initialize_bert, get_bert_embeddings
-from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_body
+from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_text
 
 class KMeans:
     def __init__(self, k, max_iterations=100, tolerance=1e-4, random_state=26):
@@ -73,16 +74,26 @@ def run_kmeans(emails_df, categories, kmeans_config, lda_config, neural_config):
     include_subject = kmeans_config.get('include_subject')
     num_clusters = kmeans_config.get('num_clusters')
     model = neural_config.get('model')
+    use_tfidf = model == "None"
     
     df = emails_df.copy()
-    df = clean_text(df, 'body')
-    df = lemmatize_body(df)
+
+    df['raw_body'] = df['body']
+
+    print("Cleaning bodies...")
+    df['body'] = df['body'].apply(clean_text)
+    df['body'] = df['body'].apply(lemmatize_text)
+    print("Cleaning complete.")
 
     if include_subject:
-        df = clean_text(df, 'subject')
+        print("Cleaning subjects...")
+        df['raw_subject'] = df['subject']
+        df['subject'] = df['subject'].apply(clean_text)
+        df['subject'] = df['subject'].apply(lemmatize_text)
+        print("Cleaning complete.")
 
     features_df = extract_features_from_dataframe(df, include_labels, include_senders, 
-                                                  include_subject, use_tfidf=model=="None")
+                                                  include_subject, use_tfidf=use_tfidf)
     X = np.array(features_df.values, dtype=float)
     features = X
 
@@ -103,15 +114,24 @@ def run_kmeans(emails_df, categories, kmeans_config, lda_config, neural_config):
 
     features = StandardScaler().fit_transform(features)
 
-    print("Running K-means...")
-    kmeans = KMeans(k = int(num_clusters), random_state=26)
-    kmeans.fit(features)
-    df['cluster_id'] = kmeans.labels
-    print("K-means complete.")
+    try:
+        print("Running HDBSCAN...")
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=5, min_samples=5, gen_min_span_tree=True)
+        clusterer.fit(features)
+        df['cluster_id'] = clusterer.labels_
+        print("HDBSCAN complete.")
+    except Exception as e:
+        print(f"Error running HDBSCAN: {e}")
 
-    print("Calculating silhouette score...")
-    silhouette_score = calculate_silhouette_score(features, kmeans.labels)
-    print(f"Silhouette score: {silhouette_score}.")
+    # print("Running K-means...")
+    # kmeans = KMeans(k = int(num_clusters), random_state=26)
+    # kmeans.fit(features)
+    # df['cluster_id'] = kmeans.labels
+    # print("K-means complete.")
+
+    # print("Calculating silhouette score...")
+    silhouette_score = None #calculate_silhouette_score(features, kmeans.labels)
+    # print(f"Silhouette score: {silhouette_score}.")
 
     print("Running PCA...")
     pca = PCA(n_components=2)

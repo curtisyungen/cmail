@@ -2,11 +2,13 @@ import React from "react";
 
 import AnalysisActions from "./AnalysisActions";
 import EmailsActions from "./EmailsActions";
+import FeatureActions from "./FeatureActions";
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
-import NeuralActions from "./NeuralActions";
 import OtherActions from "./OtherActions";
+import { useAppContext } from "../../hooks";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
+import { TABS } from "../../res";
 
 const Divider = () => {
     return (
@@ -33,6 +35,7 @@ const Section = ({ children }) => {
 };
 
 const ActionBar = () => {
+    const { tab } = useAppContext();
     return (
         <Box
             background={COLORS.WHITE}
@@ -45,29 +48,40 @@ const ActionBar = () => {
             }}
         >
             <Flex>
-                <Section>
-                    <KMeansActions />
-                </Section>
-                <Divider />
-                <Section>
-                    <NeuralActions />
-                </Section>
-                <Divider />
-                <Section>
-                    <LdaActions />
-                </Section>
-                <Divider />
-                <Section>
-                    <EmailsActions />
-                </Section>
-                <Divider />
-                <Section>
-                    <AnalysisActions />
-                </Section>
-                <Divider />
-                <Section>
-                    <OtherActions />
-                </Section>
+                {tab === TABS.MODEL ? (
+                    <>
+                        <Section>
+                            <KMeansActions />
+                        </Section>
+                        <Divider />
+                        <Section>
+                            <FeatureActions />
+                        </Section>
+                        <Divider />
+                        <Section>
+                            <LdaActions />
+                        </Section>{" "}
+                    </>
+                ) : (
+                    <></>
+                )}
+                {tab === TABS.DATA ? (
+                    <>
+                        <Section>
+                            <EmailsActions />
+                        </Section>
+                        <Divider />
+                        <Section>
+                            <AnalysisActions />
+                        </Section>
+                        <Divider />
+                        <Section>
+                            <OtherActions />
+                        </Section>
+                    </>
+                ) : (
+                    <></>
+                )}
             </Flex>
         </Box>
     );
