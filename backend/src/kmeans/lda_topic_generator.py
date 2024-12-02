@@ -53,7 +53,7 @@ def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
     if not keywords:
         return []
     try:
-        dictionary = corpora.Dictionary([keywords])
+        dictionary = corpora.Dictionary([keyword] for keyword in keywords)
         dictionary.filter_extremes(no_below=no_below, no_above=no_above)
         corpus = [dictionary.doc2bow(keywords)]
 

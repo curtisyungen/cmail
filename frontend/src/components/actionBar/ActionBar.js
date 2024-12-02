@@ -57,11 +57,11 @@ const ActionBar = () => {
                 </Section>
                 <Divider />
                 <Section>
-                    <OtherActions />
+                    <AnalysisActions />
                 </Section>
                 <Divider />
                 <Section>
-                    <AnalysisActions />
+                    <OtherActions />
                 </Section>
             </Flex>
         </Box>

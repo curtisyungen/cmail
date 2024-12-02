@@ -2,7 +2,7 @@ import axios from "axios";
 
 import useAppActions from "./useAppActions";
 import useAppContext from "./useAppContext";
-import { LS, STATUS } from "../res";
+import { ALL_TOPICS, LS, STATUS } from "../res";
 import { StorageUtils } from "../utils";
 
 const useApi = () => {
@@ -12,6 +12,7 @@ const useApi = () => {
         setAuthenticated,
         setEmails,
         setKMeansData,
+        setSelectedTopic,
         setStatus,
         setTopics,
         setTopicsMap,
@@ -92,18 +93,28 @@ const useApi = () => {
 
     const runKMeans = async () => {
         function getClustersValid(clusters) {
-            if (!clusters || clusters.length === 0) {
-                return false;
-            }
-            for (const cluster in clusters) {
-                if (cluster === null) {
+            try {
+                if (!clusters || clusters.length === 0) {
                     return false;
                 }
+                for (const cluster of clusters) {
+                    if (
+                        cluster === null ||
+                        cluster.length === 0 ||
+                        !cluster[0].hasOwnProperty("topic_id")
+                    ) {
+                        return false;
+                    }
+                }
+                return true;
+            } catch (e) {
+                console.error("Error checking cluster validity: ", e);
+                return false;
             }
-            return true;
         }
 
         setStatus(STATUS.RUNNING_KMEANS);
+        setSelectedTopic(ALL_TOPICS);
         setTopics([]);
 
         try {

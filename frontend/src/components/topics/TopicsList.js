@@ -70,7 +70,6 @@ const TopicsList = () => {
                 groupedTopics.custom.push(topic);
             }
         }
-        console.log("groupedTopics: ", groupedTopics);
         setGroupedTopics(groupedTopics);
     };
 
