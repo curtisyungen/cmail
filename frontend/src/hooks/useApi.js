@@ -119,7 +119,9 @@ const useApi = () => {
 
         try {
             const res = await axios.post("/api/run-kmeans", {
-                categories: categories.map(({ name }) => name),
+                categories: ldaConfig.use_categories
+                    ? categories.map(({ name }) => name)
+                    : [],
                 kmeansConfig,
                 ldaConfig,
             });

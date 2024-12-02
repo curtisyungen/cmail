@@ -49,11 +49,11 @@ const ActionBar = () => {
                 </Section>
                 <Divider />
                 <Section>
-                    <EmailsActions />
+                    <LdaActions />
                 </Section>
                 <Divider />
                 <Section>
-                    <LdaActions />
+                    <EmailsActions />
                 </Section>
                 <Divider />
                 <Section>

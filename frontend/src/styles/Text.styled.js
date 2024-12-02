@@ -4,7 +4,8 @@ import { FONT_SIZE } from ".";
 import COLORS from "./Colors";
 
 const Text = styled("div")`
-    color: ${({ color = COLORS.BLACK }) => color};
+    color: ${({ color = COLORS.BLACK, disabled }) =>
+        disabled ? COLORS.GRAY_MEDIUM : color};
     font-size: ${({ fontSize = FONT_SIZE.M }) => `${fontSize}px`};
     font-weight: ${({ bold }) => (bold ? 700 : 400)};
     text-align: ${({ center, textAlign = "left" }) =>

@@ -30,6 +30,7 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
     no_below: 1,
     no_above: 1,
     num_topics: 1,
+    use_categories: true,
 });
 
 export const DEFAULT_NUM_EMAILS = 400;

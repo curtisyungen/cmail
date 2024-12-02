@@ -15,6 +15,8 @@ import {
 } from "../../styles";
 import { StorageUtils } from "../../utils";
 
+const MAX_CLUSTERS = 30;
+
 const KMeansActions = () => {
     const { runKMeans } = useApi();
     const { emails, kmeansConfig, status } = useAppContext();
@@ -88,7 +90,7 @@ const KMeansActions = () => {
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
-                            { length: 20 },
+                            { length: MAX_CLUSTERS },
                             (_, index) => index + 1
                         ).map((num) => (
                             <option key={num} value={num}>

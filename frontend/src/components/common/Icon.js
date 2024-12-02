@@ -6,6 +6,7 @@ import { COLORS } from "../../styles";
 const Icon = ({
     background,
     color = COLORS.BLUE_DARK,
+    disabled,
     name,
     size = 16,
     style = {},
@@ -17,7 +18,14 @@ const Icon = ({
     }
 
     return (
-        <div style={{ background, color, fontSize: size, ...style }}>
+        <div
+            style={{
+                background,
+                color: disabled ? COLORS.GRAY_MEDIUM : color,
+                fontSize: size,
+                ...style,
+            }}
+        >
             <FaComponent
                 style={{
                     alignItems: "center",

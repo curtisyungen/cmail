@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
-import { Icon } from "../common";
+import { Icon, Switch } from "../common";
 import { useAppActions, useAppContext } from "../../hooks";
 import { LS, STATUS } from "../../res";
 import { ICON } from "../../res/icons";
@@ -19,9 +19,19 @@ import { SortUtils, StorageUtils } from "../../utils";
 
 Modal.setAppElement("#root");
 
-const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
+const CategoryModal = ({
+    categories,
+    ldaConfig,
+    onClose,
+    onDelete,
+    onSave,
+    onToggle,
+    open,
+}) => {
     const [newColor, setNewColor] = useState(COLORS.RED);
     const [newCategory, setNewCategory] = useState("");
+
+    const disabled = !ldaConfig.use_categories;
 
     const handleClose = () => {
         setNewCategory("");
@@ -49,11 +59,28 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
             }}
         >
             <Box>
-                <Text fontSize={FONT_SIZE.XL}>Create new category</Text>
+                <Flex justifyContent="space-between">
+                    <Text fontSize={FONT_SIZE.XL}>Create new category</Text>
+                    <Flex>
+                        <Text style={{ marginRight: "8px" }}>
+                            {ldaConfig.use_categories ? "Enabled" : "Disabled"}
+                        </Text>
+                        <Switch
+                            enabled={ldaConfig.use_categories}
+                            onClick={onToggle}
+                        />
+                    </Flex>
+                </Flex>
+                <Text fontSize={FONT_SIZE.S} style={{ marginTop: "5px" }}>
+                    {disabled
+                        ? "Categories will not be used for LDA."
+                        : "Categories will be used for LDA naming of clusters."}
+                </Text>
             </Box>
-            <Box margin={{ top: 10 }}>
-                <Text>Name</Text>
+            <Box margin={{ top: 15 }}>
+                <Text disabled={disabled}>Name</Text>
                 <input
+                    disabled={disabled}
                     onChange={(e) => setNewCategory(e.target.value)}
                     placeholder="Name your category"
                     style={{
@@ -65,16 +92,20 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                 />
             </Box>
             <Box margin={{ top: 10 }}>
-                <Text>Color</Text>
+                <Text disabled={disabled}>Color</Text>
                 <Flex>
                     {CATEGORY_COLORS.map((color, idx) => (
                         <Box
                             key={idx}
                             alignItems="center"
-                            background={color}
-                            borderColor={COLORS.BLACK}
+                            background={disabled ? COLORS.GRAY_LIGHT : color}
+                            borderColor={
+                                disabled ? COLORS.GRAY_DARK : COLORS.BLACK
+                            }
                             borderRadius={25}
-                            borderWidth={newColor === color ? 2 : 1}
+                            borderWidth={
+                                !disabled && newColor === color ? 2 : 1
+                            }
                             clickable
                             height={25}
                             margin={3}
@@ -84,9 +115,10 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                             width={25}
                         >
                             <Text
-                                bold={newColor === color}
+                                bold={!disabled && newColor === color}
                                 center
                                 color={COLORS.BLACK}
+                                disabled={disabled}
                             >
                                 A
                             </Text>
@@ -95,13 +127,13 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                 </Flex>
                 <Flex justifyContent="flex-end" style={{ marginTop: "10px" }}>
                     <Button
-                        disabled={newCategory.length === 0}
+                        disabled={newCategory.length === 0 || disabled}
                         onClick={handleSave}
                         style={{ marginRight: "10px" }}
                     >
                         Save
                     </Button>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Close</Button>
                 </Flex>
             </Box>
             <Box
@@ -123,11 +155,12 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                                 <Flex style={{ width: "130px" }}>
                                     <Icon
                                         color={color}
+                                        disabled={disabled}
                                         name={ICON.CATEGORY}
                                         size={14}
                                         style={{ marginRight: "5px" }}
                                     />
-                                    <Text>{name}</Text>
+                                    <Text disabled={disabled}>{name}</Text>
                                 </Flex>
                                 <Box
                                     clickable
@@ -136,6 +169,7 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
                                 >
                                     <Icon
                                         color={COLORS.GRAY_DARK}
+                                        disabled={disabled}
                                         name={ICON.TRASH}
                                         size={14}
                                     />
@@ -150,8 +184,8 @@ const CategoryModal = ({ categories, onClose, onDelete, onSave, open }) => {
 };
 
 const CategoryActions = () => {
-    const { categories, status } = useAppContext();
-    const { setCategories } = useAppActions();
+    const { categories, ldaConfig, status } = useAppContext();
+    const { setCategories, setLdaConfig } = useAppActions();
 
     const [showModal, setShowModal] = useState(false);
 
@@ -167,6 +201,13 @@ const CategoryActions = () => {
 
     const handleDelete = (index) => {
         saveCategories(categories.filter((_, idx) => idx !== index));
+    };
+
+    const handleToggle = () => {
+        setLdaConfig({
+            ...ldaConfig,
+            use_categories: !ldaConfig.use_categories,
+        });
     };
 
     const saveCategories = (categories) => {
@@ -217,9 +258,11 @@ const CategoryActions = () => {
 
             <CategoryModal
                 categories={categories}
+                ldaConfig={ldaConfig}
                 onClose={() => setShowModal(false)}
                 onDelete={handleDelete}
                 onSave={handleAdd}
+                onToggle={handleToggle}
                 open={showModal}
             />
         </>
