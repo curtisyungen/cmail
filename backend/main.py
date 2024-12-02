@@ -1,13 +1,13 @@
 import pandas as pd
-from src.kmeans.kmeans import run_kmeans
+from backend.src.kmeans.clustering import run_model
 
-def run_kmeans_model(emails_df: pd.DataFrame, categories: list[str], 
-                     kmeans_config: dict, lda_config: dict,
-                     neural_config: dict):
-    return run_kmeans(
+def run_model_main(emails_df: pd.DataFrame, categories: list[str], 
+                     feature_config: dict, lda_config: dict,
+                     model_config: dict):
+    return run_model(
         emails_df=emails_df,
         categories=categories,
-        kmeans_config=kmeans_config,
+        feature_config=feature_config,
         lda_config=lda_config,
-        neural_config=neural_config
+        model_config=model_config,
     )

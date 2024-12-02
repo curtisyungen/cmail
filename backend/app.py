@@ -4,7 +4,7 @@ import secrets
 from flask import Flask, request, jsonify
 from io import StringIO
 from auth import exchange_code_for_token, get_creds
-from main import run_kmeans_model
+from main import run_model
 from config import REDIS_KEYS
 from emails import get_emails, fetch_labels
 from redis_cache import clear_redis_values, get_value_from_redis, remove_value_from_redis
@@ -73,8 +73,8 @@ def run_kmeans():
     data = request.json
     categories = data.get("categories", [])
     feature_config = data.get("featureConfig", {})
-    kmeans_config = data.get("kmeansConfig", {})
     lda_config = data.get("ldaConfig", {})
+    model_config = data.get("modelConfig", {})
 
     try:
         # Emails should always be loaded/stored before run_kmeans() is called
@@ -84,12 +84,12 @@ def run_kmeans():
         
         emails_df = pd.read_json(StringIO(emails))
 
-        df, clusters, silhouette_score = run_kmeans_model(
+        df, clusters, silhouette_score = run_model(
             emails_df, 
             categories, 
-            kmeans_config, 
+            feature_config,
             lda_config,
-            feature_config
+            model_config, 
         )
         
         email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
