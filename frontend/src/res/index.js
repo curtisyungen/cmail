@@ -26,7 +26,8 @@ export const DEFAULT_CATEGORIES = [
     { name: "Travel", color: COLORS.PINK },
 ];
 
-export const DEFAULT_KMEANS_CONFIG = Object.freeze({
+export const DEFAULT_MODEL_CONFIG = Object.freeze({
+    model: MODEL.CLUSTERING.KMEANS,
     num_clusters: 12,
 });
 

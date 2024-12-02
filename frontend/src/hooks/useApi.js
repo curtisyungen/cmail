@@ -9,15 +9,15 @@ const useApi = () => {
     const {
         categories,
         featureConfig,
-        kmeansConfig,
         ldaConfig,
+        modelConfig,
         numEmails,
         status,
     } = useAppContext();
     const {
         setAuthenticated,
         setEmails,
-        setKMeansData,
+        setModelResult,
         setSelectedTopic,
         setStatus,
         setTopics,
@@ -97,7 +97,7 @@ const useApi = () => {
         }
     };
 
-    const runKMeans = async () => {
+    const runModel = async () => {
         function handleEmptyClusters(clusters) {
             try {
                 if (!clusters || clusters.length === 0) {
@@ -128,25 +128,25 @@ const useApi = () => {
         }
 
         setStatus(STATUS.RUNNING_KMEANS);
-        setKMeansData({});
+        setModelResult({});
         setSelectedTopic(ALL_TOPICS);
         setTopics([]);
 
         try {
-            const res = await axios.post("/api/run-kmeans", {
+            const res = await axios.post("/api/run-model", {
                 categories: ldaConfig.use_categories
                     ? categories.map(({ name }) => name)
                     : [],
                 featureConfig,
-                kmeansConfig,
                 ldaConfig,
+                modelConfig,
             });
             console.log("response: ", res.data);
 
             const { email_clusters } = res.data;
             const clusters = handleEmptyClusters(res.data.clusters);
 
-            setKMeansData(res.data);
+            setModelResult(res.data);
             setTopics(clusters);
             setTopicsMap(email_clusters);
             StorageUtils.setItem(LS.KMEANS_DATA, res.data);
@@ -154,7 +154,7 @@ const useApi = () => {
             StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
         } catch (e) {
             console.error(
-                "Error running k-means: ",
+                "Error running model: ",
                 e.response?.data?.message || "An error occurred"
             );
         } finally {
@@ -168,7 +168,7 @@ const useApi = () => {
         clearRedis,
         fetchEmails,
         fetchLabels,
-        runKMeans,
+        runModel,
     };
 };
 

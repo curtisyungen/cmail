@@ -20,16 +20,16 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_FEATURE_CONFIG, payload: featureConfig });
     };
 
-    const setKMeansConfig = (config) => {
-        dispatch({ type: ACTIONS.SET_KMEANS_CONFIG, payload: config });
-    };
-
-    const setKMeansData = (data) => {
-        dispatch({ type: ACTIONS.SET_KMEANS_DATA, payload: data });
-    };
-
     const setLdaConfig = (ldaConfig) => {
         dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
+    };
+
+    const setModelConfig = (config) => {
+        dispatch({ type: ACTIONS.SET_MODEL_CONFIG, payload: config });
+    };
+
+    const setModelResult = (result) => {
+        dispatch({ type: ACTIONS.SET_MODEL_RESULT, payload: result });
     };
 
     const setNumEmails = (numEmails) => {
@@ -65,9 +65,9 @@ const useAppActions = () => {
         setCategories,
         setEmails,
         setFeatureConfig,
-        setKMeansConfig,
-        setKMeansData,
         setLdaConfig,
+        setModelConfig,
+        setModelResult,
         setNumEmails,
         setSelectedEmail,
         setSelectedTopic,

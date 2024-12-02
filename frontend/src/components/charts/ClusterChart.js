@@ -7,7 +7,7 @@ import { Box } from "../../styles";
 
 const ClusterChart = ({ onClose, open }) => {
     const {
-        kmeansData: { clusters_data },
+        modelResult: { clusters_data },
     } = useAppContext();
 
     const [plotData, setPlotData] = useState([]);

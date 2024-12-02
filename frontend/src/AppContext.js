@@ -3,7 +3,7 @@ import React, { createContext, useContext, useReducer } from "react";
 import {
     ALL_TOPICS,
     DEFAULT_CATEGORIES,
-    DEFAULT_KMEANS_CONFIG,
+    DEFAULT_MODEL_CONFIG,
     DEFAULT_LDA_CONFIG,
     DEFAULT_FEATURE_CONFIG,
     DEFAULT_NUM_EMAILS,
@@ -17,9 +17,9 @@ const initialState = {
     categories: DEFAULT_CATEGORIES,
     emails: [],
     featureConfig: DEFAULT_FEATURE_CONFIG,
-    kmeansData: {},
-    kmeansConfig: DEFAULT_KMEANS_CONFIG,
     ldaConfig: DEFAULT_LDA_CONFIG,
+    modelConfig: DEFAULT_MODEL_CONFIG,
+    modelResult: {},
     numEmails: DEFAULT_NUM_EMAILS,
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
@@ -34,9 +34,9 @@ export const ACTIONS = {
     SET_CATEGORIES: "set_categories",
     SET_EMAILS: "set_email",
     SET_FEATURE_CONFIG: "set_feature_config",
-    SET_KMEANS_CONFIG: "set_kmeans_config",
-    SET_KMEANS_DATA: "set_kmeans_data",
     SET_LDA_CONFIG: "set_lda_config",
+    SET_MODEL_CONFIG: "set_model_config",
+    SET_MODEL_RESULT: "set_model_result",
     SET_NUM_EMAILS: "set_num_emails",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
@@ -58,12 +58,12 @@ export const appReducer = (state, action) => {
             return { ...state, emails: action.payload };
         case ACTIONS.SET_FEATURE_CONFIG:
             return { ...state, featureConfig: action.payload };
-        case ACTIONS.SET_KMEANS_CONFIG:
-            return { ...state, kmeansConfig: action.payload };
-        case ACTIONS.SET_KMEANS_DATA:
-            return { ...state, kmeansData: action.payload };
         case ACTIONS.SET_LDA_CONFIG:
             return { ...state, ldaConfig: action.payload };
+        case ACTIONS.SET_MODEL_CONFIG:
+            return { ...state, modelConfig: action.payload };
+        case ACTIONS.SET_MODEL_RESULT:
+            return { ...state, modelResult: action.payload };
         case ACTIONS.SET_NUM_EMAILS:
             return { ...state, numEmails: action.payload };
         case ACTIONS.SET_SELECTED_EMAIL:

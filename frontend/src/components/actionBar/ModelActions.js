@@ -17,10 +17,10 @@ import { StorageUtils } from "../../utils";
 
 const MAX_CLUSTERS = 30;
 
-const KMeansActions = () => {
-    const { runKMeans } = useApi();
-    const { emails, kmeansConfig, status } = useAppContext();
-    const { setKMeansConfig, setTopics, setTopicsMap } = useAppActions();
+const ModelActions = () => {
+    const { runModel } = useApi();
+    const { emails, modelConfig, status } = useAppContext();
+    const { setModelConfig, setTopics, setTopicsMap } = useAppActions();
 
     useEffect(() => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
@@ -31,8 +31,8 @@ const KMeansActions = () => {
 
     const handleConfigChange = (name, value) => {
         console.log("name: ", name, "value: ", value);
-        setKMeansConfig({
-            ...kmeansConfig,
+        setModelConfig({
+            ...modelConfig,
             [name]: value,
         });
     };
@@ -51,7 +51,7 @@ const KMeansActions = () => {
                         kmeansDisabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
-                    onClick={runKMeans}
+                    onClick={runModel}
                     style={{
                         flex: 1,
                         minWidth: DIMENS.ACTION_BAR_SECTION_HEIGHT,
@@ -65,7 +65,7 @@ const KMeansActions = () => {
                                 : COLORS.BLUE_DARK
                         }
                         name={
-                            kmeansConfig.model === MODEL.CLUSTERING.KMEANS
+                            modelConfig.model === MODEL.CLUSTERING.KMEANS
                                 ? ICON.KMEANS
                                 : ICON.HDBSCAN
                         }
@@ -89,7 +89,7 @@ const KMeansActions = () => {
                         style={{
                             marginBottom: "5px",
                         }}
-                        value={kmeansConfig.model}
+                        value={modelConfig.model}
                         width="100px"
                     >
                         {Object.entries(MODEL.CLUSTERING).map(
@@ -104,7 +104,7 @@ const KMeansActions = () => {
                         Model
                     </Text>
                 </Box>
-                {kmeansConfig.model === MODEL.CLUSTERING.KMEANS ? (
+                {modelConfig.model === MODEL.CLUSTERING.KMEANS ? (
                     <Box
                         height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                         margin={{ left: 5 }}
@@ -121,7 +121,7 @@ const KMeansActions = () => {
                             style={{
                                 marginBottom: "5px",
                             }}
-                            value={kmeansConfig.num_clusters}
+                            value={modelConfig.num_clusters}
                             width={DIMENS.SELECT_WIDTH}
                         >
                             {Array.from(
@@ -146,4 +146,4 @@ const KMeansActions = () => {
     );
 };
 
-export default KMeansActions;
+export default ModelActions;

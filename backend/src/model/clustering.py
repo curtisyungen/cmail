@@ -121,7 +121,6 @@ def label_clusters(df, cluster_keywords, categories, lda_config):
         print(f"Error labeling clusters: {e}")
         return None
 
-
 def run_model(emails_df, categories, feature_config, lda_config, model_config):
     print(f"Setting up model with config {model_config} and {len(emails_df)} emails...")
 

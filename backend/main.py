@@ -1,5 +1,5 @@
 import pandas as pd
-from backend.src.kmeans.clustering import run_model
+from backend.src.model.clustering import run_model
 
 def run_model_main(emails_df: pd.DataFrame, categories: list[str], 
                      feature_config: dict, lda_config: dict,

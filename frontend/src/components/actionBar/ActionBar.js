@@ -3,8 +3,8 @@ import React from "react";
 import AnalysisActions from "./AnalysisActions";
 import EmailsActions from "./EmailsActions";
 import FeatureActions from "./FeatureActions";
-import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
+import ModelActions from "./ModelActions";
 import OtherActions from "./OtherActions";
 import { useAppContext } from "../../hooks";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
@@ -51,7 +51,7 @@ const ActionBar = () => {
                 {tab === TABS.MODEL ? (
                     <>
                         <Section>
-                            <KMeansActions />
+                            <ModelActions />
                         </Section>
                         <Divider />
                         <Section>
@@ -60,7 +60,7 @@ const ActionBar = () => {
                         <Divider />
                         <Section>
                             <LdaActions />
-                        </Section>{" "}
+                        </Section>
                     </>
                 ) : (
                     <></>

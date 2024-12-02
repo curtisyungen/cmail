@@ -7,8 +7,8 @@ import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 
 const AnalysisActions = () => {
-    const { kmeansData, status } = useAppContext();
-    const { clusters_data, silhouette_score } = kmeansData;
+    const { modelResult, status } = useAppContext();
+    const { clusters_data, silhouette_score } = modelResult;
 
     const [showModal, setShowModal] = useState(false);
 

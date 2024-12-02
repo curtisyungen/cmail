@@ -68,8 +68,8 @@ def fetch_labels_for_user():
         print(f"Error fetching labels: {e}")
         return jsonify({'message': str(e)}), 500
 
-@app.route('/api/run-kmeans', methods=['POST'])
-def run_kmeans():
+@app.route('/api/run-model', methods=['POST'])
+def run_model_route():
     data = request.json
     categories = data.get("categories", [])
     feature_config = data.get("featureConfig", {})
@@ -77,7 +77,7 @@ def run_kmeans():
     model_config = data.get("modelConfig", {})
 
     try:
-        # Emails should always be loaded/stored before run_kmeans() is called
+        # Emails should always be loaded/stored before run_model() is called
         emails = get_value_from_redis(REDIS_KEYS.EMAILS)
         if not emails:
             return jsonify({'error', 'No emails found.'}), 404
