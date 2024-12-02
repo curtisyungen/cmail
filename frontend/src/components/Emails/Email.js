@@ -28,7 +28,7 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
     const loadCategory = () => {
         try {
             let category = null;
-            for (const { label, topic_id } of topics.flat()) {
+            for (const { label, topic_id } of topics) {
                 if (topic_id === topicId) {
                     const matchingCategory = categories.find(
                         ({ name }) => name.toLowerCase() === label.toLowerCase()

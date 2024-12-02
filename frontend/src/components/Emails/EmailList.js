@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import Email from "./Email";
 import Header from "./Header";
@@ -10,10 +10,6 @@ const EmailList = () => {
     const { emails, selectedEmail, selectedTopic, status, topics, topicsMap } =
         useAppContext();
     const { setSelectedEmail } = useAppActions();
-
-    useEffect(() => {
-        console.log("topicsMap: ", topicsMap);
-    }, [topicsMap]);
 
     const handleEmailClick = (email) => {
         setSelectedEmail(selectedEmail?.id === email.id ? null : email);

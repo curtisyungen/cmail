@@ -10,8 +10,6 @@ const AnalysisActions = () => {
     const { kmeansData, status } = useAppContext();
     const { clusters_data, silhouette_score } = kmeansData;
 
-    console.log("kmeansData: ", kmeansData);
-
     const [showModal, setShowModal] = useState(false);
 
     const disabled = status || !clusters_data || clusters_data.length === 0;

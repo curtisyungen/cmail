@@ -89,7 +89,7 @@ def extract_features(email_entry, sender_freqs, include_senders):
         features["sender_freq"] = sender_freqs.get(sender, 0)
     return features
 
-def extract_features_from_dataframe(df, include_labels, include_senders, include_subject):
+def extract_features_from_dataframe(df, include_labels, include_senders, include_subject, use_tfidf):
     try:
         print("Extract features...")
         extracted_features = []
@@ -100,8 +100,8 @@ def extract_features_from_dataframe(df, include_labels, include_senders, include
         extracted_features = df.apply(lambda row: extract_features(row, sender_freqs, include_senders), axis=1).tolist()
         features_df = pd.DataFrame(extracted_features).fillna(0)
 
-        tfidf_body_df = run_tfidf(df, 'body')
-        tfidf_subject_df = run_tfidf(df, 'subject') if include_subject else pd.DataFrame()
+        tfidf_body_df = run_tfidf(df, 'body') if use_tfidf else pd.DataFrame()
+        tfidf_subject_df = run_tfidf(df, 'subject') if use_tfidf and include_subject else pd.DataFrame()
 
         if include_labels and not labels_df.empty:
             final_df = pd.concat([features_df, tfidf_body_df, tfidf_subject_df, labels_df], axis=1)

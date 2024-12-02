@@ -5,6 +5,7 @@ import {
     DEFAULT_CATEGORIES,
     DEFAULT_KMEANS_CONFIG,
     DEFAULT_LDA_CONFIG,
+    DEFAULT_NEURAL_CONFIG,
     DEFAULT_NUM_EMAILS,
 } from "./res";
 
@@ -17,6 +18,7 @@ const initialState = {
     kmeansData: {},
     kmeansConfig: DEFAULT_KMEANS_CONFIG,
     ldaConfig: DEFAULT_LDA_CONFIG,
+    neuralConfig: DEFAULT_NEURAL_CONFIG,
     numEmails: DEFAULT_NUM_EMAILS,
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
@@ -32,6 +34,7 @@ export const ACTIONS = {
     SET_KMEANS_CONFIG: "set_kmeans_config",
     SET_KMEANS_DATA: "set_kmeans_data",
     SET_LDA_CONFIG: "set_lda_config",
+    SET_NEURAL_CONFIG: "set_neural_config",
     SET_NUM_EMAILS: "set_num_emails",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
@@ -56,6 +59,8 @@ export const appReducer = (state, action) => {
             return { ...state, kmeansData: action.payload };
         case ACTIONS.SET_LDA_CONFIG:
             return { ...state, ldaConfig: action.payload };
+        case ACTIONS.SET_NEURAL_CONFIG:
+            return { ...state, neuralConfig: action.payload };
         case ACTIONS.SET_NUM_EMAILS:
             return { ...state, numEmails: action.payload };
         case ACTIONS.SET_SELECTED_EMAIL:

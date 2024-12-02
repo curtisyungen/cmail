@@ -8,6 +8,8 @@ def calculate_silhouette_score(X, labels):
         num_samples = len(X)
         scores = []
 
+        unique_labels = np.unique(labels)
+
         for i in range(num_samples):
             point = X[i]
             point_label = labels[i]
@@ -16,17 +18,23 @@ def calculate_silhouette_score(X, labels):
             if len(same_cluster_points) <= 1:
                 a_i = 0
             else:
-                a_i = np.mean([euclidean_distance(point, other_point) for other_point in same_cluster_points if not np.array_equal(point, other_point)])
-
-            unique_labels = np.unique(labels)
-            unique_labels = unique_labels[unique_labels != point_label]
+                a_i = np.mean([
+                    euclidean_distance(point, other_point) 
+                    for other_point in same_cluster_points 
+                    if not np.array_equal(point, other_point)
+                ])
 
             b_i = float('inf')
             for label in unique_labels:
+                if label == point_label:
+                    continue
                 other_cluster_points = X[labels == label]
                 if len(other_cluster_points) == 0:
                     continue
-                b_i_for_cluster = np.mean([euclidean_distance(point, other_point) for other_point in other_cluster_points])
+                b_i_for_cluster = np.mean([
+                    euclidean_distance(point, other_point) 
+                    for other_point in other_cluster_points
+                ])
                 b_i = min(b_i, b_i_for_cluster)
 
             s_i = (b_i - a_i) / max(a_i, b_i) if max(a_i, b_i) != 0 else 0

@@ -71,9 +71,10 @@ def fetch_labels_for_user():
 @app.route('/api/run-kmeans', methods=['POST'])
 def run_kmeans():
     data = request.json
-    kmeans_config = data.get("kmeansConfig", {})
     categories = data.get("categories", [])
+    kmeans_config = data.get("kmeansConfig", {})
     lda_config = data.get("ldaConfig", {})
+    neural_config = data.get("neuralConfig", {})
 
     try:
         # Emails should always be loaded/stored before run_kmeans() is called
@@ -83,7 +84,13 @@ def run_kmeans():
         
         emails_df = pd.read_json(StringIO(emails))
 
-        df, clusters, silhouette_score = run_kmeans_model(emails_df, categories, kmeans_config, lda_config)
+        df, clusters, silhouette_score = run_kmeans_model(
+            emails_df, 
+            categories, 
+            kmeans_config, 
+            lda_config,
+            neural_config
+        )
         
         email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
         email_clusters['id'] = email_clusters.index

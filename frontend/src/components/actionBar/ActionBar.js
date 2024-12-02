@@ -4,6 +4,7 @@ import AnalysisActions from "./AnalysisActions";
 import EmailsActions from "./EmailsActions";
 import KMeansActions from "./KMeansActions";
 import LdaActions from "./LdaActions";
+import NeuralActions from "./NeuralActions";
 import OtherActions from "./OtherActions";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
 
@@ -46,6 +47,10 @@ const ActionBar = () => {
             <Flex>
                 <Section>
                     <KMeansActions />
+                </Section>
+                <Divider />
+                <Section>
+                    <NeuralActions />
                 </Section>
                 <Divider />
                 <Section>

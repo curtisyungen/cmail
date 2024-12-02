@@ -1,7 +1,8 @@
 import { COLORS } from "../styles";
 
-export const ACTION = {
-    KMEANS: "Kmeans",
+export const MODEL = {
+    AUTOENCODER: "Autoencoder",
+    BERT: "BERT",
 };
 
 export const ALL_TOPICS = "All";
@@ -31,6 +32,12 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
     no_above: 1,
     num_topics: 1,
     use_categories: true,
+});
+
+export const DEFAULT_NEURAL_CONFIG = Object.freeze({
+    encoding_dim: 256,
+    model: MODEL.AUTOENCODER,
+    num_epochs: 50,
 });
 
 export const DEFAULT_NUM_EMAILS = 500;

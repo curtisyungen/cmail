@@ -28,6 +28,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
     };
 
+    const setNeuralConfig = (neuralConfig) => {
+        dispatch({ type: ACTIONS.SET_NEURAL_CONFIG, payload: neuralConfig });
+    };
+
     const setNumEmails = (numEmails) => {
         dispatch({ type: ACTIONS.SET_NUM_EMAILS, payload: numEmails });
     };
@@ -59,6 +63,7 @@ const useAppActions = () => {
         setKMeansConfig,
         setKMeansData,
         setLdaConfig,
+        setNeuralConfig,
         setNumEmails,
         setSelectedEmail,
         setSelectedTopic,

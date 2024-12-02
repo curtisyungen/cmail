@@ -1,8 +1,11 @@
 import numpy as np
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 from .silhouette_score import calculate_silhouette_score
 from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
+from ..neural.autoencoder import construct_autoencoder
+from ..neural.bert import initialize_bert, get_bert_embeddings
 from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_body
 
 class KMeans:
@@ -63,12 +66,13 @@ class KMeans:
         except Exception as e:
             print(f"Error fitting: {e}")
 
-def run_kmeans(emails_df, categories, kmeans_config, lda_config):
+def run_kmeans(emails_df, categories, kmeans_config, lda_config, neural_config):
     print(f"Setting up K-means with config {kmeans_config} and {len(emails_df)} emails...")
     include_labels = kmeans_config.get('include_labels')
     include_senders = kmeans_config.get('include_senders')
     include_subject = kmeans_config.get('include_subject')
     num_clusters = kmeans_config.get('num_clusters')
+    model = neural_config.get('model')
     
     df = emails_df.copy()
     df = clean_text(df, 'body')
@@ -77,24 +81,43 @@ def run_kmeans(emails_df, categories, kmeans_config, lda_config):
     if include_subject:
         df = clean_text(df, 'subject')
 
-    features_df = extract_features_from_dataframe(df, include_labels, include_senders, include_subject)
+    features_df = extract_features_from_dataframe(df, include_labels, include_senders, 
+                                                  include_subject, use_tfidf=model=="None")
     X = np.array(features_df.values, dtype=float)
+    features = X
+
+    if neural_config.get('model') == "Autoencoder":
+        print("Running autoencoder...")
+        encoding_dim = neural_config.get('encoding_dim', 256)
+        epochs = neural_config.get('epochs', 50)
+        autoencoder, encoder = construct_autoencoder(X.shape[1], encoding_dim)
+        autoencoder.fit(X, X, epochs=epochs, batch_size=32, shuffle=True, verbose=1)
+        features = encoder.predict(X)
+        print("Autoencoder complete.")
+    elif neural_config.get('model') == "BERT":
+        print("Running BERT...")
+        texts = df['body'].tolist()
+        tokenizer, model = initialize_bert(model_name='bert-base-uncased')
+        features = get_bert_embeddings(texts, tokenizer, model, pooling='mean', max_length=128)
+        print("BERT complete.")
+
+    features = StandardScaler().fit_transform(features)
 
     print("Running K-means...")
     kmeans = KMeans(k = int(num_clusters), random_state=26)
-    kmeans.fit(X)
+    kmeans.fit(features)
     df['cluster_id'] = kmeans.labels
     print("K-means complete.")
 
     print("Calculating silhouette score...")
-    silhouette_score = calculate_silhouette_score(X, kmeans.labels)
-    print("Calculation complete.")
+    silhouette_score = calculate_silhouette_score(features, kmeans.labels)
+    print(f"Silhouette score: {silhouette_score}.")
 
     print("Running PCA...")
     pca = PCA(n_components=2)
-    X_2d = pca.fit_transform(X)
-    df['x'] = X_2d[:, 0]
-    df['y'] = X_2d[:, 1]
+    features_2d = pca.fit_transform(features)
+    df['x'] = features_2d[:, 0]
+    df['y'] = features_2d[:, 1]
     print("PCA complete.")
 
     print("Extracting keywords...")

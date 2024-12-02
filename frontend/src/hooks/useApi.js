@@ -6,8 +6,14 @@ import { ALL_TOPICS, LS, STATUS } from "../res";
 import { StorageUtils } from "../utils";
 
 const useApi = () => {
-    const { categories, kmeansConfig, ldaConfig, numEmails, status } =
-        useAppContext();
+    const {
+        categories,
+        kmeansConfig,
+        ldaConfig,
+        neuralConfig,
+        numEmails,
+        status,
+    } = useAppContext();
     const {
         setAuthenticated,
         setEmails,
@@ -92,24 +98,32 @@ const useApi = () => {
     };
 
     const runKMeans = async () => {
-        function getClustersValid(clusters) {
+        function handleEmptyClusters(clusters) {
             try {
                 if (!clusters || clusters.length === 0) {
-                    return false;
+                    return [];
                 }
+                const finalClusters = [];
                 for (const cluster of clusters) {
                     if (
                         cluster === null ||
                         cluster.length === 0 ||
-                        !cluster[0].hasOwnProperty("topic_id")
+                        !cluster[0]?.hasOwnProperty("topic_id")
                     ) {
-                        return false;
+                        finalClusters.push({
+                            generated: false,
+                            keywords: [],
+                            label: "Empty",
+                            topic_id: Math.random(),
+                        });
+                    } else {
+                        finalClusters.push(...cluster);
                     }
                 }
-                return true;
+                return finalClusters;
             } catch (e) {
-                console.error("Error checking cluster validity: ", e);
-                return false;
+                console.error("Error handling empty clusters: ", e);
+                return [];
             }
         }
 
@@ -125,23 +139,24 @@ const useApi = () => {
                     : [],
                 kmeansConfig,
                 ldaConfig,
+                neuralConfig,
             });
             console.log("response: ", res.data);
 
-            const { clusters, email_clusters } = res.data;
+            const { email_clusters } = res.data;
+            const clusters = handleEmptyClusters(res.data.clusters);
 
-            if (getClustersValid(clusters)) {
-                setKMeansData(res.data);
-                setTopics(clusters);
-                setTopicsMap(email_clusters);
-                StorageUtils.setItem(LS.KMEANS_DATA, res.data);
-                StorageUtils.setItem(LS.CLUSTERS, clusters);
-                StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
-            } else {
-                console.error("Invalid clusters: ", clusters);
-            }
+            setKMeansData(res.data);
+            setTopics(clusters);
+            setTopicsMap(email_clusters);
+            StorageUtils.setItem(LS.KMEANS_DATA, res.data);
+            StorageUtils.setItem(LS.CLUSTERS, clusters);
+            StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
         } catch (e) {
-            console.error(e.response?.data?.message || "An error occurred");
+            console.error(
+                "Error running k-means: ",
+                e.response?.data?.message || "An error occurred"
+            );
         } finally {
             setStatus(null);
         }

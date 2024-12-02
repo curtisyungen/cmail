@@ -9,6 +9,7 @@ const Select = styled("select")`
     color: ${({ color = COLORS.BLACK }) => color};
     font-size: ${({ fontSize = 12 }) => `${fontSize}px`};
     padding: 5px;
+    text-overflow: ellipsis;
     width: ${({ width }) => `${width}px`};
 
     &:active,

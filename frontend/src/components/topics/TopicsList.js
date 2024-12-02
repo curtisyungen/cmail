@@ -56,7 +56,7 @@ const TopicsList = () => {
 
     const sortTopics = () => {
         const sortedTopics = SortUtils.sortData({
-            data: topics.flat(),
+            data: topics || [],
             key: "label",
         });
         const groupedTopics = {
