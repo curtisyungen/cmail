@@ -34,7 +34,7 @@ const AnalysisActions = () => {
                 >
                     <Icon
                         color={disabled ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK}
-                        name={ICON.TRASH}
+                        name={ICON.CHART}
                         size={24}
                         style={{ marginBottom: "5px" }}
                     />

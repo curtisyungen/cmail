@@ -3,6 +3,7 @@ import {} from "@mdi/js";
 import {
     FaAtom,
     FaBars,
+    FaBraille,
     FaCalendarAlt,
     FaCheck,
     FaCloud,
@@ -26,6 +27,7 @@ import {
 export const ICON = {
     CALENDAR: "CALENDAR",
     CATEGORY: "CATEGORY",
+    CHART: "CHART",
     CHECK: "CHECK",
     CLOUD: "CLOUD",
     ENVELOPE: "ENVELOPE",
@@ -49,6 +51,7 @@ export const ICON = {
 export const FA_COMPONENTS = {
     [ICON.CALENDAR]: FaCalendarAlt,
     [ICON.CATEGORY]: FaTag,
+    [ICON.CHART]: FaBraille,
     [ICON.CHECK]: FaCheck,
     [ICON.CLOUD]: FaCloud,
     [ICON.ENVELOPE]: FaRegEnvelope,

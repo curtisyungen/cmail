@@ -39,12 +39,24 @@ const Header = ({ date, from, to }) => {
 };
 
 const Spacer = () => {
-    return <Box height={DIMENS.SPACING_STANDARD} />;
+    return (
+        <Box
+            height={DIMENS.SPACING_STANDARD}
+            style={{ minHeight: DIMENS.SPACING_STANDARD }}
+        />
+    );
 };
 
 const Subject = ({ subject }) => {
     return (
-        <Box background={COLORS.WHITE} borderRadius={5} padding={10}>
+        <Box
+            background={COLORS.WHITE}
+            borderRadius={5}
+            padding={10}
+            style={{
+                boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
+            }}
+        >
             <Text bold>{subject}</Text>
         </Box>
     );
@@ -57,11 +69,17 @@ const EmailReader = () => {
     return (
         <Box
             justifyContent="flex-start"
-            style={{ flex: 1, height: "100%", overflowY: "scroll" }}
+            style={{ flex: 1, height: "100%", overflowY: "scroll", padding: 2 }}
         >
             <Subject subject={raw_subject} />
             <Spacer />
-            <Box background={COLORS.WHITE} borderRadius={5} padding={10}>
+            <Box
+                background={COLORS.WHITE}
+                borderRadius={5}
+                margin={{ bottom: 150 }}
+                padding={10}
+                style={{ boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}` }}
+            >
                 <Header date={date} from={from} to={to} />
                 <Body body={raw_body} keywords={keywords} />
             </Box>
