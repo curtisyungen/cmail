@@ -26,6 +26,9 @@ def match_topic(keywords, categories, threshold=0.8):
     else:
         return None
 
+def match_topic_to_keywords(keywords, categories):
+    return None
+
 def generate_label(keywords, categories):
     if not keywords:
         return "Unknown"

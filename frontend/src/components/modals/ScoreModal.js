@@ -3,6 +3,8 @@ import Modal from "react-modal";
 
 import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
 
+Modal.setAppElement("#root");
+
 const ScoreSection = ({ title, description, color }) => {
     return (
         <Box margin={{ top: 10 }}>

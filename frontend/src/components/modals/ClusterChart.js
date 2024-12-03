@@ -5,6 +5,8 @@ import Modal from "react-modal";
 import { useAppContext } from "../../hooks";
 import { Box } from "../../styles";
 
+Modal.setAppElement("#root");
+
 const ClusterChart = ({ onClose, open }) => {
     const {
         modelResult: { clusters_data },
