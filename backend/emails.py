@@ -80,8 +80,11 @@ def get_emails(creds, limit):
         if emails_df is None or emails_df.empty:
             return None
 
-        emails_df = clean_text(emails_df, 'body')
-        emails_df = clean_text(emails_df, 'subject')
+        emails_df['raw_body'] = emails_df['body']
+        emails_df['raw_subject'] = emails_df['subject']
+        emails_df['body'] = emails_df['body'].apply(clean_text)
+        emails_df['subject'] = emails_df['subject'].apply(clean_text)
+
         store_value_in_redis(REDIS_KEYS.EMAILS, emails_df.to_json(orient='records'))
 
         return emails_df
