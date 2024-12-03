@@ -173,4 +173,5 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     # LDA to label clusters
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
 
+    print("Model execution complete.")
     return df, clusters_with_labels, score

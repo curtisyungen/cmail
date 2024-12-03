@@ -78,7 +78,11 @@ const AnalysisActions = () => {
                     style={{ flex: 1 }}
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
-                    <Box height={24} margin={{ bottom: 5 }}>
+                    <Box
+                        clickable={!disabled}
+                        height={24}
+                        margin={{ bottom: 5 }}
+                    >
                         <Text
                             center
                             color={scoreColor}

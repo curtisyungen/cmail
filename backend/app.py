@@ -92,6 +92,8 @@ def run_model_route():
             model_config, 
         )
 
+        print(f"app.py: clusters: {clusters}, silhouette_score: {silhouette_score}")
+
         try:
             email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
             email_clusters['id'] = email_clusters.index
