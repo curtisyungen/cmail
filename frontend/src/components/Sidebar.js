@@ -1,13 +1,28 @@
 import React from "react";
 
 import { Icon } from "./common";
-import { Box, COLORS, DIMENS } from "../styles";
 import { ICON } from "../res/icons";
+import { Box, COLORS, DIMENS, Flex } from "../styles";
 
-const SidebarItem = ({ color, icon }) => {
+const SelectionIndicator = ({ active }) => {
+    return (
+        <Box
+            background={active ? COLORS.BLUE_DARK : COLORS.TRANSPARENT}
+            borderRadius={5}
+            height={24}
+            style={{ left: 0, position: "absolute" }}
+            width={3}
+        />
+    );
+};
+
+const SidebarItem = ({ color, icon, selected }) => {
     return (
         <Box alignItems="center" height={38}>
-            <Icon color={color} name={icon} />
+            <Flex>
+                <SelectionIndicator active={selected} />
+                <Icon color={color} name={icon} />
+            </Flex>
         </Box>
     );
 };
@@ -21,7 +36,7 @@ const Sidebar = () => {
             style={{ minWidth: DIMENS.SIDEBAR_WIDTH }}
             width={DIMENS.SIDEBAR_WIDTH}
         >
-            <SidebarItem icon={ICON.MAIL} />
+            <SidebarItem icon={ICON.MAIL} selected={true} />
             <SidebarItem icon={ICON.CALENDAR} />
             <SidebarItem icon={ICON.USERS} />
             <SidebarItem icon={ICON.CHECK} />
