@@ -3,13 +3,13 @@ import Plot from "react-plotly.js";
 import Modal from "react-modal";
 
 import { useAppContext } from "../../hooks";
-import { Box } from "../../styles";
+import { Box, COLORS } from "../../styles";
 
 Modal.setAppElement("#root");
 
 const ClusterChart = ({ onClose, open }) => {
     const {
-        modelResult: { clusters_data },
+        modelResult: { centroids_data, clusters_data },
     } = useAppContext();
 
     const [plotData, setPlotData] = useState([]);
@@ -19,7 +19,26 @@ const ClusterChart = ({ onClose, open }) => {
             return;
         }
 
-        const traceData = clusters_data.map((cluster, idx) => {
+        const centroidTrace = {
+            x: centroids_data.map((centroid) => centroid.x),
+            y: centroids_data.map((centroid) => centroid.y),
+            mode: "markers+text",
+            type: "scatter",
+            name: "Centroids",
+            marker: {
+                size: 12,
+                color: "black",
+                symbol: "x",
+            },
+            text: centroids_data.map((_, idx) => `C${idx + 1}`),
+            textposition: "top center",
+            textfont: {
+                size: 10,
+                color: COLORS.BLACK,
+            },
+        };
+
+        const clusterTraces = clusters_data.map((cluster, idx) => {
             return {
                 x: cluster.x,
                 y: cluster.y,
@@ -35,7 +54,7 @@ const ClusterChart = ({ onClose, open }) => {
             };
         });
 
-        setPlotData(traceData);
+        setPlotData([...clusterTraces, centroidTrace]);
     }, [open]);
 
     return (

@@ -62,7 +62,7 @@ def run_kmeans(df, features, num_clusters):
         kmeans.fit(features)
         df['cluster_id'] = kmeans.labels
         print("K-means complete.")
-        return df
+        return df, kmeans
     except Exception as e:
         print(f"Error running k-means: {e}")
         return None
@@ -80,18 +80,20 @@ def run_hdbscan(df, features):
         print(f"Error running HDBSCAN: {e}")
         return pd.DataFrame()
 
-def run_pca(df, features):
+def run_pca(df, centroids, features):
     try:
         print("Running PCA...")
         pca = PCA(n_components=2)
         features_2d = pca.fit_transform(features)
         df['x'] = features_2d[:, 0]
         df['y'] = features_2d[:, 1]
+        centroids_2d = pca.transform(centroids)
+        centroids_data = [{'x': float(c[0]), 'y': float(c[1])} for c in centroids_2d]
         print("PCA complete.")
-        return df
+        return centroids_data
     except Exception as e:
         print(f"Error running PCA: {e}")
-        return df
+        return []
     
 def extract_keywords(df):
     try:
@@ -159,7 +161,7 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     # Clustering
     if model == "K-means":
         num_clusters = model_config.get('num_clusters')
-        df = run_kmeans(df, features, num_clusters)
+        df, kmeans = run_kmeans(df, features, num_clusters)
     elif model == "HDBSCAN":
         df = run_hdbscan(df, features)
     else:
@@ -168,8 +170,8 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     # Scoring
     score = calculate_silhouette_score(features, df['cluster_id'])
 
-    # PCA for cluster visualization
-    run_pca(df, features)
+    # PCA for centroid and cluster visualization
+    centroids_data = run_pca(df, kmeans.centroids, features)
 
     # Keyword extraction
     cluster_keywords = extract_keywords(df)
@@ -178,4 +180,4 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
 
     print("Model execution complete.")
-    return df, clusters_with_labels, float(score)
+    return df, clusters_with_labels, score, centroids_data

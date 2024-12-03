@@ -85,8 +85,7 @@ def run_model_route():
         print("run_model_route()")
         emails_df = pd.read_json(StringIO(emails))
 
-
-        df, clusters, silhouette_score = run_model_main(
+        df, clusters, silhouette_score, centroids_data = run_model_main(
             emails_df, 
             categories, 
             feature_config,
@@ -94,7 +93,7 @@ def run_model_route():
             model_config, 
         )
 
-        print(f"app.py: clusters: {clusters}, silhouette_score: {silhouette_score}")
+        print(f"centroids_data: {centroids_data}")
 
         try:
             email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
@@ -120,6 +119,7 @@ def run_model_route():
             "message": "Ran K-means model.",
             "clusters": clusters,
             "email_clusters": email_clusters,
+            "centroids_data": centroids_data,
             "clusters_data": clusters_data,
             "silhouette_score": silhouette_score
         }
