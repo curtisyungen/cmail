@@ -14,7 +14,7 @@ const COLORS = {
     PURPLE: "#9D00FF",
     RED: "#FF0000",
     SECONDARY: "#666666",
-    SIDEBAR: "#F1F3F8",
+    SIDEBAR: "#F5F5F5BB",
     TERTIARY: "#AAAAAA",
     TRANSPARENT: "transparent",
     WHITE: "#FFFFFF",

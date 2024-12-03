@@ -1,5 +1,6 @@
 import hdbscan
 import numpy as np
+import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from .kmeans import KMeans
@@ -27,9 +28,11 @@ def init_df(emails_df, include_subject):
         df['subject'] = df['subject'].apply(lemmatize_text)
         print("Cleaning complete.")
 
+    return df
+
 def run_autoencoder(features, feature_config):
     try:
-        print("Running autoencoder...")
+        print(f"Running autoencoder... features shape: {features.shape}")
         encoding_dim = feature_config.get('encoding_dim', 256)
         epochs = feature_config.get('epochs', 50)
         autoencoder, encoder = construct_autoencoder(features.shape[1], encoding_dim)
@@ -75,6 +78,7 @@ def run_hdbscan(df, features):
         return df
     except Exception as e:
         print(f"Error running HDBSCAN: {e}")
+        return pd.DataFrame()
 
 def run_pca(df, features):
     try:
@@ -99,17 +103,17 @@ def extract_keywords(df):
             for email in emails:
                 all_words.extend(clean_and_tokenize(email))
             cluster_keywords[int(cluster)] = all_words
-            return cluster_keywords
         print("Keyword extraction complete.")
+        return cluster_keywords
     except Exception as e:
         print(f"Error extracting keywords: {e}")
-        return None
+        return {}
     
-def label_clusters(df, cluster_keywords, categories, lda_config):
+def label_clusters(cluster_column, cluster_keywords, categories, lda_config):
     try:
         print(f"Labeling clusters...")
         clusters_with_labels = []
-        for cluster in df['cluster_id'].unique():
+        for cluster in cluster_column.unique():
             keywords = cluster_keywords[int(cluster)]
             lda_result = run_lda(cluster, keywords, categories, 
                                 no_below=lda_config.get('no_below'), 
@@ -117,9 +121,10 @@ def label_clusters(df, cluster_keywords, categories, lda_config):
                                 num_topics=lda_config.get('num_topics'))
             clusters_with_labels.append(lda_result)
         print("Labeling complete.")
+        return clusters_with_labels
     except Exception as e:
         print(f"Error labeling clusters: {e}")
-        return None
+        return []
 
 def run_model(emails_df, categories, feature_config, lda_config, model_config):
     print(f"Setting up model with config {model_config} and {len(emails_df)} emails...")
@@ -134,15 +139,17 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     
     # DataFrame set-up
     df = init_df(emails_df, include_subject)
-    features_df = extract_features_from_dataframe(df, include_labels, include_senders, include_subject, use_tfidf=use_tfidf)
-    X = np.array(features_df.values, dtype=float)
-
+    
     # Feature extraction
-    features = X
+    features_df = extract_features_from_dataframe(df, include_labels, include_senders, include_subject, use_tfidf=use_tfidf)
+    features = None
+
     if feature_model == "Autoencoder":
-        features = run_autoencoder(features, feature_config)
+        features = run_autoencoder(features_df.values, feature_config)
     elif feature_model == "BERT":
         features = run_bert(df['body'].tolist())
+    else:
+        features = np.array(features_df.values, dtype=float)
     features = StandardScaler().fit_transform(features)
 
     # Clustering
@@ -150,25 +157,20 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
         num_clusters = model_config.get('num_clusters')
         df = run_kmeans(df, features, num_clusters)
     elif model == "HDBSCAN":
-        df = run_hdbscan(df)
+        df = run_hdbscan(df, features)
     else:
         raise ValueError(f"Invalid model: {model}")
 
     # Scoring
-    if model == "K-means":
-        score = calculate_silhouette_score(features, df['cluster_id'])
-    elif model == "HDBSCAN":
-        score = 0
-    else:
-        score = 0
+    score = calculate_silhouette_score(features, df['cluster_id'])
 
     # PCA for cluster visualization
-    run_pca(df)
+    run_pca(df, features)
 
     # Keyword extraction
     cluster_keywords = extract_keywords(df)
 
     # LDA to label clusters
-    clusters_with_labels = run_lda(df, cluster_keywords, categories, lda_config)
+    clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
 
     return df, clusters_with_labels, score

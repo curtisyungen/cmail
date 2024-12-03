@@ -29,8 +29,7 @@ const NeuralActions = () => {
     const { featureConfig, status } = useAppContext();
     const { setFeatureConfig } = useAppActions();
 
-    const handleConfigChange = (e) => {
-        const { name, value } = e.target;
+    const handleConfigChange = (name, value) => {
         setFeatureConfig({
             ...featureConfig,
             [name]: value,
@@ -48,7 +47,9 @@ const NeuralActions = () => {
                     <Select
                         disabled={status === STATUS.RUNNING_KMEANS}
                         name="model"
-                        onChange={handleConfigChange}
+                        onChange={(e) =>
+                            handleConfigChange("model", e.target.value)
+                        }
                         style={{
                             marginBottom: "5px",
                         }}

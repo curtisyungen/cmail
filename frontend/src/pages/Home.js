@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import backgroundImage from "../assets/backgroundImage.jpg";
 import {
     ActionBar,
     Navbar,
@@ -51,41 +52,55 @@ const Home = () => {
             height="100vh"
             justifyContent="flex-start"
             overflow="hidden"
+            style={{
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundPositionX: "50%",
+                backgroundPositionY: "50%",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+            }}
         >
             <TitleBar />
+
             <Flex alignItems="flex-start">
                 <Sidebar />
                 <Box
-                    margin={{
-                        right: DIMENS.HOME_PADDING,
-                    }}
-                    style={{ flex: 1 }}
-                    width="unset"
+                    background={COLORS.GRAY_LIGHT}
+                    justifyContent="flex-start"
+                    overflow="hidden"
                 >
-                    <Navbar />
-                    <ActionBar />
-                    <Box height={DIMENS.SPACING_STANDARD} width="100%" />
                     <Box
-                        height={DIMENS.EMAIL_LIST_HEIGHT}
-                        justifyContent="flex-start"
-                        overflow="hidden"
+                        margin={{
+                            right: DIMENS.HOME_PADDING,
+                        }}
+                        style={{ flex: 1 }}
+                        width="unset"
                     >
-                        <Flex
-                            alignItems="flex-start"
-                            style={{ overflow: "hidden" }}
+                        <Navbar />
+                        <ActionBar />
+                        <Box height={DIMENS.SPACING_STANDARD} width="100%" />
+                        <Box
+                            height={DIMENS.EMAIL_LIST_HEIGHT}
+                            justifyContent="flex-start"
+                            overflow="hidden"
                         >
-                            <TopicsList />
-                            <EmailList />
-                            <Box
-                                height="100%"
-                                width={DIMENS.SPACING_STANDARD}
-                            />
-                            {selectedEmail ? (
-                                <EmailReader />
-                            ) : (
-                                <EmptyStateView />
-                            )}
-                        </Flex>
+                            <Flex
+                                alignItems="flex-start"
+                                style={{ overflow: "hidden" }}
+                            >
+                                <TopicsList />
+                                <EmailList />
+                                <Box
+                                    height="100%"
+                                    width={DIMENS.SPACING_STANDARD}
+                                />
+                                {selectedEmail ? (
+                                    <EmailReader />
+                                ) : (
+                                    <EmptyStateView />
+                                )}
+                            </Flex>
+                        </Box>
                     </Box>
                 </Box>
             </Flex>

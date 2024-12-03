@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
-import backgroundImage from "../assets/loginBackground.jpg";
+import backgroundImage from "../assets/backgroundImage.jpg";
 import { Icon } from "../components/common";
 import { useApi, useAppContext, useAuthentication } from "../hooks";
 import { APP_NAME, PAGES, STATUS } from "../res";

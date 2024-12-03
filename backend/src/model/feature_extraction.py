@@ -8,43 +8,41 @@ def compute_sender_freqs(sender_column):
     try:
         sender_column = sender_column.fillna("").astype(str)
 
-        email_pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         cleaned_senders = sender_column.apply(lambda x: re.sub(r'\s+|<.*?>', '', x).strip())
-        valid_senders = cleaned_senders[cleaned_senders.apply(lambda x: re.match(email_pattern, x) is not None)]
+        valid_senders = cleaned_senders[cleaned_senders.apply(lambda x: re.match(email_regex, x) is not None)]
 
         sender_counts = Counter(valid_senders)
-        sender_counts = {k: int(v) for k, v in sender_counts.items()}
         total_senders = len(valid_senders)
 
         if total_senders == 0:
             return {}
         
-        sender_freqs = {}
-        for sender, count in sender_counts.items():
-            freq = count / total_senders
-            sender_freqs[sender] = freq
+        sender_freqs = {sender: count / total_senders for sender, count in sender_counts.items()}
         return sender_freqs
     except Exception as e:
         print(f"Error computing sender frequencies: {e}")
         return {}
     
-def encode_labels(df):
+def encode_column(column_data):
     try:
-        all_labels = set()
-        for labels in df['labelIds']:
-            all_labels.update(labels)
-        label_to_index = {label: idx for idx, label in enumerate(sorted(all_labels))}
-        encoded_labels = []
-        for labels in df['labelIds']:
-            vector = [0] * len(label_to_index)
-            for label in labels:
-                if label in label_to_index:
-                    vector[label_to_index[label]] = 1
-            encoded_labels.append(vector)
-        return pd.DataFrame(encoded_labels, columns=list(label_to_index.keys()))
+        all_words = set()
+        for text in column_data:
+            words = text.split()
+            all_words.update(words)
+        word_to_index = {word: idx for idx, word in enumerate(sorted(all_words))}
+        encoded_text = []
+        for text in column_data:
+            words = text.split()
+            vector = [0] * len(word_to_index)
+            for word in words:
+                if word in word_to_index:
+                    vector[word_to_index[word]] = 1
+            encoded_text.append(vector)
+        return pd.DataFrame(encoded_text, columns=list(word_to_index.keys()))
     except Exception as e:
-        print(f"Error encoding labels: {e}")
-        return None
+        print(f"Error encoding text: {e}")
+        return pd.DataFrame()
 
 def process_time(timestamp):
     try:
@@ -69,6 +67,7 @@ def process_time(timestamp):
             }
     except Exception as e:
         print(f"Error processing time: {e}")
+        return None
 
 def run_tfidf(df, column):
     try:
@@ -78,37 +77,51 @@ def run_tfidf(df, column):
         vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 3))
         tfidf_matrix = vectorizer.fit_transform(df[column])
         tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
+        tfidf_df.columns = [f"{column}_tfidf_{col}" for col in tfidf_df.columns]
         return tfidf_df
     except Exception as e:
         print(f"Error running tfidf on {column}: {e}")
+        return pd.DataFrame()
 
-def extract_features(email_entry, sender_freqs, include_senders):
-    features = {}
-    if include_senders:
-        sender = email_entry.get("from", "")
-        features["sender_freq"] = sender_freqs.get(sender, 0)
-    return features
+def extract_senders(sender_column):
+    try:
+        cleaned_senders = sender_column.apply(lambda x: x.strip().lower() if isinstance(x, str) else "")
+        sender_freqs = compute_sender_freqs(cleaned_senders)
+        sender_df = cleaned_senders.apply(lambda sender: sender_freqs.get(sender, 0)).to_frame(name='sender_freq')
+        return sender_df
+    except Exception as e:
+        print(f"Error extracting senders: {e}")
+        return pd.DataFrame()
+    
+def get_body_df(df, use_tfidf):
+    if use_tfidf:
+        return run_tfidf(df, 'body')
+    return encode_column(df['body']) # Encoding for Autoencoder or BERT
+    
+def get_subject_df(df, include_subject, use_tfidf):
+    if not include_subject:
+        return pd.DataFrame()
+    if use_tfidf:
+        return run_tfidf(df, 'subject')
+    return encode_column(df['subject']) # Encoding for Autoencoder or BERT
 
 def extract_features_from_dataframe(df, include_labels, include_senders, include_subject, use_tfidf):
     try:
-        print("Extract features...")
-        extracted_features = []
-        
-        labels_df = encode_labels(df) if include_labels else pd.DataFrame()
-        sender_freqs = compute_sender_freqs(df['from']) if include_senders else {}
-        
-        extracted_features = df.apply(lambda row: extract_features(row, sender_freqs, include_senders), axis=1).tolist()
-        features_df = pd.DataFrame(extracted_features).fillna(0)
+        print(f"Extracting features...")
 
-        tfidf_body_df = run_tfidf(df, 'body') if use_tfidf else pd.DataFrame()
-        tfidf_subject_df = run_tfidf(df, 'subject') if use_tfidf and include_subject else pd.DataFrame()
+        body_df = get_body_df(df, use_tfidf)
+        subject_df = get_subject_df(df, include_subject, use_tfidf)
+        labels_df = encode_column(df['labelIds']) if include_labels else pd.DataFrame()
+        senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
 
-        if include_labels and not labels_df.empty:
-            final_df = pd.concat([features_df, tfidf_body_df, tfidf_subject_df, labels_df], axis=1)
-        else:
-            final_df = pd.concat([features_df, tfidf_body_df, tfidf_subject_df], axis=1)
+        final_df = body_df
+        other_dfs = [subject_df, labels_df, senders_df]
+        for other_df in other_dfs:
+            if not other_df.empty:
+                final_df = pd.concat([final_df, other_df], axis=1)
 
-        print(f"Feature extraction complete.")
+        print(f"Feature extraction complete. Final shape: {final_df.shape}.")
         return final_df
     except Exception as e:
         print(f"Error extracting features: {e}")
+        return pd.DataFrame()

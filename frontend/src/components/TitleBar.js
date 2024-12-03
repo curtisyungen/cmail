@@ -6,6 +6,7 @@ import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../styles";
 const TitleBar = () => {
     return (
         <Box
+            background={COLORS.SIDEBAR}
             height={DIMENS.TITLEBAR_HEIGHT}
             padding={{ bottom: 5, left: 20, right: 20, top: 5 }}
             style={{}}
@@ -29,7 +30,7 @@ const TitleBar = () => {
                         borderWidth: "1px",
                         fontSize: FONT_SIZE.M,
                         height: "25px",
-                        marginLeft: "165px",
+                        marginLeft: "180px",
                         paddingLeft: "5px",
                         paddingRight: "5px",
                         width: DIMENS.EMAIL_WIDTH,
