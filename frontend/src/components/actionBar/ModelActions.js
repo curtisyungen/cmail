@@ -30,7 +30,6 @@ const ModelActions = () => {
     }, []);
 
     const handleConfigChange = (name, value) => {
-        console.log("name: ", name, "value: ", value);
         setModelConfig({
             ...modelConfig,
             [name]: value,

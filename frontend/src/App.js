@@ -5,6 +5,8 @@ import { AppContextProvider } from "./AppContext";
 import { Home, Login } from "./pages";
 import { PAGES } from "./res";
 
+import "./App.css";
+
 const App = () => {
     return (
         <AppContextProvider>

@@ -1,5 +1,7 @@
 import { COLORS } from "../styles";
 
+export const APP_NAME = "Cmail";
+
 export const MODEL = {
     CLUSTERING: {
         KMEANS: "K-means",

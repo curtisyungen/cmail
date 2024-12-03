@@ -1,5 +1,6 @@
 import React from "react";
 
+import { APP_NAME } from "../res";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../styles";
 
 const TitleBar = () => {
@@ -16,7 +17,7 @@ const TitleBar = () => {
                     fontSize={FONT_SIZE.L}
                     style={{ userSelect: "none" }}
                 >
-                    Kmail
+                    {APP_NAME}
                 </Text>
                 <input
                     type="search"

@@ -16,5 +16,5 @@ export const FONT_SIZE = {
     L: 14,
     XL: 18,
     XXL: 24,
-    XXXL: 32,
+    XXXL: 48,
 };

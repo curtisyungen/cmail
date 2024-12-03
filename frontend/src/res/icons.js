@@ -1,5 +1,3 @@
-import {} from "@mdi/js";
-
 import {
     FaAtom,
     FaBan,
@@ -13,6 +11,7 @@ import {
     FaFileAlt,
     FaFolder,
     FaInbox,
+    FaKey,
     FaKickstarterK,
     FaMarker,
     FaRegEnvelope,
@@ -39,6 +38,7 @@ export const ICON = {
     FOLDER_REG: "FOLDER_REG",
     HDBSCAN: "HDBSCAN",
     INBOX: "INBOX",
+    KEY: "KEY",
     KMEANS: "KMEANS",
     LABEL: "LABEL",
     MAIL: "MAIL",
@@ -66,6 +66,7 @@ export const FA_COMPONENTS = {
     [ICON.FOLDER_REG]: FaRegFolder,
     [ICON.HDBSCAN]: FaBrain,
     [ICON.INBOX]: FaInbox,
+    [ICON.KEY]: FaKey,
     [ICON.KMEANS]: FaKickstarterK,
     [ICON.LABEL]: FaSign,
     [ICON.MAIL]: FaEnvelopeOpenText,
