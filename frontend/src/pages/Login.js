@@ -184,13 +184,17 @@ const LoginButton = () => {
                 </Box>
             </Box>
             <Box
+                alignItems="flex-end"
                 background="rgba(0, 0, 0, 0.6)"
                 height={46}
+                padding={{ left: 20, right: 20 }}
                 style={{
                     bottom: 0,
                     position: "fixed",
                 }}
-            ></Box>
+            >
+                <Text color={COLORS.WHITE}>{`\u00A9 2024`}</Text>
+            </Box>
         </Box>
     );
 };
