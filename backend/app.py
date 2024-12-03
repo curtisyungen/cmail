@@ -82,7 +82,9 @@ def run_model_route():
         if not emails:
             return jsonify({'error', 'No emails found.'}), 404
         
+        print("run_model_route()")
         emails_df = pd.read_json(StringIO(emails))
+
 
         df, clusters, silhouette_score = run_model_main(
             emails_df, 

@@ -69,7 +69,37 @@ const NeuralActions = () => {
                         Model
                     </Text>
                 </Box>
-                <Box clickable width={100}>
+                <Box
+                    clickable
+                    height="100%"
+                    justifyContent="flex-start"
+                    margin={{ right: DIMENS.SPACING_STANDARD }}
+                    width={100}
+                >
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={featureConfig.include_dates}
+                        icon={ICON.DATE}
+                        label="Dates"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_dates",
+                                !featureConfig.include_dates
+                            )
+                        }
+                    />
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={featureConfig.include_subject}
+                        icon={ICON.SUBJECT}
+                        label="Subject"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_subject",
+                                !featureConfig.include_subject
+                            )
+                        }
+                    />
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
                         enabled={featureConfig.include_labels}
@@ -82,6 +112,13 @@ const NeuralActions = () => {
                             )
                         }
                     />
+                </Box>
+                <Box
+                    clickable
+                    justifyContent="flex-start"
+                    height="100%"
+                    width={100}
+                >
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
                         enabled={featureConfig.include_senders}
@@ -96,13 +133,13 @@ const NeuralActions = () => {
                     />
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
-                        enabled={featureConfig.include_subject}
-                        icon={ICON.SUBJECT}
-                        label="Subject"
+                        enabled={featureConfig.include_thread_ids}
+                        icon={ICON.THREAD_ID}
+                        label="Thread IDs"
                         onClick={() =>
                             handleConfigChange(
-                                "include_subject",
-                                !featureConfig.include_subject
+                                "include_thread_ids",
+                                !featureConfig.include_thread_ids
                             )
                         }
                     />

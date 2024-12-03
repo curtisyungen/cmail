@@ -1,5 +1,5 @@
 from collections import Counter
-from datetime import datetime
+import numpy as np
 import pandas as pd
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -43,31 +43,64 @@ def encode_column(column_data):
     except Exception as e:
         print(f"Error encoding text: {e}")
         return pd.DataFrame()
-
-def process_time(timestamp):
+    
+def encode_thread_ids(thread_ids):
     try:
-        if isinstance(timestamp, pd.Timestamp):
-            date_time = timestamp
-        elif isinstance(timestamp, (int, float)):
-            date_time = datetime.fromtimestamp(timestamp / 1000)
-        else:
-            date_time = None
-        
-        if date_time:
-            return {
-                "hour": date_time.hour / 23.0,
-                "day": date_time.day / 31.0,
-                "weekday": date_time.weekday() / 6.0
-            }
-        else:
-            return {
-                "hour": 0,
-                "day": 0,
-                "weekday": 0
-            }
+        thread_id_to_index = {thread_id: idx for idx, thread_id in enumerate(sorted(set(thread_ids)))}
+        return [thread_id_to_index[thread_id] for thread_id in thread_ids]
     except Exception as e:
-        print(f"Error processing time: {e}")
-        return None
+        print(f"Error encoding threadIds: {e}")
+        return []
+
+def extract_date(datetime_column):
+    try:
+        datetime_column = pd.to_datetime(datetime_column)
+        timestamps = datetime_column.astype(np.int64) // 10**9
+        day_of_week = datetime_column.dt.dayofweek
+        hour_of_day = datetime_column.dt.hour
+        return pd.DataFrame({
+            'timestamp': timestamps,
+            'day_of_week': day_of_week,
+            'hour_of_day': hour_of_day
+        })
+    except Exception as e:
+        print(f"Error extracting date: {e}")
+        return pd.DataFrame()
+
+def extract_senders(sender_column):
+    try:
+        cleaned_senders = sender_column.apply(lambda x: x.strip().lower() if isinstance(x, str) else "")
+        sender_freqs = compute_sender_freqs(cleaned_senders)
+        sender_df = cleaned_senders.apply(lambda sender: sender_freqs.get(sender, 0)).to_frame(name='sender_freq')
+        return sender_df
+    except Exception as e:
+        print(f"Error extracting senders: {e}")
+        return pd.DataFrame()
+    
+def extract_thread_ids(thread_id_column, include_thread_ids, encode_thread_ids):
+    try:
+        if not include_thread_ids:
+            return pd.DataFrame()
+        # For K-means and/or Autoencoder
+        if encode_thread_ids:
+            thread_id_to_index = {thread_id: idx for idx, thread_id in enumerate(sorted(set(thread_id_column)))}
+            encoded_thread_ids = [thread_id_to_index[thread_id] for thread_id in thread_id_column]
+            return pd.DataFrame(encoded_thread_ids, columns=["encoded_threadId"])
+        # For HDBSCAN
+        return pd.DataFrame(thread_id_column, columns=["threadId"])
+    except Exception as e:
+        print(f"Error extracting thread IDs: {e}")
+        return pd.DataFrame()
+    
+def get_body_df(df, use_tfidf):
+    if use_tfidf:
+        return run_tfidf(df, 'body')
+    return encode_column(df['body']) # Encoding for Autoencoder or BERT
+    
+def get_subject_df(df, use_tfidf):
+    if use_tfidf:
+        return run_tfidf(df, 'subject')
+    return encode_column(df['subject']) # Encoding for Autoencoder or BERT
 
 def run_tfidf(df, column):
     try:
@@ -83,39 +116,23 @@ def run_tfidf(df, column):
         print(f"Error running tfidf on {column}: {e}")
         return pd.DataFrame()
 
-def extract_senders(sender_column):
-    try:
-        cleaned_senders = sender_column.apply(lambda x: x.strip().lower() if isinstance(x, str) else "")
-        sender_freqs = compute_sender_freqs(cleaned_senders)
-        sender_df = cleaned_senders.apply(lambda sender: sender_freqs.get(sender, 0)).to_frame(name='sender_freq')
-        return sender_df
-    except Exception as e:
-        print(f"Error extracting senders: {e}")
-        return pd.DataFrame()
-    
-def get_body_df(df, use_tfidf):
-    if use_tfidf:
-        return run_tfidf(df, 'body')
-    return encode_column(df['body']) # Encoding for Autoencoder or BERT
-    
-def get_subject_df(df, include_subject, use_tfidf):
-    if not include_subject:
-        return pd.DataFrame()
-    if use_tfidf:
-        return run_tfidf(df, 'subject')
-    return encode_column(df['subject']) # Encoding for Autoencoder or BERT
-
-def extract_features_from_dataframe(df, include_labels, include_senders, include_subject, use_tfidf):
+def extract_features_from_dataframe(df, include_dates, include_labels, include_senders, 
+                                    include_subject, include_thread_ids, feature_model, model):
     try:
         print(f"Extracting features...")
 
+        use_tfidf = feature_model != "Autoencoder" and feature_model != "BERT"
+        encode_thread_ids = feature_model == "Autoencoder" or model == "K-means"
+
         body_df = get_body_df(df, use_tfidf)
-        subject_df = get_subject_df(df, include_subject, use_tfidf)
+        dates_df = extract_date(df['date']) if include_dates else pd.DataFrame()
+        subject_df = get_subject_df(df, use_tfidf) if include_subject else pd.DataFrame()
         labels_df = encode_column(df['labelIds']) if include_labels else pd.DataFrame()
         senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
+        thread_ids_df = extract_thread_ids(df['threadId'], encode_thread_ids) if include_thread_ids else pd.DataFrame()
 
         final_df = body_df
-        other_dfs = [subject_df, labels_df, senders_df]
+        other_dfs = [dates_df, subject_df, labels_df, senders_df, thread_ids_df]
         for other_df in other_dfs:
             if not other_df.empty:
                 final_df = pd.concat([final_df, other_df], axis=1)

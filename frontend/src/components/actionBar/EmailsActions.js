@@ -82,7 +82,7 @@ const EmailsActions = () => {
                         width={DIMENS.SELECT_WIDTH}
                     >
                         {Array.from(
-                            { length: 10 },
+                            { length: 20 },
                             (_, index) => (index + 1) * 100
                         ).map((num) => (
                             <option key={num} value={num}>

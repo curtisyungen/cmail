@@ -32,7 +32,7 @@ def init_df(emails_df, include_subject):
 
 def run_autoencoder(features, feature_config):
     try:
-        print(f"Running autoencoder... features shape: {features.shape}")
+        print(f"Running autoencoder...")
         encoding_dim = feature_config.get('encoding_dim', 256)
         epochs = feature_config.get('epochs', 50)
         autoencoder, encoder = construct_autoencoder(features.shape[1], encoding_dim)
@@ -131,22 +131,26 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
 
     model = model_config.get('model')
 
+    include_dates = model_config.get('include_dates')
     include_labels = model_config.get('include_labels')
     include_senders = model_config.get('include_senders')
     include_subject = model_config.get('include_subject')
+    include_thread_ids = model_config.get('include_thread_ids')
     feature_model = feature_config.get('model')
-    use_tfidf = feature_model == "None"
     
     # DataFrame set-up
     df = init_df(emails_df, include_subject)
     
     # Feature extraction
-    features_df = extract_features_from_dataframe(df, include_labels, include_senders, include_subject, use_tfidf=use_tfidf)
+    features_df = extract_features_from_dataframe(df, include_dates, include_labels, include_senders, 
+                                                  include_subject, include_thread_ids, 
+                                                  feature_model, model)
     features = None
 
     if feature_model == "Autoencoder":
         features = run_autoencoder(features_df.values, feature_config)
     elif feature_model == "BERT":
+        # Don't pass in categorical features like thread IDs, dates, etc.
         features = run_bert(df['body'].tolist())
     else:
         features = np.array(features_df.values, dtype=float)
@@ -174,4 +178,4 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
 
     print("Model execution complete.")
-    return df, clusters_with_labels, score
+    return df, clusters_with_labels, float(score)

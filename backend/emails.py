@@ -41,6 +41,7 @@ def fetch_emails(creds, limit):
             headers = {header['name']: header['value'] for header in payload.get('headers', [])}
             email_data = {
                 'id': msg['id'],
+                'threadId': msg['threadId'],
                 'labelIds': msg.get('labelIds', []),
                 'subject': headers.get('Subject', ''),
                 'from': headers.get('From', ''),

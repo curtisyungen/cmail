@@ -3,9 +3,9 @@ import React, { createContext, useContext, useReducer } from "react";
 import {
     ALL_TOPICS,
     DEFAULT_CATEGORIES,
-    DEFAULT_MODEL_CONFIG,
-    DEFAULT_LDA_CONFIG,
     DEFAULT_FEATURE_CONFIG,
+    DEFAULT_LDA_CONFIG,
+    DEFAULT_MODEL_CONFIG,
     DEFAULT_NUM_EMAILS,
     TABS,
 } from "./res";
