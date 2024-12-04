@@ -1,5 +1,7 @@
 import redis
 
+from config import DEFAULT_REDIS_EXPIRATION
+
 redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 def clear_redis_values():
@@ -13,7 +15,7 @@ def remove_value_from_redis(key):
     redis_client.delete(key)
     print(f"{key} deleted from Redis.")
 
-def store_value_in_redis(key, value, expiration = 3600):
+def store_value_in_redis(key, value, expiration = DEFAULT_REDIS_EXPIRATION):
     try:
         redis_client.set(key, value)
         redis_client.expire(key, expiration)

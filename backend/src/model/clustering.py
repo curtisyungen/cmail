@@ -1,5 +1,4 @@
 import hdbscan
-import numpy as np
 import pandas as pd
 from collections import Counter
 from sklearn.decomposition import PCA
@@ -8,9 +7,7 @@ from .kmeans import KMeans
 from .elbow_method import run_elbow_method
 from .silhouette_score import calculate_silhouette_score
 from .lda_topic_generator import run_lda
-from .feature_extraction import extract_features_from_dataframe
-from .autoencoder import construct_autoencoder
-from .bert import initialize_bert, get_bert_embeddings
+from .feature_extraction import extract_features_from_dataframe, process_features
 from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_text
 
 def init_df(emails_df, include_subject):
@@ -31,31 +28,6 @@ def init_df(emails_df, include_subject):
         print("Cleaning complete.")
 
     return df
-
-def run_autoencoder(features, feature_config):
-    try:
-        print(f"Running autoencoder...")
-        encoding_dim = feature_config.get('encoding_dim', 384)
-        epochs = feature_config.get('epochs', 50)
-        autoencoder, encoder = construct_autoencoder(features.shape[1], encoding_dim)
-        autoencoder.fit(features, features, epochs=epochs, batch_size=32, shuffle=True, verbose=1)
-        embeddings = encoder.predict(features)
-        print("Autoencoder complete.")
-        return embeddings.tolist()
-    except Exception as e:
-        print(f"Error running autoencoder: {e}")
-        return None
-    
-def run_bert(features):
-    try:
-        print("Running BERT...")
-        tokenizer, feature_model = initialize_bert(model_name='bert-base-uncased')
-        embeddings = get_bert_embeddings(features, tokenizer, feature_model, pooling='mean', max_length=128)
-        print("BERT complete.")
-        return embeddings
-    except Exception as e:
-        print(f"Error running BERT: {e}")
-        return None
     
 def run_kmeans(df, features, num_clusters):
     try:
@@ -68,7 +40,6 @@ def run_kmeans(df, features, num_clusters):
     except Exception as e:
         print(f"Error running k-means: {e}")
         return None
-
 
 def run_hdbscan(df, features):
     try:
@@ -155,35 +126,16 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     print(f"Setting up model with config {model_config} and {len(emails_df)} emails...")
 
     model = model_config.get('model')
-    feature_model = feature_config.get('model')
 
     # Set-up
     df = init_df(emails_df, feature_config.get('include_subject'))
     
-    # Feature extraction
-    features = None
-    if feature_model == "BERT":
-        # Operates on body only; don't pass in categorical features like thread IDs, dates, etc.
-        features_df = df['body']
-    else:
-        features_df = extract_features_from_dataframe(df, feature_config, model)
-    if features_df.empty:
-        raise ValueError(f"No features found. Check configuration.")
+    # Feature extraction and processing
+    body_df, features_df = extract_features_from_dataframe(df, feature_config)
+    features = process_features(body_df, features_df, feature_config)
 
-    if feature_model == "Autoencoder":
-        features = run_autoencoder(features_df.values, feature_config)
-    elif feature_model == "BERT":
-        features = run_bert(features_df.tolist())
-    else:
-        try:
-            features = np.array(features_df.values, dtype=float)
-        except Exception as e:
-            print(f"Error with features: {e}")
-            
     # Scale
     features = StandardScaler().fit_transform(features)
-
-    print(f"features size = {len(features)}")
 
     # Clustering
     centroids = None

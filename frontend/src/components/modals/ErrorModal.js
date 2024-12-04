@@ -8,7 +8,7 @@ import { Box, Button, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
 
 Modal.setAppElement("#root");
 
-const ErrorModal = ({ onClose }) => {
+const ErrorModal = ({ hasError, onClose }) => {
     const { error } = useAppContext();
     const { setError } = useAppActions();
 
@@ -19,7 +19,7 @@ const ErrorModal = ({ onClose }) => {
 
     return (
         <Modal
-            isOpen={error}
+            isOpen={error || hasError}
             onRequestClose={handleClose}
             style={{
                 content: {

@@ -1,6 +1,8 @@
 import requests
 from types import SimpleNamespace
 
+DEFAULT_REDIS_EXPIRATION = 36000 # 10 hours
+
 REDIS_KEYS = SimpleNamespace(
     ACCESS_TOKEN="access_token",
     EMAILS="emails",

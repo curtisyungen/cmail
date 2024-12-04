@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
+from .autoencoder import construct_autoencoder
+from .bert import initialize_bert, get_bert_embeddings
 
 def compute_sender_freqs(sender_column):
     # Some senders have <email@gmail.com>; others, such as emails sent to self, are just email@gmail.com
@@ -102,16 +104,31 @@ def extract_thread_ids(thread_id_column):
     except Exception as e:
         print(f"Error extracting thread IDs: {e}")
         return pd.DataFrame()
+
+def run_autoencoder(features, feature_config):
+    try:
+        print(f"Running autoencoder...")
+        encoding_dim = feature_config.get('encoding_dim', 256)
+        epochs = feature_config.get('epochs', 50)
+        autoencoder, encoder = construct_autoencoder(features.shape[1], encoding_dim)
+        autoencoder.fit(features, features, epochs=epochs, batch_size=32, shuffle=True, verbose=1)
+        embeddings = encoder.predict(features)
+        print("Autoencoder complete.")
+        return embeddings.tolist()
+    except Exception as e:
+        print(f"Error running autoencoder: {e}")
+        return None
     
-def get_body_df(df, use_tfidf):
-    if use_tfidf:
-        return run_tfidf(df, 'body')
-    return encode_column(df['body']) # Encoding for Autoencoder or BERT
-    
-def get_subject_df(df, use_tfidf):
-    if use_tfidf:
-        return run_tfidf(df, 'subject')
-    return encode_column(df['subject']) # Encoding for Autoencoder or BERT
+def run_bert(features):
+    try:
+        print("Running BERT...")
+        tokenizer, feature_model = initialize_bert(model_name='bert-base-uncased')
+        embeddings = get_bert_embeddings(features, tokenizer, feature_model, pooling='mean', max_length=128)
+        print("BERT complete.")
+        return embeddings
+    except Exception as e:
+        print(f"Error running BERT: {e}")
+        return None
 
 def run_tfidf(df, column):
     try:
@@ -127,35 +144,86 @@ def run_tfidf(df, column):
         print(f"Error running tfidf on {column}: {e}")
         return pd.DataFrame()
 
-def extract_features_from_dataframe(df, feature_config, model):
+def extract_features_from_dataframe(df, feature_config):
     try:
+        print(f"feature_config: {feature_config}")
+        feature_model = feature_config.get('model')
+
         include_bodies = feature_config.get('include_bodies')
+        include_subject = feature_config.get('include_subject')
         include_dates = feature_config.get('include_dates')
         include_labels = feature_config.get('include_labels')
         include_senders = feature_config.get('include_senders')
-        include_subject = feature_config.get('include_subject')
         include_thread_ids = feature_config.get('include_thread_ids')
-        feature_model = feature_config.get('model')
 
         print(f"Extracting features...")
 
-        use_tfidf = feature_model != "Autoencoder" and feature_model != "BERT"
+        body_df = pd.DataFrame()
+        if include_bodies:
+            if feature_model == "Autoencoder":
+                body_df = encode_column(df['body'])
+            elif feature_model == "BERT":
+                body_df = df['body']
+            else:
+                body_df = run_tfidf(df, 'body')
 
-        body_df = get_body_df(df, use_tfidf) if include_bodies else pd.DataFrame()
+        subject_df = pd.DataFrame()
+        if include_subject:
+            if feature_model == "Autoencoder" or feature_model == "BERT":
+                subject_df = encode_column(df['subject'])
+            else:
+                subject_df = run_tfidf(df, 'subject')
+
         dates_df = extract_date(df['date']) if include_dates else pd.DataFrame()
-        subject_df = get_subject_df(df, use_tfidf) if include_subject else pd.DataFrame()
         labels_df = extract_labels(df['labelIds']) if include_labels else pd.DataFrame()
         senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
         thread_ids_df = extract_thread_ids(df['threadId']) if include_thread_ids else pd.DataFrame()
 
-        final_df = pd.DataFrame()
-        other_dfs = [body_df, dates_df, subject_df, labels_df, senders_df, thread_ids_df]
-        for other_df in other_dfs:
-            if not other_df.empty:
-                final_df = pd.concat([final_df, other_df], axis=1)
+        features_df = pd.DataFrame()
+        other_dfs = [subject_df, dates_df, labels_df, senders_df, thread_ids_df]
 
-        print(f"Feature extraction complete. Final shape: {final_df.shape}.")
-        return final_df
+        for df in other_dfs:
+            if not df.empty:
+                features_df = pd.concat([features_df, df], axis=1)
+
+        print(f"Feature extraction complete. Body_df shape: {body_df.shape}, features_df shape: {features_df.shape}.")
+
+        return body_df, features_df
     except Exception as e:
         print(f"Error extracting features: {e}")
-        return pd.DataFrame()
+        return pd.DataFrame(), pd.DataFrame()
+    
+def process_features(body_df, features_df, feature_config):
+    try:
+        if body_df.empty and features_df.empty:
+            raise ValueError(f"No features found. Check configuration.")
+        
+        if body_df.empty:
+            features = features_df.values
+        elif features_df.empty:
+            features = body_df.values
+        else:
+            features = np.hstack([body_df.values, features_df.values])
+
+        feature_model = feature_config.get('model')
+        if feature_model == "Autoencoder":
+            features = run_autoencoder(features, feature_config)
+        elif feature_model == "BERT":
+            if body_df.empty:
+                print("Skipping BERT because body_df is empty.")
+                features = features_df.values
+            else:
+                # Operates on body only; don't pass in categorical features like thread IDs, dates, etc.
+                bert_features = run_bert(body_df.tolist())
+                if len(bert_features) == 0:
+                    features = features_df.values
+                elif features_df.empty:
+                    features = bert_features
+                else:
+                    features = np.hstack([bert_features, features_df.values])
+
+        print(f"Feature processing complete. Features size: {len(features)}")
+        return np.array(features, dtype=float)
+    except Exception as e:
+        print(f"Error processing features: {e}")
+        return None

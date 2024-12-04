@@ -10,7 +10,7 @@ class ErrorBoundary extends Component {
         };
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError(_) {
         return { hasError: true };
     }
 
@@ -23,6 +23,7 @@ class ErrorBoundary extends Component {
         if (this.state.hasError) {
             return (
                 <ErrorModal
+                    hasError={true}
                     onClose={() => this.setState({ hasError: false })}
                 />
             );
