@@ -30,12 +30,11 @@ def get_bert_embeddings(texts, tokenizer, model, pooling='mean', device='cpu', m
                 input_ids=inputs['input_ids'].to(device),
                 attention_mask=inputs['attention_mask'].to(device)
             )
-            hidden_states = outputs.last_hidden_state  # Shape: (batch_size, seq_len, hidden_dim)
-            
+            hidden_states = outputs.last_hidden_state
             if pooling == 'mean':
-                embeddings = torch.mean(hidden_states, dim=1).cpu().numpy()  # Mean pooling
+                embeddings = torch.mean(hidden_states, dim=1).cpu().numpy()
             elif pooling == 'cls':
-                embeddings = hidden_states[:, 0, :].cpu().numpy()  # CLS token
+                embeddings = hidden_states[:, 0, :].cpu().numpy()
             else:
                 raise ValueError("Invalid pooling method. Choose 'mean' or 'cls'.")
         return embeddings

@@ -9,8 +9,8 @@ from .elbow_method import run_elbow_method
 from .silhouette_score import calculate_silhouette_score
 from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
-from ..neural.autoencoder import construct_autoencoder
-from ..neural.bert import initialize_bert, get_bert_embeddings
+from .autoencoder import construct_autoencoder
+from .bert import initialize_bert, get_bert_embeddings
 from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_text
 
 def init_df(emails_df, include_subject):
