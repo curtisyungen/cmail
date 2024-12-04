@@ -3,38 +3,51 @@ import Plot from "react-plotly.js";
 import Modal from "react-modal";
 
 import { useAppContext } from "../../hooks";
-import { Box, COLORS } from "../../styles";
+import { Box, COLORS, FONT_SIZE, Select, Text } from "../../styles";
 
 Modal.setAppElement("#root");
 
 const KeywordChart = ({ onClose, open }) => {
     const {
-        modelResult: { clusters, clusters_data },
+        modelResult: { keyword_counts },
     } = useAppContext();
 
+    const [selectedCluster, setSelectedCluster] = useState("All Clusters");
     const [plotData, setPlotData] = useState([]);
 
     useEffect(() => {
-        if (!open) {
+        if (!open || !keyword_counts) {
             return;
         }
 
-        const clusters = [];
+        if (selectedCluster === "All Clusters") {
+            const combinedData = Object.values(keyword_counts).map(
+                (clusterData, index) => generateClusterData(clusterData, index)
+            );
+            setPlotData(combinedData);
+        } else {
+            const clusterIndex = parseInt(selectedCluster);
+            const clusterData = keyword_counts[clusterIndex];
+            const clusterPlotData = generateClusterData(
+                clusterData,
+                clusterIndex
+            );
+            setPlotData([clusterPlotData]);
+        }
+    }, [open, keyword_counts, selectedCluster]);
 
-        const clusterTraces = clusters.map((cluster, index) => {
-            return {
-                x: cluster.keywords.map((kw) => kw.word),
-                y: cluster.keywords.map((kw) => kw.weight),
-                type: "bar",
-                name: cluster.label || `Cluster ${index + 1}`,
-                marker: {
-                    color: COLORS.blue,
-                },
-            };
-        });
+    const generateClusterData = (clusterData, clusterId) => {
+        const keywords = clusterData.map((item) => item[0]);
+        const counts = clusterData.map((item) => item[1]);
 
-        setPlotData(clusterTraces);
-    }, [open, clusters]);
+        return {
+            x: keywords,
+            y: counts,
+            type: "bar",
+            name: `Cluster ${clusterId}`,
+            marker: { color: COLORS.blue },
+        };
+    };
 
     return (
         <Modal
@@ -49,15 +62,34 @@ const KeywordChart = ({ onClose, open }) => {
             }}
         >
             <Box>
+                <Box alignItems="center">
+                    <Text bold center fontSize={FONT_SIZE.XL}>
+                        Cluster Keywords
+                    </Text>
+                    <Select
+                        onChange={(e) => setSelectedCluster(e.target.value)}
+                        style={{ marginTop: "10px" }}
+                        width={100}
+                        value={selectedCluster}
+                    >
+                        <option value="All Clusters">All Clusters</option>
+                        {Object.values(keyword_counts || {}).map((_, index) => (
+                            <option key={index} value={index}>
+                                Cluster {index + 1}
+                            </option>
+                        ))}
+                    </Select>
+                </Box>
                 <Plot
                     data={plotData}
                     layout={{
-                        title: "Top Keywords by Cluster",
-                        barmode: "group", // Group bars for comparison
-                        xaxis: { title: "Keywords" },
-                        yaxis: { title: "Weight" },
+                        xaxis: {
+                            title: "Keyword",
+                            tickangle: 300,
+                        },
+                        yaxis: { title: "Count" },
+                        barmode: "group",
                         showlegend: true,
-                        margin: { l: 50, r: 50, t: 50, b: 50 },
                     }}
                 />
             </Box>

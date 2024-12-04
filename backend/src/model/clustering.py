@@ -1,6 +1,7 @@
 import hdbscan
 import numpy as np
 import pandas as pd
+from collections import Counter
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from .kmeans import KMeans
@@ -112,6 +113,24 @@ def extract_keywords(df):
         print(f"Error extracting keywords: {e}")
         return {}
     
+def count_keywords(df):
+    try:
+        print("Counting keywords...")
+        cluster_keywords = {}
+        for cluster in df['cluster_id'].unique():
+            emails = df[df['cluster_id'] == cluster]['body']
+            all_words = []
+            for email in emails:
+                all_words.extend(clean_and_tokenize(email))
+            word_counts = Counter(all_words)
+            top_keywords = word_counts.most_common(10)
+            cluster_keywords[int(cluster)] = top_keywords
+        print("Keyword counting complete.")
+        return cluster_keywords
+    except Exception as e:
+        print(f"Error counting keywords: {e}")
+        return {}
+    
 def label_clusters(cluster_column, cluster_keywords, categories, lda_config):
     try:
         print(f"Labeling clusters...")
@@ -179,9 +198,10 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
 
     # Keyword extraction
     cluster_keywords = extract_keywords(df)
+    cluster_keyword_counts = count_keywords(df)
 
     # LDA to label clusters
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
 
     print("Model execution complete.")
-    return df, clusters_with_labels, score, centroids_data, elbow_data
+    return df, clusters_with_labels, score, centroids_data, elbow_data, cluster_keyword_counts

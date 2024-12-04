@@ -48,7 +48,12 @@ const Option = ({ disabled, icon, name, onClick, title }) => {
 
 const AnalysisActions = () => {
     const { modelResult, status } = useAppContext();
-    const { clusters_data, elbow_data, silhouette_score: ss } = modelResult;
+    const {
+        clusters_data,
+        elbow_data,
+        keyword_counts,
+        silhouette_score: ss,
+    } = modelResult;
 
     const [activeModal, setActiveModal] = useState(null);
     const [scoreColor, setScoreColor] = useState(COLORS.GRAY_MEDIUM);
@@ -87,7 +92,11 @@ const AnalysisActions = () => {
         <>
             <Flex>
                 <Option
-                    disabled={disabled}
+                    disabled={
+                        disabled ||
+                        !keyword_counts ||
+                        keyword_counts.length === 0
+                    }
                     icon={ICON.BAR_CHART}
                     name={MODAL.KEYWORDS}
                     onClick={handleOpenModal}

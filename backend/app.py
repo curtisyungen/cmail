@@ -85,12 +85,12 @@ def run_model_route():
         print("run_model_route()")
         emails_df = pd.read_json(StringIO(emails))
 
-        df, clusters, silhouette_score, centroids_data, elbow_data = run_model_main(
+        df, clusters, silhouette_score, centroids_data, elbow_data, keyword_counts = run_model_main(
             emails_df, 
             categories, 
             feature_config,
             lda_config,
-            model_config, 
+            model_config,
         )
 
         try:
@@ -120,6 +120,7 @@ def run_model_route():
             "centroids_data": centroids_data,
             "clusters_data": clusters_data,
             "elbow_data": elbow_data,
+            "keyword_counts": keyword_counts,
             "silhouette_score": silhouette_score
         }
 
