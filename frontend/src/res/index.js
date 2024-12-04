@@ -42,12 +42,13 @@ export const DEFAULT_LDA_CONFIG = Object.freeze({
 
 export const DEFAULT_FEATURE_CONFIG = Object.freeze({
     encoding_dim: 256,
+    include_bodies: true,
     include_dates: false,
     include_labels: false,
     include_senders: false,
     include_subject: false,
     include_thread_ids: false,
-    model: MODEL.AUTOENCODER,
+    model: null,
     num_epochs: 50,
 });
 

@@ -8,7 +8,10 @@ import { Box, DIMENS, Flex, FONT_SIZE, Select, Text } from "../../styles";
 
 const SettingSwitch = ({ disabled, enabled, icon, label, onClick }) => {
     return (
-        <Flex justifyContent="space-between" style={{ marginTop: "2px" }}>
+        <Flex
+            justifyContent="space-between"
+            style={{ marginTop: "2px", opacity: disabled ? 0.5 : 1 }}
+        >
             <Flex>
                 <Icon
                     disabled={disabled}
@@ -16,9 +19,7 @@ const SettingSwitch = ({ disabled, enabled, icon, label, onClick }) => {
                     size={12}
                     style={{ marginRight: "5px" }}
                 />
-                <Text disabled={disabled} fontSize={FONT_SIZE.S}>
-                    {label}
-                </Text>
+                <Text fontSize={FONT_SIZE.S}>{label}</Text>
             </Flex>
             <Switch disabled={disabled} enabled={enabled} onClick={onClick} />
         </Flex>
@@ -30,10 +31,14 @@ const NeuralActions = () => {
     const { setFeatureConfig } = useAppActions();
 
     const handleConfigChange = (name, value) => {
-        setFeatureConfig({
+        const updatedConfig = {
             ...featureConfig,
             [name]: value,
-        });
+        };
+        if (name === "model" && value === MODEL.FEATURE_EXTRACTION.BERT) {
+            updatedConfig.include_bodies = true;
+        }
+        setFeatureConfig(updatedConfig);
     };
 
     return (
@@ -102,13 +107,19 @@ const NeuralActions = () => {
                     />
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
-                        enabled={featureConfig.include_labels}
-                        icon={ICON.LABEL}
-                        label="Labels"
+                        enabled={
+                            featureConfig.include_bodies ||
+                            featureConfig.model ===
+                                MODEL.FEATURE_EXTRACTION.BERT
+                        }
+                        icon={ICON.BODY}
+                        label="Bodies"
                         onClick={() =>
                             handleConfigChange(
-                                "include_labels",
-                                !featureConfig.include_labels
+                                "include_bodies",
+                                !featureConfig.include_bodies ||
+                                    featureConfig.model ===
+                                        MODEL.FEATURE_EXTRACTION.BERT
                             )
                         }
                     />
@@ -128,6 +139,18 @@ const NeuralActions = () => {
                             handleConfigChange(
                                 "include_senders",
                                 !featureConfig.include_senders
+                            )
+                        }
+                    />
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={featureConfig.include_labels}
+                        icon={ICON.LABEL}
+                        label="Labels"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_labels",
+                                !featureConfig.include_labels
                             )
                         }
                     />

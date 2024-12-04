@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Icon } from "../common";
 import { useApi, useAppActions, useAppContext } from "../../hooks";
@@ -19,8 +19,13 @@ const MAX_CLUSTERS = 30;
 
 const ModelActions = () => {
     const { runModel } = useApi();
-    const { emails, modelConfig, status } = useAppContext();
+    const { emails, featureConfig, modelConfig, status } = useAppContext();
     const { setModelConfig, setTopics, setTopicsMap } = useAppActions();
+
+    const [featureConfigEmpty, setFeatureConfigEmpty] = useState(false);
+
+    const runModelDisabled =
+        status || emails.length === 0 || featureConfigEmpty;
 
     useEffect(() => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
@@ -29,6 +34,21 @@ const ModelActions = () => {
         setTopicsMap(savedEmailClusters || {});
     }, []);
 
+    useEffect(() => {
+        setFeatureConfigEmpty(getIsFeatureConfigEmpty());
+    }, [featureConfig]);
+
+    const getIsFeatureConfigEmpty = () => {
+        return !(
+            featureConfig.include_bodies ||
+            featureConfig.include_dates ||
+            featureConfig.include_labels ||
+            featureConfig.include_senders ||
+            featureConfig.include_subject ||
+            featureConfig.include_thread_ids
+        );
+    };
+
     const handleConfigChange = (name, value) => {
         setModelConfig({
             ...modelConfig,
@@ -36,7 +56,12 @@ const ModelActions = () => {
         });
     };
 
-    const kmeansDisabled = status || emails.length === 0;
+    const handleRunModel = () => {
+        if (runModelDisabled) {
+            return;
+        }
+        runModel();
+    };
 
     return (
         <>
@@ -44,13 +69,15 @@ const ModelActions = () => {
                 <Box
                     alignItems="center"
                     borderRadius={5}
-                    clickable={!kmeansDisabled}
+                    clickable={!runModelDisabled}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        kmeansDisabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                        runModelDisabled
+                            ? COLORS.TRANSPARENT
+                            : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
-                    onClick={runModel}
+                    onClick={handleRunModel}
                     style={{
                         flex: 1,
                         minWidth: DIMENS.ACTION_BAR_SECTION_HEIGHT,
@@ -59,7 +86,7 @@ const ModelActions = () => {
                 >
                     <Icon
                         color={
-                            kmeansDisabled
+                            runModelDisabled
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }

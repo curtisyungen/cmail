@@ -12,6 +12,7 @@ import {
     FaCloud,
     FaEnvelopeOpenText,
     FaEnvelopeSquare,
+    FaExclamationTriangle,
     FaFileAlt,
     FaFolder,
     FaInbox,
@@ -19,6 +20,7 @@ import {
     FaKickstarterK,
     FaMarker,
     FaRegEnvelope,
+    FaRegFileAlt,
     FaRegFolder,
     FaRegTrashAlt,
     FaSign,
@@ -33,6 +35,7 @@ import {
 export const ICON = {
     BAN: "BAN",
     BAR_CHART: "BAR_CHART",
+    BODY: "BODY",
     CALENDAR: "CALENDAR",
     CATEGORY: "CATEGORY",
     CHART: "CHART",
@@ -60,11 +63,13 @@ export const ICON = {
     THREAD_ID: "THREAD_ID",
     TRASH: "TRASH",
     USERS: "USERS",
+    WARNING: "WARNING",
 };
 
 export const FA_COMPONENTS = {
     [ICON.BAN]: FaBan,
     [ICON.BAR_CHART]: FaChartBar,
+    [ICON.BODY]: FaRegFileAlt,
     [ICON.CALENDAR]: FaCalendarAlt,
     [ICON.CATEGORY]: FaTag,
     [ICON.CHART]: FaBraille,
@@ -92,4 +97,5 @@ export const FA_COMPONENTS = {
     [ICON.THREAD_ID]: FaEnvelopeSquare,
     [ICON.TRASH]: FaRegTrashAlt,
     [ICON.USERS]: FaUserFriends,
+    [ICON.WARNING]: FaExclamationTriangle,
 };

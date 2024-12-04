@@ -10,6 +10,7 @@ import {
     TopicsList,
 } from "../components";
 import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
+import { ErrorModal } from "../components/modals";
 import { useApi, useAppActions, useAppContext } from "../hooks";
 import { DEFAULT_CATEGORIES, LS, PAGES } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
@@ -104,6 +105,7 @@ const Home = () => {
                     </Box>
                 </Box>
             </Flex>
+            <ErrorModal />
         </Box>
     );
 };

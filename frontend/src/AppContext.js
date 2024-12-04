@@ -16,6 +16,7 @@ const initialState = {
     authenticated: false,
     categories: DEFAULT_CATEGORIES,
     emails: [],
+    error: false,
     featureConfig: DEFAULT_FEATURE_CONFIG,
     ldaConfig: DEFAULT_LDA_CONFIG,
     modelConfig: DEFAULT_MODEL_CONFIG,
@@ -33,6 +34,7 @@ export const ACTIONS = {
     SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
     SET_EMAILS: "set_email",
+    SET_ERROR: "set_error",
     SET_FEATURE_CONFIG: "set_feature_config",
     SET_LDA_CONFIG: "set_lda_config",
     SET_MODEL_CONFIG: "set_model_config",
@@ -56,6 +58,8 @@ export const appReducer = (state, action) => {
             return { ...state, categories: action.payload };
         case ACTIONS.SET_EMAILS:
             return { ...state, emails: action.payload };
+        case ACTIONS.SET_ERROR:
+            return { ...state, error: action.payload };
         case ACTIONS.SET_FEATURE_CONFIG:
             return { ...state, featureConfig: action.payload };
         case ACTIONS.SET_LDA_CONFIG:

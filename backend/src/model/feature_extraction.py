@@ -108,7 +108,7 @@ def run_tfidf(df, column):
         print(f"Error running tfidf on {column}: {e}")
         return pd.DataFrame()
 
-def extract_features_from_dataframe(df, include_dates, include_labels, include_senders, 
+def extract_features_from_dataframe(df, include_bodies, include_dates, include_labels, include_senders, 
                                     include_subject, include_thread_ids, feature_model, model):
     try:
         print(f"Extracting features...")
@@ -116,15 +116,15 @@ def extract_features_from_dataframe(df, include_dates, include_labels, include_s
         use_tfidf = feature_model != "Autoencoder" and feature_model != "BERT"
         encode_thread_ids = feature_model == "Autoencoder" or model == "K-means"
 
-        body_df = get_body_df(df, use_tfidf)
+        body_df = get_body_df(df, use_tfidf) if include_bodies else pd.DataFrame()
         dates_df = extract_date(df['date']) if include_dates else pd.DataFrame()
         subject_df = get_subject_df(df, use_tfidf) if include_subject else pd.DataFrame()
         labels_df = encode_column(df['labelIds']) if include_labels else pd.DataFrame()
         senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
         thread_ids_df = extract_thread_ids(df['threadId'], encode_thread_ids) if include_thread_ids else pd.DataFrame()
 
-        final_df = body_df
-        other_dfs = [dates_df, subject_df, labels_df, senders_df, thread_ids_df]
+        final_df = pd.DataFrame()
+        other_dfs = [body_df, dates_df, subject_df, labels_df, senders_df, thread_ids_df]
         for other_df in other_dfs:
             if not other_df.empty:
                 final_df = pd.concat([final_df, other_df], axis=1)

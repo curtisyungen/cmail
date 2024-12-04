@@ -16,6 +16,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
 
+    const setError = (error) => {
+        dispatch({ type: ACTIONS.SET_ERROR, payload: error });
+    };
+
     const setFeatureConfig = (featureConfig) => {
         dispatch({ type: ACTIONS.SET_FEATURE_CONFIG, payload: featureConfig });
     };
@@ -64,6 +68,7 @@ const useAppActions = () => {
         setAuthenticated,
         setCategories,
         setEmails,
+        setError,
         setFeatureConfig,
         setLdaConfig,
         setModelConfig,

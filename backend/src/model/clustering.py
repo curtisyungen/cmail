@@ -156,6 +156,7 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
 
     model = model_config.get('model')
 
+    include_bodies = model_config.get('include_bodies')
     include_dates = model_config.get('include_dates')
     include_labels = model_config.get('include_labels')
     include_senders = model_config.get('include_senders')
@@ -167,9 +168,12 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     df = init_df(emails_df, include_subject)
     
     # Feature extraction
-    features_df = extract_features_from_dataframe(df, include_dates, include_labels, include_senders, 
-                                                  include_subject, include_thread_ids, 
+    features_df = extract_features_from_dataframe(df, include_bodies, include_dates, include_labels, 
+                                                  include_senders, include_subject, include_thread_ids, 
                                                   feature_model, model)
+    if features_df.empty:
+        raise ValueError(f"No features found. Check configuration.")
+    
     features = None
 
     if feature_model == "Autoencoder":

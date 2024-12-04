@@ -6,6 +6,12 @@ const HEIGHT = 16;
 const WIDTH = 32;
 
 const Switch = ({ disabled, enabled, onClick }) => {
+    const handleClick = () => {
+        if (disabled) {
+            return;
+        }
+        onClick();
+    };
     return (
         <Box
             background={enabled ? COLORS.BLUE_DARK : COLORS.GRAY_LIGHT}
@@ -14,7 +20,7 @@ const Switch = ({ disabled, enabled, onClick }) => {
             borderWidth={1}
             clickable={!disabled}
             height={HEIGHT}
-            onClick={onClick}
+            onClick={handleClick}
             style={{
                 cursor: disabled ? "default" : "pointer",
                 maxHeight: HEIGHT,

@@ -17,6 +17,7 @@ const useApi = () => {
     const {
         setAuthenticated,
         setEmails,
+        setError,
         setModelResult,
         setSelectedTopic,
         setStatus,
@@ -156,6 +157,7 @@ const useApi = () => {
                 "Error running model: ",
                 e.response?.data?.message || "An error occurred"
             );
+            setError(true);
         } finally {
             setStatus(null);
         }
