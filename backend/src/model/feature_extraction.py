@@ -53,8 +53,9 @@ def encode_column(column_data):
 
 def extract_date(datetime_column):
     try:
-        datetime_column = pd.to_datetime(datetime_column)
-        timestamps = (datetime_column.astype(np.int64) // 10**9).astype(int)
+        cleaned_datetime = datetime_column.apply(lambda x: re.sub(r"^\w{3},\s*|\s\([A-Za-z]+\)$", "", x))
+        datetime_column = pd.to_datetime(cleaned_datetime, format='%d %b %Y %H:%M:%S %z', utc=True)
+        timestamps = (datetime_column.astype(np.int64) // 10**9)
         day_of_week = datetime_column.dt.dayofweek
         hour_of_day = datetime_column.dt.hour
         return pd.DataFrame({

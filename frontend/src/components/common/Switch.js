@@ -32,10 +32,13 @@ const Switch = ({ disabled, enabled, onClick }) => {
             width={WIDTH}
         >
             <Box
+                borderRadius={HEIGHT / 2}
                 clickable={!disabled}
                 hoverBackground={
                     disabled
-                        ? COLORS.GRAY_LIGHT
+                        ? enabled
+                            ? COLORS.BLUE_DARK
+                            : COLORS.GRAY_LIGHT
                         : enabled
                         ? COLORS.BLUE_DARK
                         : COLORS.GRAY_MEDIUM
