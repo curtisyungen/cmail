@@ -3,6 +3,7 @@ import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
 import backgroundImage from "../assets/backgroundImage.jpg";
+import logo from "../assets/logo2.png";
 import { Icon } from "../components/common";
 import { useApi, useAppContext, useAuthentication } from "../hooks";
 import { APP_NAME, PAGES, STATUS } from "../res";
@@ -98,17 +99,17 @@ const LoginButton = () => {
                         <Box margin={{ bottom: 20 }}>
                             <Flex>
                                 <Box
-                                    background={COLORS.GREEN}
-                                    height={23}
                                     margin={{ right: 5 }}
                                     width={23}
-                                />
+                                >
+                                    <img src={logo} alt="Logo" />
+                                </Box>
                                 <Text
                                     color={COLORS.GRAY_DARK}
                                     fontSize={FONT_SIZE.XL}
                                     semibold
                                 >
-                                    Curtis Yungen
+                                    CS221 Final Project
                                 </Text>
                             </Flex>
                         </Box>
@@ -176,8 +177,8 @@ const LoginButton = () => {
                                 transform: "scaleX(-1)",
                             }}
                         />
-                        <Text fontSize={FONT_SIZE.L}>
-                            An exhaustively researched CS221 project
+                        <Text fontSize={FONT_SIZE.M}>
+                            An exhaustively researched project by Curtis Yungen
                         </Text>
                     </Flex>
                 </Box>
