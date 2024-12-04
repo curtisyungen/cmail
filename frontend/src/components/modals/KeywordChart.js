@@ -10,6 +10,7 @@ Modal.setAppElement("#root");
 const KeywordChart = ({ onClose, open }) => {
     const {
         modelResult: { keyword_counts },
+        topics,
     } = useAppContext();
 
     const [selectedCluster, setSelectedCluster] = useState("All Clusters");
@@ -22,31 +23,43 @@ const KeywordChart = ({ onClose, open }) => {
 
         if (selectedCluster === "All Clusters") {
             const combinedData = Object.values(keyword_counts).map(
-                (clusterData, index) => generateClusterData(clusterData, index)
+                (clusterData, index) => {
+                    const label = getLabel(index);
+                    return generateClusterData(clusterData, index, label);
+                }
             );
             setPlotData(combinedData);
         } else {
             const clusterIndex = parseInt(selectedCluster);
             const clusterData = keyword_counts[clusterIndex];
+            const label = getLabel(clusterIndex);
             const clusterPlotData = generateClusterData(
                 clusterData,
-                clusterIndex
+                clusterIndex,
+                label
             );
             setPlotData([clusterPlotData]);
         }
     }, [open, keyword_counts, selectedCluster]);
 
-    const generateClusterData = (clusterData, clusterId) => {
+    const generateClusterData = (clusterData, clusterId, label) => {
         const keywords = clusterData.map((item) => item[0]);
         const counts = clusterData.map((item) => item[1]);
-
         return {
             x: keywords,
             y: counts,
+            label,
             type: "bar",
-            name: `Cluster ${clusterId}`,
+            name: `Cluster ${clusterId} (${label})`,
             marker: { color: COLORS.blue },
         };
+    };
+
+    const getLabel = (clusterIndex) => {
+        return (
+            topics.find(({ topic_id }) => topic_id === clusterIndex)?.label ||
+            "N/A"
+        );
     };
 
     return (
@@ -57,6 +70,7 @@ const KeywordChart = ({ onClose, open }) => {
                 content: {
                     height: "fit-content",
                     margin: "auto",
+                    maxWidth: "800px",
                     userSelect: "none",
                 },
             }}
@@ -69,13 +83,13 @@ const KeywordChart = ({ onClose, open }) => {
                     <Select
                         onChange={(e) => setSelectedCluster(e.target.value)}
                         style={{ marginTop: "10px" }}
-                        width={100}
+                        width={160}
                         value={selectedCluster}
                     >
                         <option value="All Clusters">All Clusters</option>
                         {Object.values(keyword_counts || {}).map((_, index) => (
                             <option key={index} value={index}>
-                                Cluster {index + 1}
+                                {`Cluster ${index + 1} (${getLabel(index)})`}
                             </option>
                         ))}
                     </Select>

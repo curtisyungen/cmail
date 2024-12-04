@@ -9,8 +9,7 @@ import { APP_NAME, PAGES, STATUS } from "../res";
 import { ICON } from "../res/icons";
 import { Box, Button, COLORS, Flex, FONT_SIZE, Text } from "../styles";
 
-const CLIENT_ID =
-    "1008869086899-bvd2s8dbfue092mho910baieelbr2btf.apps.googleusercontent.com";
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const REDIRECT_URI = "http://localhost:3000";
 const SCOPES = [
     "https://mail.google.com",
@@ -99,7 +98,7 @@ const LoginButton = () => {
                         <Box margin={{ bottom: 20 }}>
                             <Flex>
                                 <Box
-                                    background={COLORS.BLUE_DARK}
+                                    background={COLORS.GREEN}
                                     height={23}
                                     margin={{ right: 5 }}
                                     width={23}
@@ -178,7 +177,7 @@ const LoginButton = () => {
                             }}
                         />
                         <Text fontSize={FONT_SIZE.L}>
-                            An exhaustively researched project for CS221
+                            An exhaustively researched CS221 project
                         </Text>
                     </Flex>
                 </Box>

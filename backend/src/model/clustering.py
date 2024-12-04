@@ -201,19 +201,11 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     score = calculate_silhouette_score(features, df['cluster_id'])
 
     # PCA for centroid and cluster visualization
-    try:
-        centroids_data = run_pca(df, centroids, features)
-        print(f"centroids_data: {centroids_data}")
-    except Exception as e:
-        print(f"Error running PCA: {e}")
+    centroids_data = run_pca(df, centroids, features)
 
     # Keyword extraction
-    try:
-        cluster_keywords = extract_keywords(df)
-        cluster_keyword_counts = count_keywords(df)
-        print(f"cluster_keywords: {cluster_keywords}")
-    except Exception as e:
-        print(f"Error extracting keywords: {e}")
+    cluster_keywords = extract_keywords(df)
+    cluster_keyword_counts = count_keywords(df)
 
     # LDA to label clusters
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
