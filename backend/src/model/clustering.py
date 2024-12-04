@@ -35,13 +35,13 @@ def init_df(emails_df, include_subject):
 def run_autoencoder(features, feature_config):
     try:
         print(f"Running autoencoder...")
-        encoding_dim = feature_config.get('encoding_dim', 256)
+        encoding_dim = feature_config.get('encoding_dim', 384)
         epochs = feature_config.get('epochs', 50)
         autoencoder, encoder = construct_autoencoder(features.shape[1], encoding_dim)
         autoencoder.fit(features, features, epochs=epochs, batch_size=32, shuffle=True, verbose=1)
         embeddings = encoder.predict(features)
         print("Autoencoder complete.")
-        return embeddings
+        return embeddings.tolist()
     except Exception as e:
         print(f"Error running autoencoder: {e}")
         return None
@@ -91,7 +91,7 @@ def run_pca(df, centroids, features):
         df['y'] = features_2d[:, 1]
 
         centroids_data = []
-        if centroids:
+        if centroids is not None and centroids.size > 0:
             centroids_2d = pca.transform(centroids)
             centroids_data = [{'x': float(c[0]), 'y': float(c[1])} for c in centroids_2d]
         print("PCA complete.")

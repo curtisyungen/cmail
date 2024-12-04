@@ -24,7 +24,6 @@ const TopicsList = () => {
     }, [emails]);
 
     useEffect(() => {
-        console.log("topics: ", topics);
         sortTopics();
     }, [topics]);
 

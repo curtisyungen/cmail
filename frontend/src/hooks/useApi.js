@@ -45,7 +45,6 @@ const useApi = () => {
     const clearEmailsFromRedis = async () => {
         try {
             const response = await axios.post("/api/remove-emails-from-redis");
-            console.log("response: ", response);
         } catch (e) {
             console.error("Error clearing emails from Redis: ", e);
         }
