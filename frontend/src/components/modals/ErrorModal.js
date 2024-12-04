@@ -8,11 +8,14 @@ import { Box, Button, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
 
 Modal.setAppElement("#root");
 
-const ErrorModal = () => {
+const ErrorModal = ({ onClose }) => {
     const { error } = useAppContext();
     const { setError } = useAppActions();
 
-    const handleClose = () => setError(null);
+    const handleClose = () => {
+        onClose();
+        setError(null);
+    };
 
     return (
         <Modal
