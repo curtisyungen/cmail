@@ -1,8 +1,8 @@
-# Cmail
+# **Cmail**
 
-Curtis Yungen
-CS221
-December 2024
+**Curtis Yungen**  
+**CS221**  
+**December 2024**
 
 ---
 
@@ -12,22 +12,19 @@ December 2024
 
 1. Clone the repository.
 2. Navigate to project directory.
-3. Navigate to backend folder.
-
--   Install required Python packages listed in requirements.txt.
-
+3. Navigate to `backend` folder.
+    - Install required Python packages listed in `requirements.txt`.
 4. Set up Gmail API Credentials:
-
--   Obtain a Gmail API `credentials.json` file from the Google Cloud console.
--   Place the file in the `backend` directory.
--   Run backend using `flask run`.
-
-5. In a separate terminal window, navigate to frontend folder.
-
--   Install required NPM dependencies by running `npm install`.
--   Run frontend using `npm start`.
-
-6. Open your web browser and go to http://localhost:3000
+    - Obtain a Gmail API `credentials.json` file from the Google Cloud console.
+        - You'll have to create an OAuth2 credential for a web application.
+        - Add `http://localhost`, `http://localhost:3000`, and `http://localhost:5000` as authorized JavaScript origins.
+        - Add `http://localhost:3000` and `http://localhost:5000/oauth2` as authorized redirect URIs.
+        - Download the credentials and name the file `credentials.json`.
+        - Place the file in the `backend` directory.
+    - Run backend using `flask run`.
+5. In a separate terminal window, navigate to the `frontend` folder.
+    - Install required NPM dependencies by running `npm install`.
+    - Run frontend using `npm start`.
+6. Open your web browser and go to `http://localhost:3000`
 7. Login with your Gmail account.
-
--   Allow necessary access for importing emails.
+    - Allow necessary access for importing emails.
