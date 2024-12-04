@@ -22,10 +22,12 @@
         - Download the credentials and name the file `credentials.json`.
         - Place the file in the `backend` directory.
     - Run backend using `flask run`.
-5. In a separate terminal window, navigate to the `frontend` folder.
+5. In a second terminal window, install Redis. If using Windows, you might need to run this using Docker.
+    - Start Redis by running `redis-server`.
+6. In a separate terminal window, navigate to the `frontend` folder.
     - Install required NPM dependencies by running `npm install`.
     - Create a .env file with a variable named `REACT_APP_GOOGLE_CLIENT_ID`. Set it to your Google Client ID.
     - Run frontend using `npm start`.
-6. Open your web browser and go to `http://localhost:3000`
-7. Login with your Gmail account.
+7. Open your web browser and go to `http://localhost:3000`
+8. Login with your Gmail account.
     - Allow necessary access for importing emails.

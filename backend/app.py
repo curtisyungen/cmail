@@ -82,7 +82,6 @@ def run_model_route():
         if not emails:
             return jsonify({'error', 'No emails found.'}), 404
         
-        print("run_model_route()")
         emails_df = pd.read_json(StringIO(emails))
 
         df, clusters, silhouette_score, centroids_data, elbow_data, keyword_counts = run_model_main(
@@ -123,8 +122,7 @@ def run_model_route():
             "keyword_counts": keyword_counts,
             "silhouette_score": silhouette_score
         }
-
-        print(f"response: {response}")
+        
         return jsonify(response), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500

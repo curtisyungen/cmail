@@ -46,6 +46,7 @@ const KeywordChart = ({ onClose, open }) => {
         const keywords = clusterData.map((item) => item[0]);
         const counts = clusterData.map((item) => item[1]);
         return {
+            id: clusterId,
             x: keywords,
             y: counts,
             label,

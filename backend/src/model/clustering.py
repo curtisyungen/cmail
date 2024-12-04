@@ -127,7 +127,7 @@ def count_keywords(df):
                 all_words.extend(clean_and_tokenize(email))
             word_counts = Counter(all_words)
             top_keywords = word_counts.most_common(10)
-            cluster_keywords[int(cluster)] = top_keywords
+            cluster_keywords[int(cluster)] = [(word, int(count)) for word, count in top_keywords]
         print("Keyword counting complete.")
         return cluster_keywords
     except Exception as e:

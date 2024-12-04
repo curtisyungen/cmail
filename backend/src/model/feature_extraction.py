@@ -43,19 +43,11 @@ def encode_column(column_data):
     except Exception as e:
         print(f"Error encoding text: {e}")
         return pd.DataFrame()
-    
-def encode_thread_ids(thread_ids):
-    try:
-        thread_id_to_index = {thread_id: idx for idx, thread_id in enumerate(sorted(set(thread_ids)))}
-        return [thread_id_to_index[thread_id] for thread_id in thread_ids]
-    except Exception as e:
-        print(f"Error encoding threadIds: {e}")
-        return []
 
 def extract_date(datetime_column):
     try:
         datetime_column = pd.to_datetime(datetime_column)
-        timestamps = datetime_column.astype(np.int64) // 10**9
+        timestamps = (datetime_column.astype(np.int64) // 10**9).astype(int)
         day_of_week = datetime_column.dt.dayofweek
         hour_of_day = datetime_column.dt.hour
         return pd.DataFrame({
@@ -84,7 +76,7 @@ def extract_thread_ids(thread_id_column, include_thread_ids, encode_thread_ids):
         # For K-means and/or Autoencoder
         if encode_thread_ids:
             thread_id_to_index = {thread_id: idx for idx, thread_id in enumerate(sorted(set(thread_id_column)))}
-            encoded_thread_ids = [thread_id_to_index[thread_id] for thread_id in thread_id_column]
+            encoded_thread_ids = [int(thread_id_to_index[thread_id]) for thread_id in thread_id_column]
             return pd.DataFrame(encoded_thread_ids, columns=["encoded_threadId"])
         # For HDBSCAN
         return pd.DataFrame(thread_id_column, columns=["threadId"])
