@@ -78,7 +78,7 @@ const TopicsList = () => {
             justifyContent="flex-start"
             margin={{ right: DIMENS.SPACING_STANDARD }}
             padding={{ left: 10 }}
-            style={{ overflowY: "scroll" }}
+            style={{ minWidth: "fit-content", overflowY: "scroll" }}
             width="fit-content"
         >
             <Box margin={{ bottom: 3, top: 3 }}>

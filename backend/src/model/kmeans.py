@@ -17,6 +17,10 @@ class KMeans:
             for _ in range(1, self.k):
                 distances = np.min(np.linalg.norm(X[:, np.newaxis] - np.array(centroids), axis=2), axis=1)
                 prob_distances = distances ** 2
+                if prob_distances.sum() == 0:
+                    print("All distances are zero. Choosing random centroid.")
+                    prob_distances = np.ones_like(prob_distances)
+                prob_distances /= (prob_distances.sum() + 1e-10)
                 prob_distances /= prob_distances.sum()
                 next_centroid = X[np.random.choice(X.shape[0], p=prob_distances)]
                 centroids.append(next_centroid)

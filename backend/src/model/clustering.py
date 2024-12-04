@@ -155,22 +155,13 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     print(f"Setting up model with config {model_config} and {len(emails_df)} emails...")
 
     model = model_config.get('model')
-
-    include_bodies = model_config.get('include_bodies')
-    include_dates = model_config.get('include_dates')
-    include_labels = model_config.get('include_labels')
-    include_senders = model_config.get('include_senders')
-    include_subject = model_config.get('include_subject')
-    include_thread_ids = model_config.get('include_thread_ids')
     feature_model = feature_config.get('model')
-    
+
     # Set-up
-    df = init_df(emails_df, include_subject)
+    df = init_df(emails_df, feature_config.get('include_subject'))
     
     # Feature extraction
-    features_df = extract_features_from_dataframe(df, include_bodies, include_dates, include_labels, 
-                                                  include_senders, include_subject, include_thread_ids, 
-                                                  feature_model, model)
+    features_df = extract_features_from_dataframe(df, feature_config, model)
     if features_df.empty:
         raise ValueError(f"No features found. Check configuration.")
     
@@ -186,6 +177,8 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
 
     # Scale
     features = StandardScaler().fit_transform(features)
+
+    print(f"features size = {len(features)}")
 
     # Clustering
     centroids = None

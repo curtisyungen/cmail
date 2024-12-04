@@ -40,7 +40,7 @@ const EmailList = () => {
             ) : (
                 <>
                     <Header selectedTopic={selectedTopic} topics={topics} />
-                    {emails.map((email, idx) => (
+                    {emails?.map((email, idx) => (
                         <Email
                             key={idx}
                             email={email}

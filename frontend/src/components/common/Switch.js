@@ -43,6 +43,7 @@ const Switch = ({ disabled, enabled, onClick }) => {
                 height="100%"
                 style={{
                     bottom: 0,
+                    cursor: disabled ? "default" : "pointer",
                     left: enabled ? WIDTH - HEIGHT : 0,
                     position: "absolute",
                     top: 0,
@@ -56,7 +57,7 @@ const Switch = ({ disabled, enabled, onClick }) => {
                     borderWidth={1}
                     clickable={!disabled}
                     height={HEIGHT - 1}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: disabled ? "default" : "pointer" }}
                     width={HEIGHT - 2}
                 />
             </Box>

@@ -26,7 +26,7 @@ const SettingSwitch = ({ disabled, enabled, icon, label, onClick }) => {
     );
 };
 
-const NeuralActions = () => {
+const FeatureActions = () => {
     const { featureConfig, status } = useAppContext();
     const { setFeatureConfig } = useAppActions();
 
@@ -173,4 +173,4 @@ const NeuralActions = () => {
     );
 };
 
-export default NeuralActions;
+export default FeatureActions;

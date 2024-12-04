@@ -5,19 +5,26 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def compute_sender_freqs(sender_column):
+    # Some senders have <email@gmail.com>; others, such as emails sent to self, are just email@gmail.com
+    def extract_email_address(sender):
+        try:
+            if '<' in sender and '>' in sender:
+                email = re.search(r'<(.*?)>', sender)
+                if email:
+                    return email.group(1).strip().lower()
+            return sender.strip().lower()
+        except Exception as e:
+            print(f"Error extracting email address: {e}")
+            return ""
+    
     try:
         sender_column = sender_column.fillna("").astype(str)
-
-        email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-        cleaned_senders = sender_column.apply(lambda x: re.sub(r'\s+|<.*?>', '', x).strip())
-        valid_senders = cleaned_senders[cleaned_senders.apply(lambda x: re.match(email_regex, x) is not None)]
-
-        sender_counts = Counter(valid_senders)
-        total_senders = len(valid_senders)
-
+        cleaned_senders = sender_column.apply(extract_email_address)
+        sender_counts = Counter(cleaned_senders)
+        print(f"sender_counts: {sender_counts}")
+        total_senders = len(cleaned_senders)
         if total_senders == 0:
             return {}
-        
         sender_freqs = {sender: count / total_senders for sender, count in sender_counts.items()}
         return sender_freqs
     except Exception as e:
@@ -61,9 +68,9 @@ def extract_date(datetime_column):
 
 def extract_senders(sender_column):
     try:
-        cleaned_senders = sender_column.apply(lambda x: x.strip().lower() if isinstance(x, str) else "")
-        sender_freqs = compute_sender_freqs(cleaned_senders)
-        sender_df = cleaned_senders.apply(lambda sender: sender_freqs.get(sender, 0)).to_frame(name='sender_freq')
+        sender_freqs = compute_sender_freqs(sender_column)
+        sender_df = sender_column.apply(lambda sender: sender_freqs.get(sender, 0)).to_frame(name='sender_freq')
+        print(f"sender_df: {sender_df}")
         return sender_df
     except Exception as e:
         print(f"Error extracting senders: {e}")
@@ -108,9 +115,16 @@ def run_tfidf(df, column):
         print(f"Error running tfidf on {column}: {e}")
         return pd.DataFrame()
 
-def extract_features_from_dataframe(df, include_bodies, include_dates, include_labels, include_senders, 
-                                    include_subject, include_thread_ids, feature_model, model):
+def extract_features_from_dataframe(df, feature_config, model):
     try:
+        include_bodies = feature_config.get('include_bodies')
+        include_dates = feature_config.get('include_dates')
+        include_labels = feature_config.get('include_labels')
+        include_senders = feature_config.get('include_senders')
+        include_subject = feature_config.get('include_subject')
+        include_thread_ids = feature_config.get('include_thread_ids')
+        feature_model = feature_config.get('model')
+
         print(f"Extracting features...")
 
         use_tfidf = feature_model != "Autoencoder" and feature_model != "BERT"
