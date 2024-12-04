@@ -8,6 +8,7 @@ class KMeans:
         self.random_state = random_state
         self.centroids = None
         self.labels = None
+        self.inertia = None # For Elbow Method
 
     def initialize_centroids(self, X):
         try:
@@ -43,6 +44,18 @@ class KMeans:
             return np.array(centroids)
         except Exception as e:
             print(f"Error updating centroids: {e}")
+
+    def calculate_inertia(self, X, labels):
+        try:
+            inertia = 0.0
+            for i in range(self.k):
+                cluster_points = X[labels == i]
+                distances = np.linalg.norm(cluster_points - self.centroids[i], axis=1) ** 2
+                inertia += distances.sum()
+            return inertia
+        except Exception as e:
+            print(f"Error calculating inertia: {e}")
+            return None
         
     def fit(self, X):
         try:
@@ -54,6 +67,7 @@ class KMeans:
                     break
                 self.centroids = new_centroids
                 self.labels = labels
+            self.inertia = self.calculate_inertia(X, labels)
             return self
         except Exception as e:
             print(f"Error fitting: {e}")

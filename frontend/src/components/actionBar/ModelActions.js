@@ -123,6 +123,7 @@ const ModelActions = () => {
                             value={modelConfig.num_clusters}
                             width={DIMENS.SELECT_WIDTH}
                         >
+                            <option value={null}>Optimal</option>
                             {Array.from(
                                 { length: MAX_CLUSTERS },
                                 (_, index) => index + 1

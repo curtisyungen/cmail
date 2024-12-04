@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from .kmeans import KMeans
+from .elbow_method import run_elbow_method
 from .silhouette_score import calculate_silhouette_score
 from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe
@@ -159,8 +160,11 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     features = StandardScaler().fit_transform(features)
 
     # Clustering
+    elbow_data = {}
     if model == "K-means":
         num_clusters = model_config.get('num_clusters')
+        if not num_clusters: # User has selected 'Optimal'
+            num_clusters, elbow_data = run_elbow_method(features, max_clusters=20)
         df, kmeans = run_kmeans(df, features, num_clusters)
     elif model == "HDBSCAN":
         df = run_hdbscan(df, features)
@@ -180,4 +184,4 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
 
     print("Model execution complete.")
-    return df, clusters_with_labels, score, centroids_data
+    return df, clusters_with_labels, score, centroids_data, elbow_data

@@ -6,6 +6,8 @@ import {
     FaBrain,
     FaCalendarAlt,
     FaCalendarDay,
+    FaChartBar,
+    FaChartLine,
     FaCheck,
     FaCloud,
     FaEnvelopeOpenText,
@@ -30,12 +32,14 @@ import {
 
 export const ICON = {
     BAN: "BAN",
+    BAR_CHART: "BAR_CHART",
     CALENDAR: "CALENDAR",
     CATEGORY: "CATEGORY",
     CHART: "CHART",
     CHECK: "CHECK",
     CLOUD: "CLOUD",
     DATE: "DATE",
+    ELBOW: "ELBOW",
     ENVELOPE: "ENVELOPE",
     FOLDER: "FOLDER",
     FOLDER_REG: "FOLDER_REG",
@@ -60,12 +64,14 @@ export const ICON = {
 
 export const FA_COMPONENTS = {
     [ICON.BAN]: FaBan,
+    [ICON.BAR_CHART]: FaChartBar,
     [ICON.CALENDAR]: FaCalendarAlt,
     [ICON.CATEGORY]: FaTag,
     [ICON.CHART]: FaBraille,
     [ICON.CHECK]: FaCheck,
     [ICON.CLOUD]: FaCloud,
     [ICON.DATE]: FaCalendarDay,
+    [ICON.ELBOW]: FaChartLine,
     [ICON.ENVELOPE]: FaRegEnvelope,
     [ICON.FOLDER]: FaFolder,
     [ICON.FOLDER_REG]: FaRegFolder,

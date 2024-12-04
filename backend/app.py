@@ -85,15 +85,13 @@ def run_model_route():
         print("run_model_route()")
         emails_df = pd.read_json(StringIO(emails))
 
-        df, clusters, silhouette_score, centroids_data = run_model_main(
+        df, clusters, silhouette_score, centroids_data, elbow_data = run_model_main(
             emails_df, 
             categories, 
             feature_config,
             lda_config,
             model_config, 
         )
-
-        print(f"centroids_data: {centroids_data}")
 
         try:
             email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
@@ -121,8 +119,11 @@ def run_model_route():
             "email_clusters": email_clusters,
             "centroids_data": centroids_data,
             "clusters_data": clusters_data,
+            "elbow_data": elbow_data,
             "silhouette_score": silhouette_score
         }
+
+        print(f"response: {response}")
         return jsonify(response), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
