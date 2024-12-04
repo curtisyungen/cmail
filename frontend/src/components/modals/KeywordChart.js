@@ -50,7 +50,7 @@ const KeywordChart = ({ onClose, open }) => {
             y: counts,
             label,
             type: "bar",
-            name: `Cluster ${clusterId} (${label})`,
+            name: `C${clusterId} (${label})`,
             marker: { color: COLORS.blue },
         };
     };
@@ -89,7 +89,7 @@ const KeywordChart = ({ onClose, open }) => {
                         <option value="All Clusters">All Clusters</option>
                         {Object.values(keyword_counts || {}).map((_, index) => (
                             <option key={index} value={index}>
-                                {`Cluster ${index + 1} (${getLabel(index)})`}
+                                {`C${index + 1} (${getLabel(index)})`}
                             </option>
                         ))}
                     </Select>

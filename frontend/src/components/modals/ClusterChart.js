@@ -10,6 +10,7 @@ Modal.setAppElement("#root");
 const ClusterChart = ({ onClose, open }) => {
     const {
         modelResult: { centroids_data, clusters_data },
+        topics,
     } = useAppContext();
 
     const [plotData, setPlotData] = useState([]);
@@ -44,7 +45,7 @@ const ClusterChart = ({ onClose, open }) => {
                 y: cluster.y,
                 mode: "markers",
                 type: "scatter",
-                name: `Cluster ${idx + 1}`,
+                name: `C${idx + 1} (${getLabel(idx)})`,
                 marker: {
                     size: 4,
                     color: `rgb(${(idx * 30) % 255}, ${(idx * 50) % 255}, ${
@@ -56,6 +57,13 @@ const ClusterChart = ({ onClose, open }) => {
 
         setPlotData([...clusterTraces, centroidTrace]);
     }, [open]);
+
+    const getLabel = (clusterIndex) => {
+        return (
+            topics.find(({ topic_id }) => topic_id === clusterIndex)?.label ||
+            "N/A"
+        );
+    };
 
     return (
         <Modal

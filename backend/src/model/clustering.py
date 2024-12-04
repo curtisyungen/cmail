@@ -184,7 +184,7 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     features = StandardScaler().fit_transform(features)
 
     # Clustering
-    centroids = []
+    centroids = None
     elbow_data = {}
     if model == "K-means":
         num_clusters = model_config.get('num_clusters')
@@ -200,7 +200,7 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     # Scoring
     score = calculate_silhouette_score(features, df['cluster_id'])
 
-    # PCA for centroid and cluster visualization
+    # PCA for centroid (K-means only) and cluster visualization
     centroids_data = run_pca(df, centroids, features)
 
     # Keyword extraction
