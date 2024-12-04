@@ -24,6 +24,7 @@
     - Run backend using `flask run`.
 5. In a separate terminal window, navigate to the `frontend` folder.
     - Install required NPM dependencies by running `npm install`.
+    - Create a .env file with a variable named `REACT_APP_GOOGLE_CLIENT_ID`. Set it to your Google Client ID.
     - Run frontend using `npm start`.
 6. Open your web browser and go to `http://localhost:3000`
 7. Login with your Gmail account.
