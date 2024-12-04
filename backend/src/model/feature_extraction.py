@@ -66,6 +66,23 @@ def extract_date(datetime_column):
     except Exception as e:
         print(f"Error extracting date: {e}")
         return pd.DataFrame()
+    
+def extract_labels(labels_column):
+    try:
+        flattened_labels = [label for label_list in labels_column for label in label_list]
+        all_labels = set(flattened_labels)
+        label_id_to_index = {label: idx for idx, label in enumerate(sorted(all_labels))}
+        encoded_labels = []
+        for label_list in labels_column:
+            vector = [0] * len(label_id_to_index)
+            for label in label_list:
+                if label in label_id_to_index:
+                    vector[label_id_to_index[label]] = 1
+            encoded_labels.append(vector)
+        return pd.DataFrame(encoded_labels, columns=sorted(label_id_to_index.keys()))
+    except Exception as e:
+        print(f"Error extracting labels: {e}")
+        return pd.DataFrame()
 
 def extract_senders(sender_column):
     try:
@@ -77,17 +94,11 @@ def extract_senders(sender_column):
         print(f"Error extracting senders: {e}")
         return pd.DataFrame()
     
-def extract_thread_ids(thread_id_column, include_thread_ids, encode_thread_ids):
+def extract_thread_ids(thread_id_column):
     try:
-        if not include_thread_ids:
-            return pd.DataFrame()
-        # For K-means and/or Autoencoder
-        if encode_thread_ids:
-            thread_id_to_index = {thread_id: idx for idx, thread_id in enumerate(sorted(set(thread_id_column)))}
-            encoded_thread_ids = [int(thread_id_to_index[thread_id]) for thread_id in thread_id_column]
-            return pd.DataFrame(encoded_thread_ids, columns=["encoded_threadId"])
-        # For HDBSCAN
-        return pd.DataFrame(thread_id_column, columns=["threadId"])
+        thread_id_to_index = {thread_id: idx for idx, thread_id in enumerate(sorted(set(thread_id_column)))}
+        encoded_thread_ids = [int(thread_id_to_index[thread_id]) for thread_id in thread_id_column]
+        return pd.DataFrame(encoded_thread_ids, columns=["encoded_threadId"])
     except Exception as e:
         print(f"Error extracting thread IDs: {e}")
         return pd.DataFrame()
@@ -129,14 +140,13 @@ def extract_features_from_dataframe(df, feature_config, model):
         print(f"Extracting features...")
 
         use_tfidf = feature_model != "Autoencoder" and feature_model != "BERT"
-        encode_thread_ids = feature_model == "Autoencoder" or model == "K-means"
 
         body_df = get_body_df(df, use_tfidf) if include_bodies else pd.DataFrame()
         dates_df = extract_date(df['date']) if include_dates else pd.DataFrame()
         subject_df = get_subject_df(df, use_tfidf) if include_subject else pd.DataFrame()
-        labels_df = encode_column(df['labelIds']) if include_labels else pd.DataFrame()
+        labels_df = extract_labels(df['labelIds']) if include_labels else pd.DataFrame()
         senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
-        thread_ids_df = extract_thread_ids(df['threadId'], encode_thread_ids) if include_thread_ids else pd.DataFrame()
+        thread_ids_df = extract_thread_ids(df['threadId']) if include_thread_ids else pd.DataFrame()
 
         final_df = pd.DataFrame()
         other_dfs = [body_df, dates_df, subject_df, labels_df, senders_df, thread_ids_df]

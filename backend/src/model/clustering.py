@@ -161,20 +161,25 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     df = init_df(emails_df, feature_config.get('include_subject'))
     
     # Feature extraction
-    features_df = extract_features_from_dataframe(df, feature_config, model)
+    features = None
+    if feature_model == "BERT":
+        # Operates on body only; don't pass in categorical features like thread IDs, dates, etc.
+        features_df = df['body']
+    else:
+        features_df = extract_features_from_dataframe(df, feature_config, model)
     if features_df.empty:
         raise ValueError(f"No features found. Check configuration.")
-    
-    features = None
 
     if feature_model == "Autoencoder":
         features = run_autoencoder(features_df.values, feature_config)
     elif feature_model == "BERT":
-        # Don't pass in categorical features like thread IDs, dates, etc.
-        features = run_bert(df['body'].tolist())
+        features = run_bert(features_df.tolist())
     else:
-        features = np.array(features_df.values, dtype=float)
-
+        try:
+            features = np.array(features_df.values, dtype=float)
+        except Exception as e:
+            print(f"Error with features: {e}")
+            
     # Scale
     features = StandardScaler().fit_transform(features)
 

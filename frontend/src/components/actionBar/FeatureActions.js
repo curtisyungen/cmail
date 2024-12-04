@@ -75,7 +75,6 @@ const FeatureActions = () => {
                     </Text>
                 </Box>
                 <Box
-                    clickable
                     height="100%"
                     justifyContent="flex-start"
                     margin={{ right: DIMENS.SPACING_STANDARD }}
