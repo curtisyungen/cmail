@@ -5,6 +5,7 @@ import { ICON } from "../../../res/icons";
 import {
     Box,
     COLORS,
+    DIMENS,
     Flex,
     FONT_SIZE,
     Text,
@@ -178,7 +179,7 @@ export const Title = ({ onSortClick, sortType }) => {
                     History
                 </Text>
                 <Box
-                    borderRadius={5}
+                    borderRadius={DIMENS.BORDER_RADIUS_L}
                     clickable
                     hoverBackground={COLORS.GRAY_LIGHT}
                     onClick={onSortClick}

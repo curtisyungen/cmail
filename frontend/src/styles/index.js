@@ -18,3 +18,8 @@ export const FONT_SIZE = {
     XXL: 24,
     XXXL: 48,
 };
+
+export const OPACITY = {
+    LIGHT: 0.4,
+    NORMAL: 1,
+};

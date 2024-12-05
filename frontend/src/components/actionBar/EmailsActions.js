@@ -37,7 +37,7 @@ const EmailsActions = () => {
             <Flex>
                 <Box
                     alignItems="center"
-                    borderRadius={5}
+                    borderRadius={DIMENS.BORDER_RADIUS_L}
                     clickable={!fetchDisabled}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={

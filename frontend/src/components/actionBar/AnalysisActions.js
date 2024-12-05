@@ -25,7 +25,7 @@ const Option = ({ disabled, icon, name, onClick, title }) => {
     return (
         <Box
             alignItems="center"
-            borderRadius={5}
+            borderRadius={DIMENS.BORDER_RADIUS_L}
             clickable={!disabled}
             height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
             hoverBackground={disabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT}
@@ -103,7 +103,7 @@ const AnalysisActions = () => {
                 />
                 <Box
                     alignItems="center"
-                    borderRadius={5}
+                    borderRadius={DIMENS.BORDER_RADIUS_L}
                     clickable={!disabled}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={

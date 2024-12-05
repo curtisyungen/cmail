@@ -51,7 +51,7 @@ const Subject = ({ subject }) => {
     return (
         <Box
             background={COLORS.WHITE}
-            borderRadius={5}
+            borderRadius={DIMENS.BORDER_RADIUS_L}
             padding={10}
             style={{
                 boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
@@ -75,7 +75,7 @@ const EmailReader = () => {
             <Spacer />
             <Box
                 background={COLORS.WHITE}
-                borderRadius={5}
+                borderRadius={DIMENS.BORDER_RADIUS_L}
                 margin={{ bottom: 150 }}
                 padding={10}
                 style={{ boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}` }}

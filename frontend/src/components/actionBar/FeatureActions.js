@@ -4,13 +4,24 @@ import { Icon, Switch } from "../common";
 import { useAppActions, useAppContext } from "../../hooks";
 import { MODEL, STATUS } from "../../res";
 import { ICON } from "../../res/icons";
-import { Box, DIMENS, Flex, FONT_SIZE, Select, Text } from "../../styles";
+import {
+    Box,
+    DIMENS,
+    Flex,
+    FONT_SIZE,
+    OPACITY,
+    Select,
+    Text,
+} from "../../styles";
 
 const SettingSwitch = ({ disabled, enabled, icon, label, onClick }) => {
     return (
         <Flex
             justifyContent="space-between"
-            style={{ marginTop: "2px", opacity: disabled ? 0.5 : 1 }}
+            style={{
+                marginTop: "2px",
+                opacity: disabled ? OPACITY.LIGHT : OPACITY.NORMAL,
+            }}
         >
             <Flex>
                 <Icon

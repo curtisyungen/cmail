@@ -10,7 +10,8 @@ const SelectionIndicator = ({ active }) => {
     return (
         <Box
             background={active ? COLORS.BLUE_DARK : COLORS.TRANSPARENT}
-            borderRadius={5}
+            borderRadius={DIMENS.BORDER_RADIUS_L}
+            clickable
             height={3}
             margin={{ top: 2 }}
             width="100%"
@@ -30,8 +31,12 @@ const Navbar = () => {
         >
             <Flex alignItems="center" justifyContent="flex-start">
                 <Box
+                    borderRadius={DIMENS.BORDER_RADIUS_S}
                     clickable
-                    margin={{ bottom: 6, right: 8 }}
+                    height="100%"
+                    hoverBackground={COLORS.GRAY_LIGHT2}
+                    margin={{ bottom: 5, left: 8, top: 5 }}
+                    padding={5}
                     onClick={() => setShowNavigationPane(!showNavigationPane)}
                     style={{ flex: 0 }}
                 >
@@ -41,10 +46,11 @@ const Navbar = () => {
                     <Box
                         key={idx}
                         alignItems="center"
-                        borderRadius={2}
+                        borderRadius={DIMENS.BORDER_RADIUS_S}
                         clickable
+                        height="100%"
                         hoverBackground={COLORS.GRAY_LIGHT2}
-                        margin={{ bottom: 5, left: 8 }}
+                        margin={{ bottom: 5, left: 8, top: 5 }}
                         onClick={() => setTab(tab)}
                         padding={5}
                         width={DIMENS.TAB_WIDTH}

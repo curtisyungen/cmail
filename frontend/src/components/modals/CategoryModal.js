@@ -10,6 +10,7 @@ import {
     COLORS,
     Flex,
     FONT_SIZE,
+    OPACITY,
     Text,
 } from "../../styles";
 
@@ -108,7 +109,12 @@ const CategoryModal = ({
                             height={25}
                             margin={3}
                             onClick={() => setNewColor(color)}
-                            style={{ opacity: newColor === color ? 1 : 0.85 }}
+                            style={{
+                                opacity:
+                                    newColor === color
+                                        ? OPACITY.NORMAL
+                                        : OPACITY.LIGHT,
+                            }}
                             transition={0}
                             width={25}
                         >
