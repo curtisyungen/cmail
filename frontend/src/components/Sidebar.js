@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Icon } from "./common";
 import { useApi, useAppActions, useAppContext } from "../hooks";
 import { ICON } from "../res/icons";
-import { Box, COLORS, DIMENS, Flex, OPACITY } from "../styles";
+import { Box, COLORS, DIMENS, Flex, FONT_SIZE, OPACITY, Text } from "../styles";
 import { PAGES, VIEW } from "../res";
 import { StorageUtils } from "../utils";
 
@@ -26,7 +26,9 @@ const SidebarItem = ({
     icon,
     onClick = () => {},
     selected,
+    tooltip,
 }) => {
+    const [showTooltip, setShowTooltip] = useState(false);
     return (
         <Box
             alignItems="center"
@@ -34,12 +36,37 @@ const SidebarItem = ({
             height={38}
             hoverBackground={clickable ? COLORS.GRAY_LIGHT : COLORS.SIDEBAR}
             onClick={onClick}
-            style={{ opacity: clickable ? OPACITY.NORMAL : OPACITY.LIGHT }}
+            onMouseEnter={() => setShowTooltip(!!tooltip)}
+            onMouseLeave={() => setShowTooltip(false)}
+            style={{
+                opacity: clickable ? OPACITY.NORMAL : OPACITY.LIGHT,
+                overflow: "visible",
+            }}
         >
             <Flex>
                 <SelectionIndicator active={selected} />
                 <Icon color={color} name={icon} />
             </Flex>
+
+            {showTooltip ? (
+                <Box
+                    background={COLORS.WHITE}
+                    borderRadius={DIMENS.BORDER_RADIUS_L}
+                    padding="5px"
+                    style={{
+                        boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
+                        left: DIMENS.SIDEBAR_WIDTH - 10,
+                        position: "absolute",
+                        zIndex: 999,
+                    }}
+                >
+                    <Text center fontSize={FONT_SIZE.S}>
+                        {tooltip}
+                    </Text>
+                </Box>
+            ) : (
+                <></>
+            )}
         </Box>
     );
 };
@@ -64,7 +91,7 @@ const Sidebar = () => {
             background={COLORS.SIDEBAR}
             height="100%"
             justifyContent="flex-start"
-            style={{ minWidth: DIMENS.SIDEBAR_WIDTH }}
+            style={{ minWidth: DIMENS.SIDEBAR_WIDTH, overflow: "visible" }}
             width={DIMENS.SIDEBAR_WIDTH}
         >
             <SidebarItem
@@ -72,12 +99,14 @@ const Sidebar = () => {
                 icon={ICON.MAIL}
                 onClick={() => setActiveView(VIEW.INBOX)}
                 selected={activeView === VIEW.INBOX}
+                tooltip="Mail"
             />
             <SidebarItem
                 clickable={true}
                 icon={ICON.HISTORY}
                 onClick={() => setActiveView(VIEW.HISTORY)}
                 selected={activeView === VIEW.HISTORY}
+                tooltip="History"
             />
             <SidebarItem icon={ICON.USERS} />
             <SidebarItem icon={ICON.CHECK} />
@@ -89,6 +118,7 @@ const Sidebar = () => {
                 color={COLORS.PURPLE}
                 icon={ICON.LOGOUT}
                 onClick={handleLogout}
+                tooltip="Logout"
             />
             <SidebarItem color={COLORS.GRAY_DARK} icon={ICON.TABLE} />
         </Box>
