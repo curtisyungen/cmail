@@ -22,9 +22,7 @@ def compute_sender_freqs(sender_column):
     try:
         sender_column = sender_column.fillna("").astype(str)
         cleaned_senders = sender_column.apply(extract_email_address)
-        print(f"cleaned_senders length: {len(cleaned_senders)}")
         sender_counts = Counter(cleaned_senders)
-        print(f"total_senders: {sum(sender_counts.values())}")
         total_senders = len(cleaned_senders)
         if total_senders == 0:
             return {}
@@ -91,7 +89,6 @@ def extract_senders(sender_column):
     try:
         sender_freqs = compute_sender_freqs(sender_column)
         sender_df = sender_column.apply(lambda sender: sender_freqs.get(sender, 0)).to_frame(name='sender_freq')
-        print(f"sender_df: {sender_df}")
         return sender_df
     except Exception as e:
         print(f"Error extracting senders: {e}")

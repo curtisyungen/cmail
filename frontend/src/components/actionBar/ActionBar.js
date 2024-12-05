@@ -41,10 +41,12 @@ const ActionBar = () => {
             background={COLORS.WHITE}
             borderRadius={5}
             height={DIMENS.ACTION_BAR_HEIGHT}
+            margin={{ left: 10 }}
             padding={{ left: 5 }}
             style={{
                 boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
                 userSelect: "none",
+                width: "calc(100% - 10px)",
             }}
         >
             <Flex>

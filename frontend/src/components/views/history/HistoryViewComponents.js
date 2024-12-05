@@ -12,6 +12,7 @@ import {
 } from "../../../styles";
 import { Utils } from "../../../utils";
 
+const LABEL_HEIGHT = 36;
 const LABEL_WIDTH_S = 60;
 const LABEL_WIDTH_L = 100;
 
@@ -29,7 +30,7 @@ export const Entry = ({
     score,
 }) => {
     return (
-        <Box padding="10px 0px" style={borderBottomStyle} width="100%">
+        <Box style={borderBottomStyle} width="100%">
             <Flex justifyContent="space-between">
                 <Box>
                     <Flex justifyContent="space-evenly">
@@ -39,7 +40,9 @@ export const Entry = ({
                 </Box>
                 <Box>
                     <Flex justifyContent="space-evenly">
-                        <Label label={featureModel} />
+                        <Box style={borderLeftStyle}>
+                            <Label label={featureModel} />
+                        </Box>
                         <Label
                             boolean
                             label={includeDates}
@@ -65,11 +68,13 @@ export const Entry = ({
                             label={includeLabels}
                             width={LABEL_WIDTH_S}
                         />
-                        <Label
-                            boolean
-                            label={includeThreadIds}
-                            width={LABEL_WIDTH_S}
-                        />
+                        <Box style={borderRightStyle}>
+                            <Label
+                                boolean
+                                label={includeThreadIds}
+                                width={LABEL_WIDTH_S}
+                            />
+                        </Box>
                     </Flex>
                 </Box>
                 <Box>
@@ -144,7 +149,12 @@ const HeaderLabel = ({ label, style, width = LABEL_WIDTH_L }) => {
 
 const Label = ({ bold, boolean, color, label, width = LABEL_WIDTH_L }) => {
     return (
-        <Box alignItems="center" padding="5px" width={width}>
+        <Box
+            alignItems="center"
+            height={LABEL_HEIGHT}
+            style={{ minWidth: width }}
+            width={width}
+        >
             {boolean ? (
                 label ? (
                     <Icon color={COLORS.BLACK} name={ICON.CHECK} size={12} />
@@ -192,6 +202,11 @@ export const Title = ({ onSortClick, sortType }) => {
 const borderBottomStyle = {
     borderBottomWidth: "1px",
     borderColor: COLORS.BORDER,
+};
+
+const borderLeftStyle = {
+    borderColor: COLORS.BORDER,
+    borderLeftWidth: "1px",
 };
 
 const borderRightStyle = {

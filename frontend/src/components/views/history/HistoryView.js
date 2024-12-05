@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { Entry, Header, Title } from "./HistoryViewComponents";
-import { useAppContext, useHistory } from "../../../hooks";
+import { useHistory } from "../../../hooks";
+import { MODEL } from "../../../res";
 import { Box, COLORS, DIMENS } from "../../../styles";
 import { SortUtils } from "../../../utils";
 
@@ -15,14 +16,11 @@ const SORT = {
 const SORT_ORDER = [SORT.CLUSTERS, SORT.DATE, SORT.MODEL, SORT.SCORE];
 
 const HistoryView = () => {
-    const { selectedEmail } = useAppContext();
-
-    const { clearHistory, history } = useHistory();
+    const { history } = useHistory();
     const [sortedHistory, setSortedHistory] = useState([]);
     const [sortType, setSortType] = useState(SORT.DATE);
 
     useEffect(() => {
-        console.log("history: ", history);
         const historyValues = [];
         history.forEach((entry, idx) => {
             const { featureConfig, modelConfig, numClusters, silhouetteScore } =
@@ -37,7 +35,10 @@ const HistoryView = () => {
                 includeSenders: featureConfig.include_senders,
                 includeSubject: featureConfig.include_subject,
                 includeThreadIds: featureConfig.include_thread_ids,
-                numClustersInput: modelConfig.num_clusters,
+                numClustersInput:
+                    modelConfig.model === MODEL.CLUSTERING.KMEANS
+                        ? modelConfig.num_clusters
+                        : null,
                 numClustersOutput: numClusters,
                 score: Math.round(silhouetteScore * 100) / 100,
             });
@@ -99,7 +100,13 @@ const HistoryView = () => {
         >
             <Title onSortClick={handleSortClick} sortType={sortType} />
             <Header />
-            <Box style={{ overflowY: "scroll", scrollbarWidth: "none" }}>
+            <Box
+                style={{
+                    overflowX: "scroll",
+                    overflowY: "scroll",
+                    scrollbarWidth: "none",
+                }}
+            >
                 {sortedHistory.map((entry, idx) => (
                     <Entry key={idx} {...entry} />
                 ))}
