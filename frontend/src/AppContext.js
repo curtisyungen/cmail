@@ -21,6 +21,7 @@ const initialState = {
     emails: [],
     error: false,
     featureConfig: DEFAULT_FEATURE_CONFIG,
+    history: [],
     modelConfig: DEFAULT_MODEL_CONFIG,
     modelResult: {},
     namingConfig: DEFAULT_NAMING_CONFIG,
@@ -42,6 +43,7 @@ export const ACTIONS = {
     SET_EMAILS: "set_email",
     SET_ERROR: "set_error",
     SET_FEATURE_CONFIG: "set_feature_config",
+    SET_HISTORY: "set_history",
     SET_MODEL_CONFIG: "set_model_config",
     SET_MODEL_RESULT: "set_model_result",
     SET_NAMING_CONFIG: "set_naming_config",
@@ -73,6 +75,8 @@ export const appReducer = (state, action) => {
             return { ...state, error: action.payload };
         case ACTIONS.SET_FEATURE_CONFIG:
             return { ...state, featureConfig: action.payload };
+        case ACTIONS.SET_HISTORY:
+            return { ...state, history: action.payload };
         case ACTIONS.SET_MODEL_CONFIG:
             return { ...state, modelConfig: action.payload };
         case ACTIONS.SET_NAMING_CONFIG:

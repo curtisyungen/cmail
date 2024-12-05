@@ -6,15 +6,11 @@ const Avatar = ({ name }) => {
     const [initials, setInitials] = useState("");
 
     useEffect(() => {
-        loadInitials();
-    }, [name]);
-
-    const loadInitials = () => {
         const words = name.trim().split(/\s+/);
         const firstInitial = words[0]?.charAt(0).toUpperCase() || "";
         const secondInitial = words[1]?.charAt(0).toUpperCase() || "";
         setInitials(`${firstInitial}${secondInitial}`);
-    };
+    }, [name]);
 
     return (
         <Box

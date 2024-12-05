@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
+import { useAppActions, useAppContext } from "../hooks";
 import { LS } from "../res";
 import { StorageUtils } from "../utils";
 
 const useHistory = () => {
-    const [history, setHistory] = useState([]);
+    const { history } = useAppContext();
+    const { setHistory } = useAppActions();
 
     useEffect(() => {
         loadHistory();

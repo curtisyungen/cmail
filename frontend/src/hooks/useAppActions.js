@@ -32,6 +32,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_FEATURE_CONFIG, payload: featureConfig });
     };
 
+    const setHistory = (history) => {
+        dispatch({ type: ACTIONS.SET_HISTORY, payload: history });
+    };
+
     const setModelConfig = (config) => {
         dispatch({ type: ACTIONS.SET_MODEL_CONFIG, payload: config });
     };
@@ -87,6 +91,7 @@ const useAppActions = () => {
         setEmails,
         setError,
         setFeatureConfig,
+        setHistory,
         setModelConfig,
         setModelResult,
         setNamingConfig,
