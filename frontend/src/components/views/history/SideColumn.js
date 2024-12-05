@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 import { Icon } from "../../common";
-import { useAppContext } from "../../../hooks";
+import { useAppContext, useHistory } from "../../../hooks";
 import { ICON } from "../../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../../styles";
 
 const SideColumn = () => {
     const { emailAddress, showNavigationPane } = useAppContext();
+    const { clearHistory, history } = useHistory();
 
     const [formattedEmailAddress, setFormattedEmailAddress] = useState("");
 
@@ -49,7 +50,7 @@ const SideColumn = () => {
             </Box>
             <Box
                 background={COLORS.BLUE_LIGHT}
-                borderRadius={3}
+                borderRadius={DIMENS.BORDER_RADIUS_S}
                 padding={{ bottom: 5, left: 19, top: 5 }}
             >
                 <Flex>
@@ -60,6 +61,25 @@ const SideColumn = () => {
                         style={{ marginRight: "10px" }}
                     />
                     <Text>History</Text>
+                </Flex>
+            </Box>
+            <Box
+                clickable={history.length > 0}
+                hoverBackground={
+                    history.length > 0 ? COLORS.GRAY_LIGHT_3 : COLORS.GRAY_LIGHT
+                }
+                onClick={clearHistory}
+                padding={{ bottom: 6, left: 19, top: 6 }}
+            >
+                <Flex>
+                    <Icon
+                        color={COLORS.GRAY_DARK2}
+                        disabled={history.length === 0}
+                        name={ICON.TRASH}
+                        size={FONT_SIZE.M}
+                        style={{ marginRight: "10px" }}
+                    />
+                    <Text disabled={history.length === 0}>Clear history</Text>
                 </Flex>
             </Box>
         </Box>

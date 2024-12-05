@@ -12,6 +12,7 @@ const useHistory = () => {
 
     const clearHistory = () => {
         StorageUtils.removeItem(LS.HISTORY);
+        setHistory([]);
     };
 
     const loadHistory = () => {
