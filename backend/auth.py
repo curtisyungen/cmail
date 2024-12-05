@@ -29,12 +29,12 @@ def exchange_code_for_token(auth_code):
     response = requests.post(TOKEN_URI, data=data)
     if response.status_code != 200:
         raise Exception('Failed to fetch tokens', response.json())
-
+    
     tokens = response.json()
     access_token = tokens.get("access_token")
     refresh_token = tokens.get("refresh_token")
 
-    store_tokens(access_token=access_token, refresh_token=refresh_token)
+    store_auth_data(access_token=access_token, refresh_token=refresh_token)
 
 def get_creds():
     try:
@@ -60,7 +60,7 @@ def get_creds():
         print(f"Error retrieving credentials: {e}")
         return None
 
-def store_tokens(access_token, refresh_token):
+def store_auth_data(access_token, refresh_token):
     try:
         store_value_in_redis(REDIS_KEYS.ACCESS_TOKEN, access_token)
         store_value_in_redis(REDIS_KEYS.REFRESH_TOKEN, refresh_token)

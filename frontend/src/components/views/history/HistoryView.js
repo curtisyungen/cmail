@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
+import SideColumn from "./SideColumn";
 import { Entry, Header, Title } from "./HistoryViewComponents";
 import { useHistory } from "../../../hooks";
 import { MODEL } from "../../../res";
-import { Box, COLORS, DIMENS } from "../../../styles";
+import { Box, COLORS, DIMENS, Flex } from "../../../styles";
 import { SortUtils } from "../../../utils";
 
 const SORT = {
@@ -17,6 +18,7 @@ const SORT_ORDER = [SORT.CLUSTERS, SORT.DATE, SORT.MODEL, SORT.SCORE];
 
 const HistoryView = () => {
     const { history } = useHistory();
+
     const [sortedHistory, setSortedHistory] = useState([]);
     const [sortType, setSortType] = useState(SORT.DATE);
 
@@ -85,33 +87,36 @@ const HistoryView = () => {
     };
 
     return (
-        <Box
-            background={COLORS.WHITE}
-            height={DIMENS.EMAIL_LIST_HEIGHT}
-            justifyContent="flex-start"
-            margin={{ left: 200 }}
-            overflow="hidden"
-            style={{
-                borderTopLeftRadius: "5px",
-                borderTopRightRadius: "5px",
-                boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
-            }}
-            width="auto"
-        >
-            <Title onSortClick={handleSortClick} sortType={sortType} />
-            <Header />
+        <Flex alignItems="flex-start" style={{ overflow: "hidden" }}>
+            <SideColumn />
             <Box
+                background={COLORS.WHITE}
+                height={DIMENS.EMAIL_LIST_HEIGHT}
+                justifyContent="flex-start"
+                overflow="hidden"
                 style={{
-                    overflowX: "scroll",
-                    overflowY: "scroll",
-                    scrollbarWidth: "none",
+                    borderTopLeftRadius: "5px",
+                    borderTopRightRadius: "5px",
+                    boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
+                    flex: 1,
                 }}
+                width="auto"
             >
-                {sortedHistory.map((entry, idx) => (
-                    <Entry key={idx} {...entry} />
-                ))}
+                <Title onSortClick={handleSortClick} sortType={sortType} />
+                <Header />
+                <Box
+                    style={{
+                        overflowX: "scroll",
+                        overflowY: "scroll",
+                        scrollbarWidth: "none",
+                    }}
+                >
+                    {sortedHistory.map((entry, idx) => (
+                        <Entry key={idx} {...entry} />
+                    ))}
+                </Box>
             </Box>
-        </Box>
+        </Flex>
     );
 };
 

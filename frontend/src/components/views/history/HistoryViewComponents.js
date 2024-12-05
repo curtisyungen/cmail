@@ -5,6 +5,7 @@ import { ICON } from "../../../res/icons";
 import {
     Box,
     COLORS,
+    DIMENS,
     Flex,
     FONT_SIZE,
     Text,
@@ -157,7 +158,7 @@ const Label = ({ bold, boolean, color, label, width = LABEL_WIDTH_L }) => {
         >
             {boolean ? (
                 label ? (
-                    <Icon color={COLORS.BLACK} name={ICON.CHECK} size={12} />
+                    <Icon color={COLORS.BLACK} name={ICON.CHECK} size={10} />
                 ) : (
                     <></>
                 )

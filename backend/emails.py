@@ -1,4 +1,5 @@
 import pandas as pd
+import requests
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from io import StringIO
@@ -73,9 +74,6 @@ def get_emails(creds, limit):
         emails = get_value_from_redis(REDIS_KEYS.EMAILS)
         if emails:
             return pd.read_json(StringIO(emails))
-        
-        if creds.expired and creds.refresh_token:
-            creds.refresh(Request())
 
         emails_df = fetch_emails(creds, limit)
         if emails_df is None or emails_df.empty:
@@ -91,6 +89,26 @@ def get_emails(creds, limit):
         return emails_df
     except Exception as e:
         print(f"Error getting emails: {e}")
+        return None
+
+def get_email_address(creds):
+    try:
+        if not creds:
+            return None
+        
+        email_address = get_value_from_redis(REDIS_KEYS.EMAIL_ADDRESS)
+        if email_address:
+            return email_address
+        
+        service = build('gmail', 'v1', credentials=creds)
+        user_profile = service.users().getProfile(userId='me').execute()
+        email_address = user_profile.get('emailAddress')
+
+        store_value_in_redis(REDIS_KEYS.EMAIL_ADDRESS, email_address)
+
+        return email_address
+    except Exception as e:
+        print(f"Error getting email address: {e}")
         return None
     
 def fetch_labels(creds):

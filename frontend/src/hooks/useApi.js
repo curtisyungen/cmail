@@ -17,6 +17,7 @@ const useApi = () => {
     } = useAppContext();
     const {
         setAuthenticated,
+        setEmailAddress,
         setEmails,
         setError,
         setModelResult,
@@ -99,6 +100,16 @@ const useApi = () => {
         }
     };
 
+    const getEmailAddress = async () => {
+        try {
+            const response = await axios.get("/api/get-email-address");
+            console.log("get-email-address response: ", response);
+            setEmailAddress(response.data.email_address);
+        } catch (e) {
+            console.error("Error getting email address: ", e);
+        }
+    };
+
     const runModel = async () => {
         function handleEmptyClusters(clusters) {
             try {
@@ -178,6 +189,7 @@ const useApi = () => {
         clearRedis,
         fetchEmails,
         fetchLabels,
+        getEmailAddress,
         runModel,
     };
 };

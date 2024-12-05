@@ -16,6 +16,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_CATEGORIES, payload: categories });
     };
 
+    const setEmailAddress = (emailAddress) => {
+        dispatch({ type: ACTIONS.SET_EMAIL_ADDRESS, payload: emailAddress });
+    };
+
     const setEmails = (emails) => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
@@ -72,6 +76,7 @@ const useAppActions = () => {
         setActiveView,
         setAuthenticated,
         setCategories,
+        setEmailAddress,
         setEmails,
         setError,
         setFeatureConfig,

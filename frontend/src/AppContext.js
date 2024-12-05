@@ -17,6 +17,7 @@ const initialState = {
     activeView: VIEW.INBOX,
     authenticated: false,
     categories: DEFAULT_CATEGORIES,
+    emailAddress: null,
     emails: [],
     error: false,
     featureConfig: DEFAULT_FEATURE_CONFIG,
@@ -36,6 +37,7 @@ export const ACTIONS = {
     SET_ACTIVE_VIEW: "set_active_view",
     SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
+    SET_EMAIL_ADDRESS: "set_email_address",
     SET_EMAILS: "set_email",
     SET_ERROR: "set_error",
     SET_FEATURE_CONFIG: "set_feature_config",
@@ -61,6 +63,8 @@ export const appReducer = (state, action) => {
             return { ...state, authenticated: action.payload };
         case ACTIONS.SET_CATEGORIES:
             return { ...state, categories: action.payload };
+        case ACTIONS.SET_EMAIL_ADDRESS:
+            return { ...state, emailAddress: action.payload };
         case ACTIONS.SET_EMAILS:
             return { ...state, emails: action.payload };
         case ACTIONS.SET_ERROR:

@@ -6,7 +6,7 @@ from io import StringIO
 from auth import exchange_code_for_token, get_creds
 from main import run_model_main
 from config import REDIS_KEYS
-from emails import get_emails, fetch_labels
+from emails import get_emails, get_email_address, fetch_labels
 from redis_cache import clear_redis_values, get_value_from_redis, remove_value_from_redis
 
 app = Flask(__name__)
@@ -66,6 +66,18 @@ def fetch_labels_for_user():
         return jsonify({'labels': labels})
     except Exception as e:
         print(f"Error fetching labels: {e}")
+        return jsonify({'message': str(e)}), 500
+    
+@app.route("/api/get-email-address", methods=['GET'])
+def get_email_address_route():
+    try:
+        creds = get_creds()
+        if not creds:
+            return jsonify({'error': 'Failed to get credentials.'}), 400
+        email_address = get_email_address(creds)
+        return jsonify({'email_address': email_address})
+    except Exception as e:
+        print(f"Error getting email address: {e}")
         return jsonify({'message': str(e)}), 500
 
 @app.route('/api/run-model', methods=['POST'])
