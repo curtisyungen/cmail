@@ -46,7 +46,7 @@ const ActionBar = () => {
             style={{
                 boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
                 userSelect: "none",
-                width: "calc(100% - 10px)",
+                width: "calc(100% - 12px)",
             }}
         >
             <Flex>

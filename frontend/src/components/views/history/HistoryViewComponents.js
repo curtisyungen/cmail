@@ -5,7 +5,6 @@ import { ICON } from "../../../res/icons";
 import {
     Box,
     COLORS,
-    DIMENS,
     Flex,
     FONT_SIZE,
     Text,
@@ -14,8 +13,8 @@ import {
 import { Utils } from "../../../utils";
 
 const LABEL_HEIGHT = 36;
-const LABEL_WIDTH_S = 60;
-const LABEL_WIDTH_L = 100;
+const LABEL_WIDTH_S = 70;
+const LABEL_WIDTH_L = 95;
 
 export const Entry = ({
     clusteringModel,

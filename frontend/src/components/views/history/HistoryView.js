@@ -90,30 +90,39 @@ const HistoryView = () => {
         <Flex alignItems="flex-start" style={{ overflow: "hidden" }}>
             <SideColumn />
             <Box
-                background={COLORS.WHITE}
-                height={DIMENS.EMAIL_LIST_HEIGHT}
                 justifyContent="flex-start"
-                overflow="hidden"
                 style={{
-                    borderTopLeftRadius: "5px",
-                    borderTopRightRadius: "5px",
-                    boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
                     flex: 1,
+                    height: "100%",
+                    padding: 2,
+                    paddingBottom: 0,
                 }}
                 width="auto"
             >
-                <Title onSortClick={handleSortClick} sortType={sortType} />
-                <Header />
                 <Box
+                    background={COLORS.WHITE}
+                    height={DIMENS.EMAIL_LIST_HEIGHT}
+                    justifyContent="flex-start"
+                    overflow="hidden"
                     style={{
-                        overflowX: "scroll",
-                        overflowY: "scroll",
-                        scrollbarWidth: "none",
+                        borderTopLeftRadius: "5px",
+                        borderTopRightRadius: "5px",
+                        boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
                     }}
                 >
-                    {sortedHistory.map((entry, idx) => (
-                        <Entry key={idx} {...entry} />
-                    ))}
+                    <Title onSortClick={handleSortClick} sortType={sortType} />
+                    <Header />
+                    <Box
+                        style={{
+                            overflowX: "scroll",
+                            overflowY: "scroll",
+                            scrollbarWidth: "none",
+                        }}
+                    >
+                        {sortedHistory.map((entry, idx) => (
+                            <Entry key={idx} {...entry} />
+                        ))}
+                    </Box>
                 </Box>
             </Box>
         </Flex>
