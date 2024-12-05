@@ -1,1 +1,1 @@
-export { default as TopicList } from "./TopicsList";
+export { default as TopicsList } from "./TopicsList";

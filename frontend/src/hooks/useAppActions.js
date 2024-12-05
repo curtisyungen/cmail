@@ -4,6 +4,10 @@ import { AppContext, ACTIONS } from "../AppContext";
 const useAppActions = () => {
     const { dispatch } = useContext(AppContext);
 
+    const setActiveView = (activeView) => {
+        dispatch({ type: ACTIONS.SET_ACTIVE_VIEW, payload: activeView });
+    };
+
     const setAuthenticated = (authenticated) => {
         dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: authenticated });
     };
@@ -65,6 +69,7 @@ const useAppActions = () => {
     };
 
     return {
+        setActiveView,
         setAuthenticated,
         setCategories,
         setEmails,

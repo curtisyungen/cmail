@@ -8,11 +8,13 @@ import {
     DEFAULT_MODEL_CONFIG,
     DEFAULT_NUM_EMAILS,
     TABS,
+    VIEW,
 } from "./res";
 
 export const AppContext = createContext();
 
 const initialState = {
+    activeView: VIEW.INBOX,
     authenticated: false,
     categories: DEFAULT_CATEGORIES,
     emails: [],
@@ -31,6 +33,7 @@ const initialState = {
 };
 
 export const ACTIONS = {
+    SET_ACTIVE_VIEW: "set_active_view",
     SET_AUTHENTICATED: "set_authenticated",
     SET_CATEGORIES: "set_categories",
     SET_EMAILS: "set_email",
@@ -52,6 +55,8 @@ export const useAppContext = () => useContext(AppContext);
 
 export const appReducer = (state, action) => {
     switch (action.type) {
+        case ACTIONS.SET_ACTIVE_VIEW:
+            return { ...state, activeView: action.payload };
         case ACTIONS.SET_AUTHENTICATED:
             return { ...state, authenticated: action.payload };
         case ACTIONS.SET_CATEGORIES:

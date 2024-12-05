@@ -62,6 +62,7 @@ export const LS = {
     CATEGORIES: "categories",
     CLUSTERS: "clusters",
     EMAIL_CLUSTERS: "email_clusters",
+    HISTORY: "history",
     KMEANS_DATA: "kmeans_data",
 };
 
@@ -83,3 +84,8 @@ export const TABS = {
 };
 
 export const UNKNOWN_SENDER = "Unknown Sender";
+
+export const VIEW = {
+    INBOX: "Inbox",
+    HISTORY: "History",
+};

@@ -4,6 +4,7 @@ import useAppActions from "./useAppActions";
 import useAppContext from "./useAppContext";
 import { ALL_TOPICS, LS, STATUS } from "../res";
 import { StorageUtils } from "../utils";
+import useHistory from "./useHistory";
 
 const useApi = () => {
     const {
@@ -24,6 +25,7 @@ const useApi = () => {
         setTopics,
         setTopicsMap,
     } = useAppActions();
+    const { updateHistory } = useHistory();
 
     const authenticateUser = async (code) => {
         setStatus(STATUS.AUTHENTICATING);
@@ -152,6 +154,14 @@ const useApi = () => {
             StorageUtils.setItem(LS.KMEANS_DATA, res.data);
             StorageUtils.setItem(LS.CLUSTERS, clusters);
             StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
+
+            updateHistory({
+                featureConfig,
+                modelConfig,
+                namingConfig,
+                numClusters: clusters.length,
+                silhouetteScore: res.data.silhouette_score,
+            });
         } catch (e) {
             console.error(
                 "Error running model: ",

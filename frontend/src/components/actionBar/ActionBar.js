@@ -7,8 +7,8 @@ import ModelActions from "./ModelActions";
 import NamingActions from "./NamingActions";
 import OtherActions from "./OtherActions";
 import { useAppContext } from "../../hooks";
-import { Box, COLORS, DIMENS, Flex } from "../../styles";
 import { TABS } from "../../res";
+import { Box, COLORS, DIMENS, Flex } from "../../styles";
 
 const Divider = () => {
     return (

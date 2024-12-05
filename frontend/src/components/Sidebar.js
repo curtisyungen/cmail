@@ -2,10 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Icon } from "./common";
+import { useApi, useAppActions, useAppContext } from "../hooks";
 import { ICON } from "../res/icons";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
-import useApi from "../hooks/useApi";
-import { PAGES } from "../res";
+import { PAGES, VIEW } from "../res";
 import { StorageUtils } from "../utils";
 
 const SelectionIndicator = ({ active }) => {
@@ -32,8 +32,11 @@ const SidebarItem = ({ color, icon, onClick = () => {}, selected }) => {
 };
 
 const Sidebar = () => {
-    const { clearRedis } = useApi();
     const navigate = useNavigate();
+
+    const { clearRedis } = useApi();
+    const { setActiveView } = useAppActions();
+    const { activeView } = useAppContext();
 
     const handleLogout = () => {
         clearRedis();
@@ -49,8 +52,16 @@ const Sidebar = () => {
             style={{ minWidth: DIMENS.SIDEBAR_WIDTH }}
             width={DIMENS.SIDEBAR_WIDTH}
         >
-            <SidebarItem icon={ICON.MAIL} selected={true} />
-            <SidebarItem icon={ICON.CALENDAR} />
+            <SidebarItem
+                icon={ICON.MAIL}
+                onClick={() => setActiveView(VIEW.INBOX)}
+                selected={activeView === VIEW.INBOX}
+            />
+            <SidebarItem
+                icon={ICON.CALENDAR}
+                onClick={() => setActiveView(VIEW.HISTORY)}
+                selected={activeView === VIEW.HISTORY}
+            />
             <SidebarItem icon={ICON.USERS} />
             <SidebarItem icon={ICON.CHECK} />
             <SidebarItem icon={ICON.NEWS} />

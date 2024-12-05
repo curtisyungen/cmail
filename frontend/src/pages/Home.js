@@ -2,16 +2,10 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import backgroundImage from "../assets/backgroundImage.jpg";
-import {
-    ActionBar,
-    Navbar,
-    Sidebar,
-    TitleBar,
-    TopicsList,
-} from "../components";
-import { EmailList, EmailReader, EmptyStateView } from "../components/emails";
+import { ActionBar, Navbar, Sidebar, TitleBar } from "../components";
+import { HistoryView, InboxView } from "../components/views";
 import { useApi, useAppActions, useAppContext } from "../hooks";
-import { DEFAULT_CATEGORIES, LS, PAGES } from "../res";
+import { DEFAULT_CATEGORIES, LS, PAGES, VIEW } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 import { StorageUtils } from "../utils";
 
@@ -19,7 +13,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     const { fetchEmails } = useApi();
-    const { authenticated, emails, selectedEmail, status } = useAppContext();
+    const { activeView, authenticated, emails, status } = useAppContext();
     const { setCategories } = useAppActions();
 
     useEffect(() => {
@@ -78,28 +72,8 @@ const Home = () => {
                         <Navbar />
                         <ActionBar />
                         <Box height={DIMENS.SPACING_STANDARD} width="100%" />
-                        <Box
-                            height={DIMENS.EMAIL_LIST_HEIGHT}
-                            justifyContent="flex-start"
-                            overflow="hidden"
-                        >
-                            <Flex
-                                alignItems="flex-start"
-                                style={{ overflow: "hidden" }}
-                            >
-                                <TopicsList />
-                                <EmailList />
-                                <Box
-                                    height="100%"
-                                    width={DIMENS.SPACING_STANDARD}
-                                />
-                                {selectedEmail ? (
-                                    <EmailReader />
-                                ) : (
-                                    <EmptyStateView />
-                                )}
-                            </Flex>
-                        </Box>
+                        {activeView === VIEW.INBOX ? <InboxView /> : <></>}
+                        {activeView === VIEW.HISTORY ? <HistoryView /> : <></>}
                     </Box>
                 </Box>
             </Flex>
