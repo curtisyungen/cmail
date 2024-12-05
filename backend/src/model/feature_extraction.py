@@ -163,7 +163,7 @@ def extract_features_from_dataframe(df, feature_config):
             if feature_model == "Autoencoder":
                 body_df = encode_column(df['body'])
             elif feature_model == "BERT":
-                body_df = df['body']
+                body_df = pd.DataFrame(df['body'])
             else:
                 body_df = run_tfidf(df, 'body')
 
@@ -198,29 +198,31 @@ def process_features(body_df, features_df, feature_config):
         if body_df.empty and features_df.empty:
             raise ValueError(f"No features found. Check configuration.")
         
-        if body_df.empty:
-            features = features_df.values
-        elif features_df.empty:
-            features = body_df.values
-        else:
-            features = np.hstack([body_df.values, features_df.values])
-
         feature_model = feature_config.get('model')
-        if feature_model == "Autoencoder":
-            features = run_autoencoder(features, feature_config)
-        elif feature_model == "BERT":
+        
+        if feature_model == "BERT":
             if body_df.empty:
                 print("Skipping BERT because body_df is empty.")
                 features = features_df.values
             else:
                 # Operates on body only; don't pass in categorical features like thread IDs, dates, etc.
-                bert_features = run_bert(body_df.tolist())
+                bert_features = run_bert(body_df['body'].tolist())
                 if len(bert_features) == 0:
                     features = features_df.values
                 elif features_df.empty:
                     features = bert_features
                 else:
                     features = np.hstack([bert_features, features_df.values])
+        else:
+            if body_df.empty:
+                features = features_df.values
+            elif features_df.empty:
+                features = body_df.values
+            else:
+                features = np.hstack([body_df.values, features_df.values])
+
+            if feature_model == "Autoencoder":
+                features = run_autoencoder(features, feature_config)
 
         print(f"Feature processing complete. Features size: {len(features)}")
         return np.array(features, dtype=float)
