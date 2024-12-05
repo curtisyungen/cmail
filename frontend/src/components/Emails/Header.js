@@ -6,7 +6,7 @@ import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
 
 const Header = () => {
     const { selectedTopic, topics } = useAppContext();
-    const { keywordsWithWeights } = useKeywords();
+    const { keywords } = useKeywords();
 
     if (selectedTopic === ALL_TOPICS || topics.length === 0) {
         return null;
@@ -26,12 +26,7 @@ const Header = () => {
             <Box margin={{ top: 5 }}>
                 <Flex flexWrap={true}>
                     <Text capitalize fontSize={FONT_SIZE.S}>
-                        {keywordsWithWeights
-                            .reduce((array, { weight, word }) => {
-                                array.push(`${word}`);
-                                return array;
-                            }, [])
-                            .join(", ")}
+                        {keywords.join(", ")}
                     </Text>
                 </Flex>
             </Box>

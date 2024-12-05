@@ -73,8 +73,8 @@ def run_model_route():
     data = request.json
     categories = data.get("categories", [])
     feature_config = data.get("featureConfig", {})
-    lda_config = data.get("ldaConfig", {})
     model_config = data.get("modelConfig", {})
+    naming_config = data.get("namingConfig", {})
 
     try:
         # Emails should always be loaded/stored before run_model() is called
@@ -88,8 +88,8 @@ def run_model_route():
             emails_df, 
             categories, 
             feature_config,
-            lda_config,
             model_config,
+            naming_config,
         )
 
         try:

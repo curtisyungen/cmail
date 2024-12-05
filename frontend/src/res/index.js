@@ -11,6 +11,9 @@ export const MODEL = {
         AUTOENCODER: "Autoencoder",
         BERT: "BERT",
     },
+    TOPIC_NAMING: {
+        LDA: "LDA",
+    },
 };
 
 export const ALL_TOPICS = "All";
@@ -33,7 +36,8 @@ export const DEFAULT_MODEL_CONFIG = Object.freeze({
     num_clusters: 12,
 });
 
-export const DEFAULT_LDA_CONFIG = Object.freeze({
+export const DEFAULT_NAMING_CONFIG = Object.freeze({
+    model: MODEL.TOPIC_NAMING.LDA,
     no_below: 1,
     no_above: 1,
     num_topics: 1,

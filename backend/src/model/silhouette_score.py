@@ -48,7 +48,7 @@ def calculate_silhouette_score(X, labels):
             scores.append(s_i)
 
         silhouette_score = np.nanmean(scores) if scores else 0
-        print(f"Silhouette score: {silhouette_score}")
+        print(f"Silhouette score: {silhouette_score:.2f}")
         return silhouette_score
     except Exception as e:
         print(f"Error calculating silhouette score: {e}")

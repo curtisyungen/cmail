@@ -17,7 +17,7 @@ Modal.setAppElement("#root");
 
 const CategoryModal = ({
     categories,
-    ldaConfig,
+    namingConfig,
     onClose,
     onDelete,
     onSave,
@@ -27,7 +27,7 @@ const CategoryModal = ({
     const [newColor, setNewColor] = useState(COLORS.RED);
     const [newCategory, setNewCategory] = useState("");
 
-    const disabled = !ldaConfig.use_categories;
+    const disabled = !namingConfig.use_categories;
 
     const handleClose = () => {
         setNewCategory("");
@@ -59,10 +59,12 @@ const CategoryModal = ({
                     <Text fontSize={FONT_SIZE.XL}>Create new category</Text>
                     <Flex>
                         <Text style={{ marginRight: "8px" }}>
-                            {ldaConfig.use_categories ? "Enabled" : "Disabled"}
+                            {namingConfig.use_categories
+                                ? "Enabled"
+                                : "Disabled"}
                         </Text>
                         <Switch
-                            enabled={ldaConfig.use_categories}
+                            enabled={namingConfig.use_categories}
                             onClick={onToggle}
                         />
                     </Flex>

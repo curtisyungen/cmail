@@ -3,8 +3,8 @@ import React from "react";
 import AnalysisActions from "./AnalysisActions";
 import EmailsActions from "./EmailsActions";
 import FeatureActions from "./FeatureActions";
-import LdaActions from "./LdaActions";
 import ModelActions from "./ModelActions";
+import NamingActions from "./NamingActions";
 import OtherActions from "./OtherActions";
 import { useAppContext } from "../../hooks";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
@@ -59,7 +59,7 @@ const ActionBar = () => {
                         </Section>
                         <Divider />
                         <Section>
-                            <LdaActions />
+                            <NamingActions />
                         </Section>
                     </>
                 ) : (

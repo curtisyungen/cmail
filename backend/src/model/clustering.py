@@ -4,9 +4,9 @@ from collections import Counter
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from .kmeans import KMeans
+from .cluster_labeler import label_clusters
 from .elbow_method import run_elbow_method
 from .silhouette_score import calculate_silhouette_score
-from .lda_topic_generator import run_lda
 from .feature_extraction import extract_features_from_dataframe, process_features
 from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_text
 
@@ -104,29 +104,10 @@ def count_keywords(df):
     except Exception as e:
         print(f"Error counting keywords: {e}")
         return {}
-    
-def label_clusters(cluster_column, cluster_keywords, categories, lda_config):
-    try:
-        print(f"Labeling clusters...")
-        clusters_with_labels = []
-        for cluster in cluster_column.unique():
-            keywords = cluster_keywords[int(cluster)]
-            lda_result = run_lda(cluster, keywords, categories, 
-                                no_below=lda_config.get('no_below'), 
-                                no_above=lda_config.get('no_above'), 
-                                num_topics=lda_config.get('num_topics'))
-            clusters_with_labels.append(lda_result)
-        print("Labeling complete.")
-        return clusters_with_labels
-    except Exception as e:
-        print(f"Error labeling clusters: {e}")
-        return []
 
-def run_model(emails_df, categories, feature_config, lda_config, model_config):
+def run_model(emails_df, categories, feature_config, model_config, naming_config):
     print(f"Setting up model with config {model_config} and {len(emails_df)} emails...")
-
-    model = model_config.get('model')
-
+    
     # Set-up
     df = init_df(emails_df, feature_config.get('include_subject'))
     
@@ -138,8 +119,10 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     features = StandardScaler().fit_transform(features)
 
     # Clustering
+    model = model_config.get('model')
     centroids = None
     elbow_data = {}
+
     if model == "K-means":
         num_clusters = model_config.get('num_clusters')
         if not num_clusters: # User has selected 'Optimal'
@@ -161,8 +144,8 @@ def run_model(emails_df, categories, feature_config, lda_config, model_config):
     cluster_keywords = extract_keywords(df)
     cluster_keyword_counts = count_keywords(df)
 
-    # LDA to label clusters
-    clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, categories, lda_config)
+    # Labeling
+    clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, cluster_keyword_counts, categories, naming_config)
 
     print("Model execution complete.")
     return df, clusters_with_labels, score, centroids_data, elbow_data, cluster_keyword_counts

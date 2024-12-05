@@ -9,8 +9,8 @@ const useApi = () => {
     const {
         categories,
         featureConfig,
-        ldaConfig,
         modelConfig,
+        namingConfig,
         numEmails,
         status,
     } = useAppContext();
@@ -134,12 +134,12 @@ const useApi = () => {
 
         try {
             const res = await axios.post("/api/run-model", {
-                categories: ldaConfig.use_categories
+                categories: namingConfig.use_categories
                     ? categories.map(({ name }) => name)
                     : [],
                 featureConfig,
-                ldaConfig,
                 modelConfig,
+                namingConfig,
             });
             console.log("response: ", res.data);
 

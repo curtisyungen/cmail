@@ -31,7 +31,7 @@ def match_topic_to_keywords(keywords, categories):
 
 def generate_label(keywords, categories):
     if not keywords:
-        return "Unknown"
+        return "Unknown", False
     try:
         # Try to match cluster keywords to a pre-defined category
         if categories:
@@ -49,7 +49,7 @@ def generate_label(keywords, categories):
         return final_keyword, True
     except Exception as e:
         print(f"Error generating label: {e}")
-        return "Unknown"
+        return "Unknown", False
     
 def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
     print(f"cluster {cluster}, num. keywords: {len(keywords)}")
@@ -74,3 +74,34 @@ def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
         return lda_topics
     except Exception as e:
         print(f"Error running LDA: {e}")
+
+def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, categories, naming_config):
+    try:
+        print(f"Labeling clusters...")
+        topic_naming_model = naming_config.get('model')
+
+        clusters_with_labels = []
+        for cluster in cluster_column.unique():
+            keywords = cluster_keywords[int(cluster)]
+
+            if topic_naming_model == "LDA":
+                lda_result = run_lda(cluster, keywords, categories, 
+                                    no_below=naming_config.get('no_below'), 
+                                    no_above=naming_config.get('no_above'), 
+                                    num_topics=naming_config.get('num_topics'))
+                clusters_with_labels.append(lda_result)
+            else:
+                label, generated = generate_label(keywords, categories)
+                total_words = sum(count for _, count in cluster_keyword_counts[int(cluster)])
+                top_keywords = [{'word': word, 'weight': count / total_words} for word, count in cluster_keyword_counts[int(cluster)]]
+                clusters_with_labels.append([{
+                    'topic_id': int(cluster),
+                    'keywords': top_keywords,
+                    'label': label,
+                    'generated': generated
+                }])
+        print("Labeling complete.")
+        return clusters_with_labels
+    except Exception as e:
+        print(f"Error labeling clusters: {e}")
+        return []

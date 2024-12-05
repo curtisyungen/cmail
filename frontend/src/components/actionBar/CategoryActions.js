@@ -9,8 +9,8 @@ import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { SortUtils, StorageUtils } from "../../utils";
 
 const CategoryActions = () => {
-    const { categories, ldaConfig, status } = useAppContext();
-    const { setCategories, setLdaConfig } = useAppActions();
+    const { categories, namingConfig, status } = useAppContext();
+    const { setCategories, setNamingConfig } = useAppActions();
 
     const [showModal, setShowModal] = useState(false);
 
@@ -29,9 +29,9 @@ const CategoryActions = () => {
     };
 
     const handleToggle = () => {
-        setLdaConfig({
-            ...ldaConfig,
-            use_categories: !ldaConfig.use_categories,
+        setNamingConfig({
+            ...namingConfig,
+            use_categories: !namingConfig.use_categories,
         });
     };
 
@@ -67,7 +67,7 @@ const CategoryActions = () => {
                         size={24}
                         style={{ marginBottom: "5px" }}
                     />
-                    {!ldaConfig.use_categories ? (
+                    {!namingConfig.use_categories ? (
                         <Box
                             style={{
                                 left: 7,
@@ -99,7 +99,7 @@ const CategoryActions = () => {
 
             <CategoryModal
                 categories={categories}
-                ldaConfig={ldaConfig}
+                namingConfig={namingConfig}
                 onClose={() => setShowModal(false)}
                 onDelete={handleDelete}
                 onSave={handleAdd}

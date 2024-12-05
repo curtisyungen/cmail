@@ -24,16 +24,16 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_FEATURE_CONFIG, payload: featureConfig });
     };
 
-    const setLdaConfig = (ldaConfig) => {
-        dispatch({ type: ACTIONS.SET_LDA_CONFIG, payload: ldaConfig });
-    };
-
     const setModelConfig = (config) => {
         dispatch({ type: ACTIONS.SET_MODEL_CONFIG, payload: config });
     };
 
     const setModelResult = (result) => {
         dispatch({ type: ACTIONS.SET_MODEL_RESULT, payload: result });
+    };
+
+    const setNamingConfig = (namingConfig) => {
+        dispatch({ type: ACTIONS.SET_NAMING_CONFIG, payload: namingConfig });
     };
 
     const setNumEmails = (numEmails) => {
@@ -70,9 +70,9 @@ const useAppActions = () => {
         setEmails,
         setError,
         setFeatureConfig,
-        setLdaConfig,
         setModelConfig,
         setModelResult,
+        setNamingConfig,
         setNumEmails,
         setSelectedEmail,
         setSelectedTopic,
