@@ -1,2 +1,2 @@
-export { default as HistoryView } from "./HistoryView";
-export { default as InboxView } from "./InboxView";
+export { default as HistoryView } from "./history/HistoryView";
+export { default as InboxView } from "./inbox/InboxView";

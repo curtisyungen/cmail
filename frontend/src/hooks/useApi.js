@@ -158,7 +158,6 @@ const useApi = () => {
             updateHistory({
                 featureConfig,
                 modelConfig,
-                namingConfig,
                 numClusters: clusters.length,
                 silhouetteScore: res.data.silhouette_score,
             });

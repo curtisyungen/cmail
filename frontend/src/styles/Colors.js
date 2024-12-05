@@ -18,7 +18,7 @@ const COLORS = {
     TERTIARY: "#AAAAAA",
     TRANSPARENT: "transparent",
     WHITE: "#FFFFFF",
-    YELLOW: "#FFCD46",
+    YELLOW: "gold",
 };
 
 export const CATEGORY_COLORS = [

@@ -20,7 +20,9 @@ const useHistory = () => {
     };
 
     const updateHistory = (newEntry) => {
-        StorageUtils.setItem(LS.HISTORY, [...history, newEntry]);
+        const updatedHistory = [...history, newEntry];
+        StorageUtils.setItem(LS.HISTORY, updatedHistory);
+        setHistory(updatedHistory);
     };
 
     return {

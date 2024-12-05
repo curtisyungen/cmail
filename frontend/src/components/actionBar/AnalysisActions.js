@@ -5,6 +5,7 @@ import { Icon } from "../common";
 import { useAppContext } from "../../hooks";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
+import { Utils } from "../../utils";
 
 const MODAL = {
     CLUSTER: "CLUSTER",
@@ -61,27 +62,7 @@ const AnalysisActions = () => {
     const disabled = status || !clusters_data || clusters_data.length === 0;
 
     useEffect(() => {
-        let color;
-        switch (true) {
-            case disabled:
-                color = COLORS.GRAY_MEDIUM;
-                break;
-            case ss <= 0.25:
-                color = COLORS.RED;
-                break;
-            case ss <= 0.5:
-                color = COLORS.ORANGE;
-                break;
-            case ss <= 0.75:
-                color = COLORS.YELLOW;
-                break;
-            case ss <= 1:
-                color = COLORS.GREEN;
-                break;
-            default:
-                color = COLORS.GRAY_MEDIUM;
-        }
-        setScoreColor(color);
+        setScoreColor(disabled ? COLORS.GRAY_MEDIUM : Utils.getScoreColor(ss));
     }, [ss]);
 
     const handleOpenModal = (modal) => {
