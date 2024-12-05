@@ -22,8 +22,9 @@ def compute_sender_freqs(sender_column):
     try:
         sender_column = sender_column.fillna("").astype(str)
         cleaned_senders = sender_column.apply(extract_email_address)
+        print(f"cleaned_senders length: {len(cleaned_senders)}")
         sender_counts = Counter(cleaned_senders)
-        print(f"sender_counts: {sender_counts}")
+        print(f"total_senders: {sum(sender_counts.values())}")
         total_senders = len(cleaned_senders)
         if total_senders == 0:
             return {}
@@ -144,7 +145,7 @@ def run_tfidf(df, column):
         print(f"Error running tfidf on {column}: {e}")
         return pd.DataFrame()
 
-def extract_features_from_dataframe(df, feature_config):
+def extract_features(df, feature_config):
     try:
         print(f"feature_config: {feature_config}")
         feature_model = feature_config.get('model')
@@ -157,7 +158,6 @@ def extract_features_from_dataframe(df, feature_config):
         include_thread_ids = feature_config.get('include_thread_ids')
 
         print(f"Extracting features...")
-
         body_df = pd.DataFrame()
         if include_bodies:
             if feature_model == "Autoencoder":
@@ -169,7 +169,7 @@ def extract_features_from_dataframe(df, feature_config):
 
         subject_df = pd.DataFrame()
         if include_subject:
-            if feature_model == "Autoencoder" or feature_model == "BERT":
+            if feature_model == "Autoencoder":
                 subject_df = encode_column(df['subject'])
             else:
                 subject_df = run_tfidf(df, 'subject')
@@ -187,7 +187,6 @@ def extract_features_from_dataframe(df, feature_config):
                 features_df = pd.concat([features_df, df], axis=1)
 
         print(f"Feature extraction complete. Body_df shape: {body_df.shape}, features_df shape: {features_df.shape}.")
-
         return body_df, features_df
     except Exception as e:
         print(f"Error extracting features: {e}")

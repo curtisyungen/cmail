@@ -7,7 +7,7 @@ from .kmeans import KMeans
 from .cluster_labeler import label_clusters
 from .elbow_method import run_elbow_method
 from .silhouette_score import calculate_silhouette_score
-from .feature_extraction import extract_features_from_dataframe, process_features
+from .feature_extraction import extract_features, process_features
 from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_text
 
 def init_df(emails_df, include_subject):
@@ -56,11 +56,15 @@ def run_hdbscan(df, features):
 def run_pca(df, centroids, features):
     try:
         print("Running PCA...")
-        pca = PCA(n_components=2)
+        n_components = min(2, features.shape[1]) 
+        pca = PCA(n_components=n_components)
         features_2d = pca.fit_transform(features)
-        df['x'] = features_2d[:, 0]
-        df['y'] = features_2d[:, 1]
-
+        if features_2d.shape[1] >= 2:
+            df['x'] = features_2d[:, 0]
+            df['y'] = features_2d[:, 1]
+        else:
+            df['x'] = features_2d[:, 0]
+            df['y'] = None
         centroids_data = []
         if centroids is not None and centroids.size > 0:
             centroids_2d = pca.transform(centroids)
@@ -112,7 +116,7 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
     df = init_df(emails_df, feature_config.get('include_subject'))
     
     # Feature extraction and processing
-    body_df, features_df = extract_features_from_dataframe(df, feature_config)
+    body_df, features_df = extract_features(df, feature_config)
     features = process_features(body_df, features_df, feature_config)
 
     # Scale

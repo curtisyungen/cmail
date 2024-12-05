@@ -49,7 +49,10 @@ def calculate_silhouette_score(X, labels):
 
         silhouette_score = np.nanmean(scores) if scores else 0
         print(f"Silhouette score: {silhouette_score:.2f}")
+        
+        if np.isnan(silhouette_score):
+            return 0
         return silhouette_score
     except Exception as e:
         print(f"Error calculating silhouette score: {e}")
-        return None
+        return 0

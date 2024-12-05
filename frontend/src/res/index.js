@@ -41,7 +41,7 @@ export const DEFAULT_NAMING_CONFIG = Object.freeze({
     no_below: 1,
     no_above: 1,
     num_topics: 1,
-    use_categories: true,
+    use_categories: false,
 });
 
 export const DEFAULT_FEATURE_CONFIG = Object.freeze({

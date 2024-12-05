@@ -46,7 +46,9 @@ const EmailList = () => {
                             email={email}
                             isSelected={selectedEmail?.id === email.id}
                             onClick={() => handleEmailClick(email)}
-                            topicId={topicsMap[idx]?.cluster_id}
+                            topicId={
+                                topicsMap ? topicsMap[idx]?.cluster_id : null
+                            }
                         />
                     ))}
                 </>
