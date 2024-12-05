@@ -28,6 +28,7 @@ export const Entry = ({
     includeThreadIds,
     numClustersInput,
     numClustersOutput,
+    numEmails,
     score,
 }) => {
     return (
@@ -36,7 +37,8 @@ export const Entry = ({
                 <Box>
                     <Flex justifyContent="space-evenly">
                         <Label label={clusteringModel} />
-                        <Label label={numClustersInput} />
+                        <Label label={numClustersInput} />{" "}
+                        <Label label={numEmails} />
                     </Flex>
                 </Box>
                 <Box>
@@ -103,7 +105,8 @@ export const Header = () => {
                     </Box>
                     <Flex justifyContent="space-evenly">
                         <HeaderLabel label="Model" />
-                        <HeaderLabel label="Num. Clusters" />
+                        <HeaderLabel label="Num. Clusters" />{" "}
+                        <HeaderLabel label="Num. Emails" />
                     </Flex>
                 </Box>
                 <Box style={borderRightStyle}>

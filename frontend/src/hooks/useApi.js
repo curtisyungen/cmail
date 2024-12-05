@@ -170,6 +170,7 @@ const useApi = () => {
                 featureConfig,
                 modelConfig,
                 numClusters: clusters.length,
+                numEmails,
                 silhouetteScore: res.data.silhouette_score,
             });
         } catch (e) {

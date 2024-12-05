@@ -26,8 +26,13 @@ const HistoryView = () => {
     useEffect(() => {
         const historyValues = [];
         history.forEach((entry, idx) => {
-            const { featureConfig, modelConfig, numClusters, silhouetteScore } =
-                entry;
+            const {
+                featureConfig,
+                modelConfig,
+                numClusters,
+                numEmails,
+                silhouetteScore,
+            } = entry;
             historyValues.push({
                 index: idx,
                 clusteringModel: modelConfig.model,
@@ -43,6 +48,7 @@ const HistoryView = () => {
                         ? modelConfig.num_clusters
                         : null,
                 numClustersOutput: numClusters,
+                numEmails,
                 score: Math.round(silhouetteScore * 100) / 100,
             });
         });
