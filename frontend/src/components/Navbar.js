@@ -19,8 +19,8 @@ const SelectionIndicator = ({ active }) => {
 };
 
 const Navbar = () => {
-    const { tab: selectedTab } = useAppContext();
-    const { setTab } = useAppActions();
+    const { showNavigationPane, tab: selectedTab } = useAppContext();
+    const { setShowNavigationPane, setTab } = useAppActions();
 
     return (
         <Box
@@ -29,7 +29,12 @@ const Navbar = () => {
             style={{ userSelect: "none" }}
         >
             <Flex alignItems="center" justifyContent="flex-start">
-                <Box margin={{ bottom: 6, right: 8 }} style={{ flex: 0 }}>
+                <Box
+                    clickable
+                    margin={{ bottom: 6, right: 8 }}
+                    onClick={() => setShowNavigationPane(!showNavigationPane)}
+                    style={{ flex: 0 }}
+                >
                     <Icon color={COLORS.BLACK} name={ICON.MENU} />
                 </Box>
                 {Object.values(TABS).map((tab, idx) => (

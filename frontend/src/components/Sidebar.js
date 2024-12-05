@@ -58,7 +58,7 @@ const Sidebar = () => {
                 selected={activeView === VIEW.INBOX}
             />
             <SidebarItem
-                icon={ICON.CALENDAR}
+                icon={ICON.HISTORY}
                 onClick={() => setActiveView(VIEW.HISTORY)}
                 selected={activeView === VIEW.HISTORY}
             />

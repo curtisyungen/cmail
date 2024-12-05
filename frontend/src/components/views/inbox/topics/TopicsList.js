@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 import Topic from "./Topic";
-import { useAppActions, useAppContext } from "../../hooks";
-import { ALL_TOPICS } from "../../res";
-import { Box, DIMENS, FONT_SIZE, Text } from "../../styles";
-import { SortUtils } from "../../utils";
+import { useAppActions, useAppContext } from "../../../../hooks";
+import { ALL_TOPICS } from "../../../../res";
+import { Box, DIMENS, FONT_SIZE, Text } from "../../../../styles";
+import { SortUtils } from "../../../../utils";
 
 const TopicsList = () => {
     const { setSelectedEmail, setSelectedTopic } = useAppActions();
-    const { emails, selectedTopic, topics, topicsMap } = useAppContext();
+    const { emails, selectedTopic, showNavigationPane, topics, topicsMap } =
+        useAppContext();
 
     const [groupedTopics, setGroupedTopics] = useState({
         generated: [],
@@ -71,6 +72,10 @@ const TopicsList = () => {
         }
         setGroupedTopics(groupedTopics);
     };
+
+    if (!showNavigationPane) {
+        return null;
+    }
 
     return (
         <Box

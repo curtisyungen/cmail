@@ -6,7 +6,7 @@ import { ICON } from "../../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../../styles";
 
 const SideColumn = () => {
-    const { emailAddress } = useAppContext();
+    const { emailAddress, showNavigationPane } = useAppContext();
 
     const [formattedEmailAddress, setFormattedEmailAddress] = useState("");
 
@@ -22,10 +22,15 @@ const SideColumn = () => {
         setFormattedEmailAddress(capitalizedName.concat(emailParts[1]));
     }, [emailAddress]);
 
+    if (!showNavigationPane) {
+        return null;
+    }
+
     return (
         <Box
-            margin={{ right: DIMENS.SPACING_STANDARD }}
-            padding={{ left: 10 }}
+            padding={{
+                right: DIMENS.SPACING_STANDARD,
+            }}
             style={{ minWidth: "200px" }}
             width={200}
         >

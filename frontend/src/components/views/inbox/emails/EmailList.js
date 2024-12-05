@@ -2,9 +2,9 @@ import React from "react";
 
 import Email from "./Email";
 import Header from "./Header";
-import { useAppActions, useAppContext } from "../../hooks";
-import { STATUS } from "../../res";
-import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../styles";
+import { useAppActions, useAppContext } from "../../../../hooks";
+import { STATUS } from "../../../../res";
+import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../../../styles";
 
 const EmailList = () => {
     const { emails, selectedEmail, selectedTopic, status, topics, topicsMap } =

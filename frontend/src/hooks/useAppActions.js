@@ -56,6 +56,13 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_SELECTED_TOPIC, payload: topic });
     };
 
+    const setShowNavigationPane = (showNavigationPane) => {
+        dispatch({
+            type: ACTIONS.SET_SHOW_NAVIGATION_PANE,
+            payload: showNavigationPane,
+        });
+    };
+
     const setStatus = (status) => {
         dispatch({ type: ACTIONS.SET_STATUS, payload: status });
     };
@@ -86,6 +93,7 @@ const useAppActions = () => {
         setNumEmails,
         setSelectedEmail,
         setSelectedTopic,
+        setShowNavigationPane,
         setStatus,
         setTab,
         setTopics,

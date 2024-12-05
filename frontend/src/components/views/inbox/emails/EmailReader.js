@@ -1,10 +1,10 @@
 import React from "react";
 
 import Avatar from "./Avatar";
-import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
-import { DateTimeUtils } from "../../utils";
-import { UNKNOWN_SENDER } from "../../res";
-import { useAppContext, useKeywords } from "../../hooks";
+import { useAppContext, useKeywords } from "../../../../hooks";
+import { UNKNOWN_SENDER } from "../../../../res";
+import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../../../styles";
+import { DateTimeUtils } from "../../../../utils";
 
 const Body = ({ body, keywords = [] }) => {
     const keywordPattern = new RegExp(`\\b(${keywords.join("|")})\\b`, "gi");

@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Icon } from "../common";
-import { ALL_TOPICS } from "../../res";
-import { ICON } from "../../res/icons";
-import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
+import { Icon } from "../../../common";
+import { ALL_TOPICS } from "../../../../res";
+import { ICON } from "../../../../res/icons";
+import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../../../styles";
 
 const Topic = ({ id, title, onClick, selectedTopic, size }) => {
     const isAll = title === ALL_TOPICS;

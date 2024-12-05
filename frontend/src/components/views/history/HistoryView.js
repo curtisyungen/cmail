@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import SideColumn from "./SideColumn";
 import { Entry, Header, Title } from "./HistoryViewComponents";
+import { BoxWithShadow } from "../../common";
 import { useHistory } from "../../../hooks";
 import { MODEL } from "../../../res";
-import { Box, COLORS, DIMENS, Flex } from "../../../styles";
+import { Box, DIMENS, Flex } from "../../../styles";
 import { SortUtils } from "../../../utils";
 
 const SORT = {
@@ -87,27 +88,16 @@ const HistoryView = () => {
     };
 
     return (
-        <Flex alignItems="flex-start" style={{ overflow: "hidden" }}>
-            <SideColumn />
-            <Box
-                justifyContent="flex-start"
-                style={{
-                    flex: 1,
-                    height: "100%",
-                    padding: 2,
-                    paddingBottom: 0,
-                }}
-                width="auto"
-            >
-                <Box
-                    background={COLORS.WHITE}
+        <Box padding={{ left: DIMENS.SPACING_STANDARD }}>
+            <Flex alignItems="flex-start" style={{ overflow: "hidden" }}>
+                <SideColumn />
+                <BoxWithShadow
                     height={DIMENS.EMAIL_LIST_HEIGHT}
                     justifyContent="flex-start"
                     overflow="hidden"
                     style={{
                         borderTopLeftRadius: "5px",
                         borderTopRightRadius: "5px",
-                        boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
                     }}
                 >
                     <Title onSortClick={handleSortClick} sortType={sortType} />
@@ -123,9 +113,9 @@ const HistoryView = () => {
                             <Entry key={idx} {...entry} />
                         ))}
                     </Box>
-                </Box>
-            </Box>
-        </Flex>
+                </BoxWithShadow>
+            </Flex>
+        </Box>
     );
 };
 

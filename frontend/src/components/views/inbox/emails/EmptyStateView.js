@@ -1,7 +1,7 @@
 import React from "react";
 
-import mailIcon from "../../assets/mailIcon.svg";
-import { Box, Text } from "../../styles";
+import mailIcon from "../../../../assets/mailIcon.svg";
+import { Box, Text } from "../../../../styles";
 
 const EmptyStateView = () => {
     return (

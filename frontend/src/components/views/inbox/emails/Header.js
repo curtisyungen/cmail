@@ -1,8 +1,8 @@
 import React from "react";
 
-import { useAppContext, useKeywords } from "../../hooks";
-import { ALL_TOPICS } from "../../res";
-import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
+import { useAppContext, useKeywords } from "../../../../hooks";
+import { ALL_TOPICS } from "../../../../res";
+import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../../../styles";
 
 const Header = () => {
     const { selectedTopic, topics } = useAppContext();

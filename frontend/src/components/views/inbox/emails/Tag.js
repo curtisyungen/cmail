@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Icon } from "../common";
-import { ICON } from "../../res/icons";
-import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
+import { Icon } from "../../../common";
+import { ICON } from "../../../../res/icons";
+import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../../../styles";
 
 const Tag = ({ color, tag }) => {
     return (

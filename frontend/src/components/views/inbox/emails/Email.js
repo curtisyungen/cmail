@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import Tag from "./Tag";
-import { useAppContext } from "../../hooks";
-import { ALL_TOPICS, UNKNOWN_SENDER } from "../../res";
+import { useAppContext } from "../../../../hooks";
+import { ALL_TOPICS, UNKNOWN_SENDER } from "../../../../res";
 import {
     Box,
     COLORS,
@@ -11,8 +11,8 @@ import {
     FONT_SIZE,
     Text,
     TextEllipsis,
-} from "../../styles";
-import { DateTimeUtils } from "../../utils";
+} from "../../../../styles";
+import { DateTimeUtils } from "../../../../utils";
 
 const CLIPPED_BODY_LENGTH = 50;
 

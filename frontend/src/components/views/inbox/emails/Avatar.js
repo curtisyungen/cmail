@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../styles";
+import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../../../styles";
 
 const Avatar = ({ name }) => {
     const [initials, setInitials] = useState("");

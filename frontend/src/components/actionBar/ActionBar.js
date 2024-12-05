@@ -6,6 +6,7 @@ import FeatureActions from "./FeatureActions";
 import ModelActions from "./ModelActions";
 import NamingActions from "./NamingActions";
 import OtherActions from "./OtherActions";
+import { BoxWithShadow } from "../common";
 import { useAppContext } from "../../hooks";
 import { TABS } from "../../res";
 import { Box, COLORS, DIMENS, Flex } from "../../styles";
@@ -37,54 +38,48 @@ const Section = ({ children }) => {
 const ActionBar = () => {
     const { tab } = useAppContext();
     return (
-        <Box
-            background={COLORS.WHITE}
-            borderRadius={5}
-            height={DIMENS.ACTION_BAR_HEIGHT}
-            margin={{ left: 10 }}
-            padding={{ left: 5 }}
-            style={{
-                boxShadow: `0px 1px 2px ${COLORS.GRAY_MEDIUM}`,
-                userSelect: "none",
-                width: "calc(100% - 12px)",
-            }}
-        >
-            <Flex>
-                {tab === TABS.MODEL ? (
-                    <>
-                        <Section>
-                            <ModelActions />
-                        </Section>
-                        <Divider />
-                        <Section>
-                            <FeatureActions />
-                        </Section>
-                        <Divider />
-                        <Section>
-                            <NamingActions />
-                        </Section>
-                    </>
-                ) : (
-                    <></>
-                )}
-                {tab === TABS.DATA ? (
-                    <>
-                        <Section>
-                            <EmailsActions />
-                        </Section>
-                        <Divider />
-                        <Section>
-                            <AnalysisActions />
-                        </Section>
-                        <Divider />
-                        <Section>
-                            <OtherActions />
-                        </Section>
-                    </>
-                ) : (
-                    <></>
-                )}
-            </Flex>
+        <Box padding={{ left: DIMENS.SPACING_STANDARD }}>
+            <BoxWithShadow
+                height={DIMENS.ACTION_BAR_HEIGHT}
+                padding={{ left: 5 }}
+            >
+                <Flex>
+                    {tab === TABS.MODEL ? (
+                        <>
+                            <Section>
+                                <ModelActions />
+                            </Section>
+                            <Divider />
+                            <Section>
+                                <FeatureActions />
+                            </Section>
+                            <Divider />
+                            <Section>
+                                <NamingActions />
+                            </Section>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                    {tab === TABS.DATA ? (
+                        <>
+                            <Section>
+                                <EmailsActions />
+                            </Section>
+                            <Divider />
+                            <Section>
+                                <AnalysisActions />
+                            </Section>
+                            <Divider />
+                            <Section>
+                                <OtherActions />
+                            </Section>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </Flex>
+            </BoxWithShadow>
         </Box>
     );
 };

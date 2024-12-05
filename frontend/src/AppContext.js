@@ -27,6 +27,7 @@ const initialState = {
     numEmails: DEFAULT_NUM_EMAILS,
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
+    showNavigationPane: true,
     status: null,
     tab: TABS.MODEL,
     topics: [],
@@ -47,6 +48,7 @@ export const ACTIONS = {
     SET_NUM_EMAILS: "set_num_emails",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
+    SET_SHOW_NAVIGATION_PANE: "set_show_navigation_pane",
     SET_TAB: "set_tab",
     SET_STATUS: "set_status",
     SET_TOPICS: "set_topics",
@@ -83,6 +85,8 @@ export const appReducer = (state, action) => {
             return { ...state, selectedEmail: action.payload };
         case ACTIONS.SET_SELECTED_TOPIC:
             return { ...state, selectedTopic: action.payload };
+        case ACTIONS.SET_SHOW_NAVIGATION_PANE:
+            return { ...state, showNavigationPane: action.payload };
         case ACTIONS.SET_STATUS:
             return { ...state, status: action.payload };
         case ACTIONS.SET_TAB:
