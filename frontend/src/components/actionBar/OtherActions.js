@@ -1,29 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import CategoryActions from "./CategoryActions";
 import { Icon } from "../common";
 import { useApi, useAppContext } from "../../hooks";
-import { LS } from "../../res";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
 
 const OtherActions = () => {
-    const { clearRedis } = useApi();
-    const { status } = useAppContext();
+    const { clearEmailsFromRedis } = useApi();
+    const { setEmails, setModelResult, setTopics, setTopicsMap, status } =
+        useAppContext();
 
-    const [hasCachedData, setHasCachedData] = useState(false);
-
-    useEffect(() => {
-        const cachedData = StorageUtils.getItem(LS.CLUSTERS);
-        setHasCachedData(!!cachedData);
-    }, []);
+    const [loading, setLoading] = useState(false);
 
     const handleClearCache = async () => {
-        StorageUtils.clearAll();
-        setHasCachedData(false);
-        clearRedis();
+        try {
+            setLoading(true);
+            StorageUtils.clearAll();
+            await clearEmailsFromRedis();
+            setEmails([]);
+            setModelResult({});
+            setTopics([]);
+            setTopicsMap({});
+        } catch (e) {
+            console.error("Error clearing cache: ", e);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const disabled = status || loading;
 
     return (
         <>
@@ -32,34 +39,24 @@ const OtherActions = () => {
                 <Box
                     alignItems="center"
                     borderRadius={DIMENS.BORDER_RADIUS_L}
-                    clickable={!status && hasCachedData}
+                    clickable={!disabled}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        status || !hasCachedData
-                            ? COLORS.TRANSPARENT
-                            : COLORS.GRAY_LIGHT
+                        disabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     onClick={handleClearCache}
                     style={{ flex: 1 }}
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
-                        color={
-                            status || !hasCachedData
-                                ? COLORS.GRAY_MEDIUM
-                                : COLORS.BLUE_DARK
-                        }
+                        color={disabled ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK}
                         name={ICON.TRASH}
                         size={24}
                         style={{ marginBottom: "5px" }}
                     />
                     <Text
                         center
-                        color={
-                            status || !hasCachedData
-                                ? COLORS.GRAY_MEDIUM
-                                : COLORS.BLACK
-                        }
+                        color={disabled ? COLORS.GRAY_MEDIUM : COLORS.BLACK}
                         fontSize={FONT_SIZE.S}
                     >
                         Clear cache

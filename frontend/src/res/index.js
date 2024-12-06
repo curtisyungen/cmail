@@ -63,7 +63,7 @@ export const LS = {
     CLUSTERS: "clusters",
     EMAIL_CLUSTERS: "email_clusters",
     HISTORY: "history",
-    KMEANS_DATA: "kmeans_data",
+    MODEL_RESULT: "model_result",
 };
 
 export const PAGES = {

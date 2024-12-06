@@ -91,7 +91,7 @@ const CategoryActions = () => {
                         color={
                             status === STATUS.RUNNING_KMEANS
                                 ? COLORS.GRAY_MEDIUM
-                                : COLORS.BLUE_DARK
+                                : COLORS.BLACK
                         }
                         fontSize={FONT_SIZE.S}
                     >

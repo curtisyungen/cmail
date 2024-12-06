@@ -162,9 +162,9 @@ const useApi = () => {
             setModelResult(res.data);
             setTopics(clusters);
             setTopicsMap(email_clusters);
-            StorageUtils.setItem(LS.KMEANS_DATA, res.data);
             StorageUtils.setItem(LS.CLUSTERS, clusters);
             StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
+            StorageUtils.setItem(LS.MODEL_RESULT, res.data);
 
             updateHistory({
                 featureConfig,
