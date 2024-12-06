@@ -30,18 +30,16 @@ const EmailsActions = () => {
         fetchEmails();
     };
 
-    const fetchDisabled = emails.length === numEmails || status;
-
     return (
         <>
             <Flex>
                 <Box
                     alignItems="center"
                     borderRadius={DIMENS.BORDER_RADIUS_L}
-                    clickable={!fetchDisabled}
+                    clickable={!status}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
-                        fetchDisabled ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
+                        status ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
                     }
                     margin={{ right: DIMENS.SPACING_STANDARD }}
                     onClick={handleFetchEmails}
@@ -49,20 +47,14 @@ const EmailsActions = () => {
                     width={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                 >
                     <Icon
-                        color={
-                            fetchDisabled
-                                ? COLORS.GRAY_MEDIUM
-                                : COLORS.BLUE_DARK
-                        }
+                        color={status ? COLORS.GRAY_MEDIUM : COLORS.BLUE_DARK}
                         name={ICON.ENVELOPE}
                         size={26}
                         style={{ marginBottom: "5px" }}
                     />
                     <Text
                         center
-                        color={
-                            fetchDisabled ? COLORS.GRAY_MEDIUM : COLORS.BLACK
-                        }
+                        color={status ? COLORS.GRAY_MEDIUM : COLORS.BLACK}
                         fontSize={FONT_SIZE.S}
                     >
                         {status === STATUS.FETCHING_EMAILS

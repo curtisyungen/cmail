@@ -23,6 +23,7 @@ google-pasta==0.2.0
 googleapis-common-protos==1.66.0
 grpcio==1.68.1
 h5py==3.12.1
+hdbscan==0.8.40
 httplib2==0.22.0
 huggingface-hub==0.26.2
 idna==3.10
