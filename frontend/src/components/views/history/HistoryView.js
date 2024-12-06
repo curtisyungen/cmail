@@ -42,7 +42,7 @@ const HistoryView = () => {
                 includeDates: featureConfig.include_dates,
                 includeLabels: featureConfig.include_labels,
                 includeSenders: featureConfig.include_senders,
-                includeSubject: featureConfig.include_subject,
+                includeSubject: featureConfig.include_subjects,
                 includeThreadIds: featureConfig.include_thread_ids,
                 numClustersInput:
                     modelConfig.model === MODEL.CLUSTERING.KMEANS

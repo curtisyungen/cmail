@@ -105,13 +105,13 @@ const FeatureActions = () => {
                     />
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
-                        enabled={featureConfig.include_subject}
+                        enabled={featureConfig.include_subjects}
                         icon={ICON.SUBJECT}
-                        label="Subject"
+                        label="Subjects"
                         onClick={() =>
                             handleConfigChange(
-                                "include_subject",
-                                !featureConfig.include_subject
+                                "include_subjects",
+                                !featureConfig.include_subjects
                             )
                         }
                     />

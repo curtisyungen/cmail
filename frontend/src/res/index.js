@@ -51,7 +51,7 @@ export const DEFAULT_FEATURE_CONFIG = Object.freeze({
     include_dates: false,
     include_labels: false,
     include_senders: false,
-    include_subject: false,
+    include_subjects: false,
     include_thread_ids: false,
     model: null,
     num_epochs: 50,

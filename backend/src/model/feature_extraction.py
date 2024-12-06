@@ -170,7 +170,7 @@ def extract_features(df, feature_config):
         feature_model = feature_config.get('model')
 
         include_bodies = feature_config.get('include_bodies')
-        include_subject = feature_config.get('include_subject')
+        include_subjects = feature_config.get('include_subjects')
         include_dates = feature_config.get('include_dates')
         include_labels = feature_config.get('include_labels')
         include_senders = feature_config.get('include_senders')
@@ -188,7 +188,7 @@ def extract_features(df, feature_config):
                 body_df = run_tfidf(df, 'body')
 
         subject_df = pd.DataFrame()
-        if include_subject:
+        if include_subjects:
             if feature_model == "Autoencoder":
                 subject_df = encode_column(df['subject'])
             else:
@@ -199,8 +199,8 @@ def extract_features(df, feature_config):
         senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
         thread_ids_df = extract_thread_ids(df['threadId']) if include_thread_ids else pd.DataFrame()
        
-        bodies_with_casing_df = extract_capitalized_words(df['body_with_casing']) if include_bodies and include_capitals else pd.DataFrame()
-        subjects_with_casing_df = extract_capitalized_words(df['subject_with_casing']) if include_subject and include_capitals else pd.DataFrame()
+        bodies_with_casing_df = extract_capitalized_words(df['body_with_casing']) if include_capitals else pd.DataFrame()
+        subjects_with_casing_df = extract_capitalized_words(df['subject_with_casing']) if include_capitals else pd.DataFrame()
 
         features_df = pd.DataFrame()
         other_dfs = [subject_df, dates_df, labels_df, senders_df, thread_ids_df, bodies_with_casing_df, subjects_with_casing_df]

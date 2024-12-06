@@ -41,10 +41,11 @@ const ModelActions = () => {
     const getIsFeatureConfigEmpty = () => {
         return !(
             featureConfig.include_bodies ||
+            featureConfig.include_capitals ||
             featureConfig.include_dates ||
             featureConfig.include_labels ||
             featureConfig.include_senders ||
-            featureConfig.include_subject ||
+            featureConfig.include_subjects ||
             featureConfig.include_thread_ids
         );
     };
