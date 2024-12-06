@@ -47,6 +47,7 @@ export const DEFAULT_NAMING_CONFIG = Object.freeze({
 export const DEFAULT_FEATURE_CONFIG = Object.freeze({
     encoding_dim: 256,
     include_bodies: true,
+    include_capitals: false,
     include_dates: false,
     include_labels: false,
     include_senders: false,

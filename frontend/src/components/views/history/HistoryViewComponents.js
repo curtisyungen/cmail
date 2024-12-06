@@ -21,6 +21,7 @@ export const Entry = ({
     clusteringModel,
     featureModel,
     includeBodies,
+    includeCapitals,
     includeDates,
     includeLabels,
     includeSenders,
@@ -71,10 +72,15 @@ export const Entry = ({
                             label={includeLabels}
                             width={LABEL_WIDTH_S}
                         />
+                        <Label
+                            boolean
+                            label={includeThreadIds}
+                            width={LABEL_WIDTH_S}
+                        />
                         <Box style={borderRightStyle}>
                             <Label
                                 boolean
-                                label={includeThreadIds}
+                                label={includeCapitals}
                                 width={LABEL_WIDTH_S}
                             />
                         </Box>
@@ -121,6 +127,7 @@ export const Header = () => {
                         <HeaderLabel label="Senders" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Labels" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Thread IDs" width={LABEL_WIDTH_S} />
+                        <HeaderLabel label="Capitals" width={LABEL_WIDTH_S} />
                     </Flex>
                 </Box>
                 <Box>

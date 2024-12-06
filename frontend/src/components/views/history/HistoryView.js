@@ -38,6 +38,7 @@ const HistoryView = () => {
                 clusteringModel: modelConfig.model,
                 featureModel: featureConfig.model,
                 includeBodies: featureConfig.include_bodies,
+                includeCapitals: featureConfig.include_capitals,
                 includeDates: featureConfig.include_dates,
                 includeLabels: featureConfig.include_labels,
                 includeSenders: featureConfig.include_senders,

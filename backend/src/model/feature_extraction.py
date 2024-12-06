@@ -175,6 +175,7 @@ def extract_features(df, feature_config):
         include_labels = feature_config.get('include_labels')
         include_senders = feature_config.get('include_senders')
         include_thread_ids = feature_config.get('include_thread_ids')
+        include_capitals = feature_config.get('include_capitals')
 
         print(f"Extracting features...")
         body_df = pd.DataFrame()
@@ -198,10 +199,8 @@ def extract_features(df, feature_config):
         senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
         thread_ids_df = extract_thread_ids(df['threadId']) if include_thread_ids else pd.DataFrame()
        
-        bodies_with_casing_df = extract_capitalized_words(df['body_with_casing']) if include_bodies else pd.DataFrame()
-        subjects_with_casing_df = extract_capitalized_words(df['subject_with_casing']) if include_subject else pd.DataFrame()
-
-        print(f"bodies_with_casing_df: {bodies_with_casing_df.head()}")
+        bodies_with_casing_df = extract_capitalized_words(df['body_with_casing']) if include_bodies and include_capitals else pd.DataFrame()
+        subjects_with_casing_df = extract_capitalized_words(df['subject_with_casing']) if include_subject and include_capitals else pd.DataFrame()
 
         features_df = pd.DataFrame()
         other_dfs = [subject_df, dates_df, labels_df, senders_df, thread_ids_df, bodies_with_casing_df, subjects_with_casing_df]

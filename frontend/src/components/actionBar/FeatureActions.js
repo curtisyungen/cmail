@@ -135,9 +135,9 @@ const FeatureActions = () => {
                     />
                 </Box>
                 <Box
-                    clickable
-                    justifyContent="flex-start"
                     height="100%"
+                    justifyContent="flex-start"
+                    margin={{ right: DIMENS.SPACING_STANDARD }}
                     width={100}
                 >
                     <SettingSwitch
@@ -173,6 +173,20 @@ const FeatureActions = () => {
                             handleConfigChange(
                                 "include_thread_ids",
                                 !featureConfig.include_thread_ids
+                            )
+                        }
+                    />
+                </Box>
+                <Box height="100%" justifyContent="flex-start" width={100}>
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={featureConfig.include_capitals}
+                        icon={ICON.CAPITALS}
+                        label="Capitals"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_capitals",
+                                !featureConfig.include_capitals
                             )
                         }
                     />

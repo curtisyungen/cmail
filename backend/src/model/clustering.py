@@ -10,7 +10,7 @@ from .silhouette_score import calculate_silhouette_score
 from .feature_extraction import extract_features, process_features
 from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_text
 
-def init_df(emails_df, include_subject):
+def init_df(emails_df, include_subject, include_capitals):
     def clean_and_lemmatize(text):
         cleaned_text = clean_text(text)
         lemmatized = lemmatize_text(cleaned_text)
@@ -20,14 +20,16 @@ def init_df(emails_df, include_subject):
 
     print("Cleaning bodies...")
     cleaned_body = df['body'].apply(clean_and_lemmatize)
-    df['body_with_casing'] = cleaned_body
+    if include_capitals:
+        df['body_with_casing'] = cleaned_body
     df['body'] = cleaned_body.apply(lambda text: text.lower())
     print("Cleaning complete.")
 
     if include_subject:
         print("Cleaning subjects...")
         cleaned_subject = df['subject'].apply(clean_and_lemmatize)
-        df['subject_with_casing'] = cleaned_subject
+        if include_capitals:
+            df['subject_with_casing'] = cleaned_subject
         df['subject'] = cleaned_subject.apply(lambda text: text.lower())
         print("Cleaning complete.")
 
@@ -117,7 +119,7 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
     print(f"Setting up model with config {model_config} and {len(emails_df)} emails...")
     
     # Set-up
-    df = init_df(emails_df, feature_config.get('include_subject'))
+    df = init_df(emails_df, feature_config.get('include_subject'), feature_config.get('include_capitals'))
     
     # Feature extraction and processing
     body_df, features_df = extract_features(df, feature_config)
