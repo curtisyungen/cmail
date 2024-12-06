@@ -5,7 +5,7 @@ from config import DEFAULT_REDIS_EXPIRATION
 redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 def clear_redis_values():
-    redis_client.flushall()
+    redis_client.flushdb()
     print("Redis cleared.")
 
 def get_value_from_redis(key):
