@@ -8,14 +8,21 @@ import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../../../styles";
 const Topic = ({ id, title, onClick, selectedTopic, size }) => {
     const isAll = title === ALL_TOPICS;
     const isSelected = id === selectedTopic;
+    const disabled = !title;
+
+    const handleClick = () => {
+        if (!disabled) {
+            onClick();
+        }
+    };
 
     return (
         <Box
             background={isSelected ? COLORS.BLUE_LIGHT : COLORS.TRANSPARENT}
             borderRadius={DIMENS.BORDER_RADIUS_L}
-            clickable={true}
+            clickable={!disabled}
             margin={1}
-            onClick={onClick}
+            onClick={handleClick}
             padding={{ bottom: 4, left: 15, right: 5, top: 4 }}
             style={{ userSelect: "none" }}
             width={150}
@@ -23,6 +30,7 @@ const Topic = ({ id, title, onClick, selectedTopic, size }) => {
             <Flex justifyContent="space-between">
                 <Flex>
                     <Icon
+                        disabled={disabled}
                         name={
                             isAll
                                 ? ICON.INBOX
@@ -35,9 +43,10 @@ const Topic = ({ id, title, onClick, selectedTopic, size }) => {
                     />
                     <Text
                         bold={isSelected}
+                        disabled={disabled}
                         style={{ textTransform: "capitalize" }}
                     >
-                        {title === ALL_TOPICS ? ALL_TOPICS : title}
+                        {title || "Empty"}
                     </Text>
                 </Flex>
                 <Text color={COLORS.GRAY_DARK}>{size}</Text>

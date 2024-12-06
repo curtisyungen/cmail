@@ -126,7 +126,7 @@ const useApi = () => {
                         finalClusters.push({
                             generated: false,
                             keywords: [],
-                            label: "Empty",
+                            label: null,
                             topic_id: Math.random(),
                         });
                     } else {
