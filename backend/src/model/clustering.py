@@ -10,10 +10,8 @@ from .silhouette_score import calculate_silhouette_score
 from .feature_extraction import extract_features, process_features
 from ..utils.preprocess import clean_and_tokenize, clean_and_lemmatize, get_stopwords
 
-def init_df(emails_df, custom_stopwords, include_bodies, include_subjects, include_capitals):
+def init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals):
     df = emails_df.copy()
-
-    stopwords = get_stopwords(custom_stopwords) if include_bodies or include_subjects or include_capitals else []
 
     # If include_capitals is enabled, it'll extract capitals from BOTH body and subject
     if include_bodies or include_capitals:
@@ -82,7 +80,7 @@ def run_pca(df, centroids, features):
         print(f"Error running PCA: {e}")
         return []
     
-def extract_keywords(df):
+def extract_keywords(df, stopwords):
     try:
         print("Extracting keywords...")
         cluster_keywords = {}
@@ -90,7 +88,7 @@ def extract_keywords(df):
             emails = df[df['cluster_id'] == cluster]['body']
             all_words = []
             for email in emails:
-                all_words.extend(clean_and_tokenize(email))
+                all_words.extend(clean_and_tokenize(email, stopwords))
             cluster_keywords[int(cluster)] = all_words
         print("Keyword extraction complete.")
         return cluster_keywords
@@ -98,7 +96,7 @@ def extract_keywords(df):
         print(f"Error extracting keywords: {e}")
         return {}
     
-def count_keywords(df):
+def count_keywords(df, stopwords):
     try:
         print("Counting keywords...")
         cluster_keywords = {}
@@ -106,7 +104,7 @@ def count_keywords(df):
             emails = df[df['cluster_id'] == cluster]['body']
             all_words = []
             for email in emails:
-                all_words.extend(clean_and_tokenize(email))
+                all_words.extend(clean_and_tokenize(email, stopwords))
             word_counts = Counter(all_words)
             top_keywords = word_counts.most_common(10)
             cluster_keywords[int(cluster)] = [(word, int(count)) for word, count in top_keywords]
@@ -116,12 +114,17 @@ def count_keywords(df):
         print(f"Error counting keywords: {e}")
         return {}
 
-def run_model(emails_df, categories, feature_config, model_config, naming_config, stopwords):
+def run_model(emails_df, categories, feature_config, model_config, naming_config, custom_stopwords):
     print(f"Setting up model with config {model_config} and {len(emails_df)} emails...")
-    
+
+    include_bodies = feature_config.get('include_bodies')
+    include_subjects = feature_config.get('include_subjects')
+    include_capitals = feature_config.get('include_capitals')
+
+    stopwords = get_stopwords(custom_stopwords) if include_bodies or include_subjects or include_capitals else []
+
     # Set-up
-    df = init_df(emails_df, stopwords, feature_config.get('include_bodies'), 
-                 feature_config.get('include_subjects'), feature_config.get('include_capitals'))
+    df = init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals)
     
     # Feature extraction and processing
     body_df, features_df = extract_features(df, feature_config)
@@ -153,8 +156,8 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
     centroids_data = run_pca(df, centroids, features)
 
     # Keyword extraction
-    cluster_keywords = extract_keywords(df)
-    cluster_keyword_counts = count_keywords(df)
+    cluster_keywords = extract_keywords(df, stopwords)
+    cluster_keyword_counts = count_keywords(df, stopwords)
 
     # Labeling
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, cluster_keyword_counts, categories, naming_config)

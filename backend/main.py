@@ -10,5 +10,5 @@ def run_model_main(emails_df: pd.DataFrame, categories: list[str],
         feature_config=feature_config,
         model_config=model_config,
         naming_config=naming_config,
-        stopwords=stopwords
+        custom_stopwords=stopwords
     )

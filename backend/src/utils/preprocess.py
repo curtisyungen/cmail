@@ -3,13 +3,13 @@ import re
 import emoji
 from bs4 import BeautifulSoup
 from nltk.stem import WordNetLemmatizer
-from config import stopwords
+from config import stopwords as default_stopwords
 
 lemmatizer = WordNetLemmatizer()
 
 def get_stopwords(custom_stopwords=[]):
     try:
-        lowercase_stopwords = {word.lower() for word in stopwords}
+        lowercase_stopwords = {word.lower() for word in default_stopwords}
         if custom_stopwords:
             lowercase_custom_stopwords = {word.lower() for word in custom_stopwords}
             return lowercase_stopwords.union(lowercase_custom_stopwords)
@@ -93,7 +93,7 @@ def clean_and_lemmatize(text, stopwords):
     lemmatized = lemmatize_text(cleaned_text, stopwords)
     return lemmatized
 
-def clean_and_tokenize(text):
+def clean_and_tokenize(text, stopwords):
     if not isinstance(text, str):
         return []
     words = text.lower().split()

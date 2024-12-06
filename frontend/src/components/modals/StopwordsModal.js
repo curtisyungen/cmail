@@ -68,11 +68,10 @@ const StopwordsModal = ({ onClose, open }) => {
                 <Text fontSize={FONT_SIZE.XL}>Stopwords</Text>
                 <Text fontSize={FONT_SIZE.S} style={{ marginTop: "5px" }}>
                     Stopwords will be filtered out of data during preprocessing.
-                    All stopwords are case insensitive.
                 </Text>
             </Box>
             <Box margin={{ top: 15 }}>
-                <Text>Add words</Text>
+                <Text>{`Add words (case insensitive)`}</Text>
                 <textarea
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
