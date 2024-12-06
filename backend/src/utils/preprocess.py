@@ -54,7 +54,8 @@ def lemmatize_text(text):
             return ""
         words = text.split()
         lemmatized_words = [
-            lemmatizer.lemmatize(word.lower()) for word in words 
+            lemmatizer.lemmatize(word)
+            for word in words
             if word.lower() not in stopwords
         ]
         return ' '.join(lemmatized_words)

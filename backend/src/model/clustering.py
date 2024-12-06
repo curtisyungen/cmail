@@ -11,20 +11,24 @@ from .feature_extraction import extract_features, process_features
 from ..utils.preprocess import clean_and_tokenize, clean_text, lemmatize_text
 
 def init_df(emails_df, include_subject):
+    def clean_and_lemmatize(text):
+        cleaned_text = clean_text(text)
+        lemmatized = lemmatize_text(cleaned_text)
+        return lemmatized
+    
     df = emails_df.copy()
 
-    df['raw_body'] = df['body']
-
     print("Cleaning bodies...")
-    df['body'] = df['body'].apply(clean_text)
-    df['body'] = df['body'].apply(lemmatize_text)
+    cleaned_body = df['body'].apply(clean_and_lemmatize)
+    df['body_with_casing'] = cleaned_body
+    df['body'] = cleaned_body.apply(lambda text: text.lower())
     print("Cleaning complete.")
 
     if include_subject:
         print("Cleaning subjects...")
-        df['raw_subject'] = df['subject']
-        df['subject'] = df['subject'].apply(clean_text)
-        df['subject'] = df['subject'].apply(lemmatize_text)
+        cleaned_subject = df['subject'].apply(clean_and_lemmatize)
+        df['subject_with_casing'] = cleaned_subject
+        df['subject'] = cleaned_subject.apply(lambda text: text.lower())
         print("Cleaning complete.")
 
     return df

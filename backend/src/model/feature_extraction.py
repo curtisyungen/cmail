@@ -36,12 +36,12 @@ def encode_column(column_data):
     try:
         all_words = set()
         for text in column_data:
-            words = text.split()
+            words = text.lower().split()
             all_words.update(words)
         word_to_index = {word: idx for idx, word in enumerate(sorted(all_words))}
         encoded_text = []
         for text in column_data:
-            words = text.split()
+            words = text.lower().split()
             vector = [0] * len(word_to_index)
             for word in words:
                 if word in word_to_index:
@@ -50,6 +50,28 @@ def encode_column(column_data):
         return pd.DataFrame(encoded_text, columns=list(word_to_index.keys()))
     except Exception as e:
         print(f"Error encoding text: {e}")
+        return pd.DataFrame()
+    
+def extract_capitalized_words(data_column):
+    try:
+        capitalized_words_list = []
+        for text in data_column:
+            capitalized_regex = r'\b[A-Z][a-z]*\b(?:\s+[A-Z][a-z]*)*'
+            capitalized_words = re.findall(capitalized_regex, text)
+            capitalized_words_list.append(capitalized_words)
+        flattened_capitalized_words = [word for sublist in capitalized_words_list for word in sublist]
+        all_capitalized_words = set(flattened_capitalized_words)
+        word_to_index = {word: idx for idx, word in enumerate(sorted(all_capitalized_words))}
+        encoded_capitalized_words = []
+        for words in capitalized_words_list:
+            vector = [0] * len(word_to_index)
+            for word in words:
+                if word in word_to_index:
+                    vector[word_to_index[word]] = 1
+            encoded_capitalized_words.append(vector)
+        return pd.DataFrame(encoded_capitalized_words, columns=sorted(word_to_index.keys()))
+    except Exception as e:
+        print(f"Error extracting capitalized words: {e}")
         return pd.DataFrame()
 
 def extract_date(datetime_column):
@@ -175,13 +197,18 @@ def extract_features(df, feature_config):
         labels_df = extract_labels(df['labelIds']) if include_labels else pd.DataFrame()
         senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
         thread_ids_df = extract_thread_ids(df['threadId']) if include_thread_ids else pd.DataFrame()
+       
+        bodies_with_casing_df = extract_capitalized_words(df['body_with_casing']) if include_bodies else pd.DataFrame()
+        subjects_with_casing_df = extract_capitalized_words(df['subject_with_casing']) if include_subject else pd.DataFrame()
+
+        print(f"bodies_with_casing_df: {bodies_with_casing_df.head()}")
 
         features_df = pd.DataFrame()
-        other_dfs = [subject_df, dates_df, labels_df, senders_df, thread_ids_df]
+        other_dfs = [subject_df, dates_df, labels_df, senders_df, thread_ids_df, bodies_with_casing_df, subjects_with_casing_df]
 
-        for df in other_dfs:
-            if not df.empty:
-                features_df = pd.concat([features_df, df], axis=1)
+        for other_df in other_dfs:
+            if not other_df.empty:
+                features_df = pd.concat([features_df, other_df], axis=1)
 
         print(f"Feature extraction complete. Body_df shape: {body_df.shape}, features_df shape: {features_df.shape}.")
         return body_df, features_df
