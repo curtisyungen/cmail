@@ -14,7 +14,7 @@ const Home = () => {
 
     const { fetchEmails, getEmailAddress } = useApi();
     const { activeView, authenticated, emails, status } = useAppContext();
-    const { setCategories } = useAppActions();
+    const { setCategories, setStopwords } = useAppActions();
 
     useEffect(() => {
         if (!authenticated) {
@@ -35,6 +35,9 @@ const Home = () => {
         const savedCategories =
             StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
         setCategories(savedCategories);
+
+        const savedStopwords = StorageUtils.getItem(LS.STOPWORDS) || [];
+        setStopwords(savedStopwords);
     }, []);
 
     if (!authenticated) {

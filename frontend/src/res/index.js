@@ -65,6 +65,7 @@ export const LS = {
     EMAIL_CLUSTERS: "email_clusters",
     HISTORY: "history",
     MODEL_RESULT: "model_result",
+    STOPWORDS: "stopwords",
 };
 
 export const PAGES = {

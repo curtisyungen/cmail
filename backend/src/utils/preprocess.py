@@ -7,6 +7,17 @@ from config import stopwords
 
 lemmatizer = WordNetLemmatizer()
 
+def get_stopwords(custom_stopwords=[]):
+    try:
+        lowercase_stopwords = {word.lower() for word in stopwords}
+        if custom_stopwords:
+            lowercase_custom_stopwords = {word.lower() for word in custom_stopwords}
+            return lowercase_stopwords.union(lowercase_custom_stopwords)
+        return lowercase_stopwords
+    except Exception as e:
+        print(f"Error getting stopwords: {e}")
+        return []
+
 def clean_html(original_text):
     text = html.unescape(original_text)
     soup = BeautifulSoup(original_text, 'html.parser')
@@ -48,7 +59,7 @@ def clean_text(text):
         print(f"Error cleaning text: {e}")
         return text
 
-def lemmatize_text(text):
+def lemmatize_text(text, stopwords):
     try:
         if not text:
             return ""
@@ -76,6 +87,11 @@ def remove_previous_messages(text):
             text = text[:match.start()]
             break
     return text.strip()
+
+def clean_and_lemmatize(text, stopwords):
+    cleaned_text = clean_text(text)
+    lemmatized = lemmatize_text(cleaned_text, stopwords)
+    return lemmatized
 
 def clean_and_tokenize(text):
     if not isinstance(text, str):

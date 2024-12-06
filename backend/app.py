@@ -87,6 +87,7 @@ def run_model_route():
     feature_config = data.get("featureConfig", {})
     model_config = data.get("modelConfig", {})
     naming_config = data.get("namingConfig", {})
+    stopwords = data.get("stopwords", [])
 
     try:
         # Emails should always be loaded/stored before run_model() is called
@@ -102,6 +103,7 @@ def run_model_route():
             feature_config,
             model_config,
             naming_config,
+            stopwords
         )
 
         try:

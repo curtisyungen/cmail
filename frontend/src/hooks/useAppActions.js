@@ -71,6 +71,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_STATUS, payload: status });
     };
 
+    const setStopwords = (stopwords) => {
+        dispatch({ type: ACTIONS.SET_STOPWORDS, payload: stopwords });
+    };
+
     const setTab = (tab) => {
         dispatch({ type: ACTIONS.SET_TAB, payload: tab });
     };
@@ -100,6 +104,7 @@ const useAppActions = () => {
         setSelectedTopic,
         setShowNavigationPane,
         setStatus,
+        setStopwords,
         setTab,
         setTopics,
         setTopicsMap,

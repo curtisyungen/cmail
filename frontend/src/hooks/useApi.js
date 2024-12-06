@@ -14,6 +14,7 @@ const useApi = () => {
         namingConfig,
         numEmails,
         status,
+        stopwords,
     } = useAppContext();
     const {
         setAuthenticated,
@@ -153,6 +154,7 @@ const useApi = () => {
                 featureConfig,
                 modelConfig,
                 namingConfig,
+                stopwords,
             });
             console.log("response: ", res.data);
 

@@ -4,3 +4,4 @@ export { default as ElbowChart } from "./ElbowChart";
 export { default as ErrorModal } from "./ErrorModal";
 export { default as KeywordChart } from "./KeywordChart";
 export { default as ScoreModal } from "./ScoreModal";
+export { default as StopwordsModal } from "./StopwordsModal";
