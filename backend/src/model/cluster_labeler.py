@@ -77,8 +77,8 @@ def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
 
 def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, categories, naming_config):
     try:
-        print(f"Labeling clusters...")
         topic_naming_model = naming_config.get('model')
+        print(f"Labeling clusters using {topic_naming_model}, {len(categories)} categories, and config {naming_config}...")
 
         clusters_with_labels = []
         for cluster in cluster_column.unique():

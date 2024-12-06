@@ -65,10 +65,13 @@ const CategoryActions = () => {
                         }
                         name={ICON.CATEGORY}
                         size={24}
-                        style={{ marginBottom: "5px" }}
+                        style={{
+                            marginBottom: "5px",
+                        }}
                     />
                     {!namingConfig.use_categories ? (
                         <Box
+                            clickable={status !== STATUS.RUNNING_KMEANS}
                             style={{
                                 left: 7,
                                 position: "absolute",

@@ -11,11 +11,7 @@ const NamingActions = () => {
     const { namingConfig, status } = useAppContext();
     const { setNamingConfig } = useAppActions();
 
-    const handleConfigChange = (e) => {
-        let { name, value } = e.target;
-        if (name === "no_above") {
-            value /= 10;
-        }
+    const handleConfigChange = (name, value) => {
         setNamingConfig({
             ...namingConfig,
             [name]: value,
@@ -32,7 +28,9 @@ const NamingActions = () => {
                     <Select
                         disabled={status === STATUS.RUNNING_KMEANS}
                         name="model"
-                        onChange={handleConfigChange}
+                        onChange={(e) =>
+                            handleConfigChange("model", e.target.value)
+                        }
                         style={{
                             marginBottom: "5px",
                         }}
@@ -62,7 +60,12 @@ const NamingActions = () => {
                             <Select
                                 disabled={status === STATUS.RUNNING_KMEANS}
                                 name="no_below"
-                                onChange={handleConfigChange}
+                                onChange={(e) =>
+                                    handleConfigChange(
+                                        "no_below",
+                                        parseInt(e.target.value)
+                                    )
+                                }
                                 style={{
                                     marginBottom: "5px",
                                 }}
@@ -90,18 +93,23 @@ const NamingActions = () => {
                             <Select
                                 disabled={status === STATUS.RUNNING_KMEANS}
                                 name="no_above"
-                                onChange={handleConfigChange}
+                                onChange={(e) =>
+                                    handleConfigChange(
+                                        "no_above",
+                                        parseFloat(e.target.value)
+                                    )
+                                }
                                 style={{
                                     marginBottom: "5px",
                                 }}
-                                value={namingConfig.no_above * 10}
+                                value={namingConfig.no_above}
                                 width={DIMENS.SELECT_WIDTH}
                             >
                                 {Array.from(
                                     { length: MAX_NO_ABOVE / 10 },
                                     (_, index) => index + 1
                                 ).map((num) => (
-                                    <option key={num} value={num}>
+                                    <option key={num} value={num / 10}>
                                         {num * 10}
                                     </option>
                                 ))}
