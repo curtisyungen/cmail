@@ -45,6 +45,7 @@ const HistoryView = () => {
                 includeSenders: featureConfig.include_senders,
                 includeSubject: featureConfig.include_subjects,
                 includeThreadIds: featureConfig.include_thread_ids,
+                maxEmailLength: featureConfig.max_email_length || "Any",
                 numClustersInput:
                     modelConfig.model === MODEL.CLUSTERING.KMEANS
                         ? modelConfig.num_clusters

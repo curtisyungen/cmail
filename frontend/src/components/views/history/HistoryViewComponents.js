@@ -28,6 +28,7 @@ export const Entry = ({
     includeSenders,
     includeSubject,
     includeThreadIds,
+    maxEmailLength,
     numClustersInput,
     numClustersOutput,
     numEmails,
@@ -48,6 +49,7 @@ export const Entry = ({
                         <Box style={borderLeftStyle}>
                             <Label label={featureModel} />
                         </Box>
+                        <Label label={maxEmailLength} width={LABEL_WIDTH_S} />
                         <Label
                             boolean
                             label={includeDates}
@@ -127,6 +129,10 @@ export const Header = () => {
                     </Box>
                     <Flex justifyContent="space-evenly">
                         <HeaderLabel label="Model" />
+                        <HeaderLabel
+                            label="Max. Length"
+                            width={LABEL_WIDTH_S}
+                        />
                         <HeaderLabel label="Dates" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Subject" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Bodies" width={LABEL_WIDTH_S} />
@@ -180,7 +186,12 @@ const Label = ({ bold, boolean, color, label, width = LABEL_WIDTH_L }) => {
                     <Text center>-</Text>
                 )
             ) : (
-                <TextEllipsis bold={bold} center color={color}>
+                <TextEllipsis
+                    bold={bold}
+                    center
+                    color={color}
+                    fontSize={FONT_SIZE.M}
+                >
                     {boolean ? !!label : label || "-"}
                 </TextEllipsis>
             )}

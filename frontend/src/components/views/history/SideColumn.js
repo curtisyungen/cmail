@@ -3,7 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "../../common";
 import { useAppContext, useHistory } from "../../../hooks";
 import { ICON } from "../../../res/icons";
-import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../../styles";
+import {
+    Box,
+    COLORS,
+    DIMENS,
+    Flex,
+    FONT_SIZE,
+    Text,
+    TextEllipsis,
+} from "../../../styles";
 
 const SideColumn = () => {
     const { emailAddress, showNavigationPane } = useAppContext();
@@ -38,8 +46,11 @@ const SideColumn = () => {
             padding={{
                 right: DIMENS.SPACING_STANDARD,
             }}
-            style={{ minWidth: "200px" }}
-            width={200}
+            style={{
+                maxWidth: `${DIMENS.TOPICS_LIST_WIDTH}px`,
+                minWidth: "fit-content",
+            }}
+            width={DIMENS.TOPICS_LIST_WIDTH}
         >
             <Box margin={{ bottom: 5, top: 5 }}>
                 <Flex>
@@ -49,9 +60,13 @@ const SideColumn = () => {
                         size={FONT_SIZE.M}
                         style={{ marginRight: "5px" }}
                     />
-                    <Text bold color={COLORS.GRAY_DARK2} fontSize={FONT_SIZE.M}>
+                    <TextEllipsis
+                        bold
+                        color={COLORS.GRAY_DARK2}
+                        fontSize={FONT_SIZE.M}
+                    >
                         {formattedEmailAddress}
-                    </Text>
+                    </TextEllipsis>
                 </Flex>
             </Box>
             <Box

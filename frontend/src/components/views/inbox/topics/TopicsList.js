@@ -82,8 +82,13 @@ const TopicsList = () => {
             height={DIMENS.EMAIL_LIST_HEIGHT}
             justifyContent="flex-start"
             margin={{ right: DIMENS.SPACING_STANDARD }}
-            padding={{ left: 10 }}
-            style={{ minWidth: "fit-content", overflowY: "scroll" }}
+            padding={{ left: 10, right: 5 }}
+            style={{
+                maxWidth: `${DIMENS.TOPICS_LIST_WIDTH}px`,
+                minWidth: "fit-content",
+                overflowY: "scroll",
+                scrollbarWidth: "none",
+            }}
             width={DIMENS.TOPICS_LIST_WIDTH}
         >
             <Box margin={{ bottom: 3, top: 3 }}>
