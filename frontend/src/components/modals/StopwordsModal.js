@@ -5,7 +5,15 @@ import { Icon } from "../common";
 import { useAppActions, useAppContext } from "../../hooks";
 import { LS } from "../../res";
 import { ICON } from "../../res/icons";
-import { Box, Button, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
+import {
+    Box,
+    Button,
+    COLORS,
+    Flex,
+    FONT_SIZE,
+    Text,
+    TextEllipsis,
+} from "../../styles";
 import { SortUtils, StorageUtils } from "../../utils";
 
 Modal.setAppElement("#root");
@@ -15,6 +23,13 @@ const StopwordsModal = ({ onClose, open }) => {
     const { setStopwords } = useAppActions();
 
     const [newWords, setNewWords] = useState("");
+
+    const handleClearAll = () => {
+        if (window.confirm("Clear all stopwords?")) {
+            setStopwords([]);
+            StorageUtils.setItem(LS.STOPWORDS, []);
+        }
+    };
 
     const handleClose = () => {
         setNewWords("");
@@ -96,42 +111,65 @@ const StopwordsModal = ({ onClose, open }) => {
                     <Button onClick={handleClose}>Close</Button>
                 </Flex>
             </Box>
-            <Box
-                background={COLORS.BORDER}
-                height={1}
-                margin={{ top: 10 }}
-                style={{ flex: 1 }}
-            />
-            <Box padding={{ top: 10 }}>
-                <Flex flexWrap>
-                    {stopwords.map((word, idx) => (
+            {stopwords.length > 0 ? (
+                <>
+                    <Box
+                        background={COLORS.BORDER}
+                        height={1}
+                        margin={{ top: 10 }}
+                        style={{ flex: 1 }}
+                    />
+                    <Box padding={{ top: 10 }}>
                         <Box
-                            key={idx}
-                            borderRadius={12}
-                            borderWidth={1}
-                            hoverBackground={COLORS.GRAY_LIGHT}
-                            margin={{ bottom: 3, right: 3 }}
-                            padding={{ bottom: 2, left: 8, right: 6, top: 2 }}
+                            clickable
+                            margin={{ bottom: 10 }}
+                            onClick={handleClearAll}
                             width="fit-content"
                         >
-                            <Flex alignItems="center">
-                                <Text>{word}</Text>
-                                <Box
-                                    clickable
-                                    onClick={() => handleDelete(word)}
-                                >
-                                    <Icon
-                                        color={COLORS.GRAY_DARK}
-                                        name={ICON.CLOSE}
-                                        size={12}
-                                        style={{ marginLeft: "5px" }}
-                                    />
-                                </Box>
-                            </Flex>
+                            <Text
+                                color={COLORS.GRAY_DARK}
+                                fontSize={FONT_SIZE.M}
+                            >
+                                Clear all
+                            </Text>
                         </Box>
-                    ))}
-                </Flex>
-            </Box>
+                        <Flex flexWrap>
+                            {stopwords.map((word, idx) => (
+                                <Box
+                                    key={idx}
+                                    borderRadius={12}
+                                    borderWidth={1}
+                                    hoverBackground={COLORS.GRAY_LIGHT}
+                                    margin={{ bottom: 3, right: 3 }}
+                                    padding="4px 6px"
+                                    style={{ maxWidth: "100px" }}
+                                    width="fit-content"
+                                >
+                                    <Flex alignItems="center">
+                                        <TextEllipsis style={{ lineHeight: 1 }}>
+                                            {word}
+                                        </TextEllipsis>
+                                        <Box
+                                            clickable
+                                            margin={{ left: 5 }}
+                                            onClick={() => handleDelete(word)}
+                                            width={12}
+                                        >
+                                            <Icon
+                                                color={COLORS.GRAY_DARK}
+                                                name={ICON.CLOSE}
+                                                size={12}
+                                            />
+                                        </Box>
+                                    </Flex>
+                                </Box>
+                            ))}
+                        </Flex>
+                    </Box>
+                </>
+            ) : (
+                <></>
+            )}
         </Modal>
     );
 };

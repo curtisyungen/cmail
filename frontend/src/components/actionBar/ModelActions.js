@@ -169,7 +169,7 @@ const ModelActions = () => {
                     <></>
                 )}
             </Flex>
-            <Text fontSize={FONT_SIZE.XS}>Model</Text>
+            <Text fontSize={FONT_SIZE.XS}>Clustering</Text>
         </>
     );
 };
