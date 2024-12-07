@@ -11,11 +11,18 @@ import { SortUtils } from "../../../utils";
 const SORT = {
     CLUSTERS: "Clusters",
     DATE: "Date",
+    EMAILS: "Num. emails",
     MODEL: "Model",
     SCORE: "Score",
 };
 
-const SORT_ORDER = [SORT.CLUSTERS, SORT.DATE, SORT.MODEL, SORT.SCORE];
+const SORT_ORDER = [
+    SORT.CLUSTERS,
+    SORT.DATE,
+    SORT.EMAILS,
+    SORT.MODEL,
+    SORT.SCORE,
+];
 
 const HistoryView = () => {
     const { history } = useHistory();
@@ -77,6 +84,9 @@ const HistoryView = () => {
                 break;
             case SORT.DATE:
                 sortKey = "index";
+                break;
+            case SORT.EMAILS:
+                sortKey = "numEmails";
                 break;
             case SORT.MODEL:
                 sortKey = "clusteringModel";

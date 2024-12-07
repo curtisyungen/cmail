@@ -11,7 +11,6 @@ def compute_email_address_freqs(email_column):
     def extract_email_addresses(entry):
         try:
             addresses = re.split(r'[;,]', entry)
-            print(f"addresses: {addresses}")
             clean_addresses = []
             for address in addresses:
                 if '<' in address and '>' in address:

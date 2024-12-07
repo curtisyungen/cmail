@@ -212,7 +212,8 @@ export const Title = ({ onSortClick, sortType }) => {
                     hoverBackground={COLORS.GRAY_LIGHT}
                     onClick={onSortClick}
                     padding={5}
-                    width={80}
+                    style={{ minWidth: "80px" }}
+                    width="fit-content"
                 >
                     <Flex justifyContent="center">
                         <Icon
