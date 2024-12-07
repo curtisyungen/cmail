@@ -76,7 +76,7 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
             <TextEllipsis>
                 {email.from.split("<")[0]?.trim() || UNKNOWN_SENDER}
             </TextEllipsis>
-            <Box style={{ height: "2px" }} />
+            <Box clickable style={{ height: "2px" }} />
             <Flex justifyContent="space-between">
                 <TextEllipsis
                     fontSize={FONT_SIZE.S}
@@ -88,7 +88,7 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
                     {DateTimeUtils.millisToSimpleDate(email.date)}
                 </Text>
             </Flex>
-            <Box style={{ height: "2px" }} />
+            <Box clickable style={{ height: "2px" }} />
             <TextEllipsis fontSize={FONT_SIZE.S}>
                 {getClippedBody()}
                 {email.body.length > CLIPPED_BODY_LENGTH ? "..." : ""}

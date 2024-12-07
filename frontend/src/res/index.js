@@ -50,6 +50,7 @@ export const DEFAULT_FEATURE_CONFIG = Object.freeze({
     include_capitals: false,
     include_dates: false,
     include_labels: false,
+    include_recipients: false,
     include_senders: false,
     include_subjects: false,
     include_thread_ids: false,

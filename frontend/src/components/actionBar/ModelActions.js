@@ -44,6 +44,7 @@ const ModelActions = () => {
             featureConfig.include_capitals ||
             featureConfig.include_dates ||
             featureConfig.include_labels ||
+            featureConfig.include_recipients ||
             featureConfig.include_senders ||
             featureConfig.include_subjects ||
             featureConfig.include_thread_ids

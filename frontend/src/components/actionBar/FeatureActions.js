@@ -177,6 +177,18 @@ const FeatureActions = () => {
                 >
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
+                        enabled={featureConfig.include_recipients}
+                        icon={ICON.CAPITALS}
+                        label="Recipients"
+                        onClick={() =>
+                            handleConfigChange(
+                                "include_recipients",
+                                !featureConfig.include_recipients
+                            )
+                        }
+                    />
+                    <SettingSwitch
+                        disabled={status === STATUS.RUNNING_KMEANS}
                         enabled={featureConfig.include_senders}
                         icon={ICON.SENDER}
                         label="Senders"
@@ -199,6 +211,8 @@ const FeatureActions = () => {
                             )
                         }
                     />
+                </Box>
+                <Box height="100%" justifyContent="flex-start" width={100}>
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
                         enabled={featureConfig.include_thread_ids}
@@ -211,8 +225,6 @@ const FeatureActions = () => {
                             )
                         }
                     />
-                </Box>
-                <Box height="100%" justifyContent="flex-start" width={100}>
                     <SettingSwitch
                         disabled={status === STATUS.RUNNING_KMEANS}
                         enabled={featureConfig.include_capitals}

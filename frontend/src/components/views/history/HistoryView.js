@@ -41,6 +41,7 @@ const HistoryView = () => {
                 includeCapitals: featureConfig.include_capitals,
                 includeDates: featureConfig.include_dates,
                 includeLabels: featureConfig.include_labels,
+                includeRecipients: featureConfig.include_recipients,
                 includeSenders: featureConfig.include_senders,
                 includeSubject: featureConfig.include_subjects,
                 includeThreadIds: featureConfig.include_thread_ids,

@@ -6,30 +6,38 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from .autoencoder import construct_autoencoder
 from .bert import initialize_bert, get_bert_embeddings
 
-def compute_sender_freqs(sender_column):
-    # Some senders have <email@gmail.com>; others, such as emails sent to self, are just email@gmail.com
-    def extract_email_address(sender):
+def compute_email_address_freqs(email_column):
+    # Some recipients/senders have <email@gmail.com>; others, such as emails sent to self, are just email@gmail.com
+    def extract_email_addresses(entry):
         try:
-            if '<' in sender and '>' in sender:
-                email = re.search(r'<(.*?)>', sender)
-                if email:
-                    return email.group(1).strip().lower()
-            return sender.strip().lower()
+            addresses = re.split(r'[;,]', entry)
+            print(f"addresses: {addresses}")
+            clean_addresses = []
+            for address in addresses:
+                if '<' in address and '>' in address:
+                    email = re.search(r'<(.*?)>', address)
+                    if email:
+                        clean_addresses.append(email.group(1).strip().lower())
+                else:
+                    clean_addresses.append(address.strip().lower())
+            return clean_addresses
         except Exception as e:
-            print(f"Error extracting email address: {e}")
+            print(f"Error extracting email addresses: {e}")
             return ""
     
     try:
-        sender_column = sender_column.fillna("").astype(str)
-        cleaned_senders = sender_column.apply(extract_email_address)
-        sender_counts = Counter(cleaned_senders)
-        total_senders = len(cleaned_senders)
-        if total_senders == 0:
+        all_email_addresses = []
+        email_column = email_column.fillna("").astype(str)
+        for entry in email_column:
+            all_email_addresses.extend(extract_email_addresses(entry))
+        email_address_counts = Counter(all_email_addresses)
+        total_email_addresses = sum(email_address_counts.values())
+        if total_email_addresses == 0:
             return {}
-        sender_freqs = {sender: count / total_senders for sender, count in sender_counts.items()}
-        return sender_freqs
+        email_address_freqs = {address: count / total_email_addresses for address, count in email_address_counts.items()}
+        return email_address_freqs
     except Exception as e:
-        print(f"Error computing sender frequencies: {e}")
+        print(f"Error computing email address frequencies: {e}")
         return {}
     
 def encode_column(column_data):
@@ -107,13 +115,14 @@ def extract_labels(labels_column):
         print(f"Error extracting labels: {e}")
         return pd.DataFrame()
 
-def extract_senders(sender_column):
+def extract_email_addresses_freqs(df, column):
     try:
-        sender_freqs = compute_sender_freqs(sender_column)
-        sender_df = sender_column.apply(lambda sender: sender_freqs.get(sender, 0)).to_frame(name='sender_freq')
-        return sender_df
+        email_column = df[column]
+        email_address_freqs = compute_email_address_freqs(email_column)
+        final_df = email_column.apply(lambda email_address: email_address_freqs.get(email_address, 0)).to_frame(name=f"{column}_freq")
+        return final_df
     except Exception as e:
-        print(f"Error extracting senders: {e}")
+        print(f"Error extracting email addresses: {e}")
         return pd.DataFrame()
     
 def extract_thread_ids(thread_id_column):
@@ -173,6 +182,7 @@ def extract_features(df, feature_config):
         include_subjects = feature_config.get('include_subjects')
         include_dates = feature_config.get('include_dates')
         include_labels = feature_config.get('include_labels')
+        include_recipients = feature_config.get('include_recipients')
         include_senders = feature_config.get('include_senders')
         include_thread_ids = feature_config.get('include_thread_ids')
         include_capitals = feature_config.get('include_capitals')
@@ -202,14 +212,16 @@ def extract_features(df, feature_config):
 
         dates_df = extract_date(df['date']) if include_dates else pd.DataFrame()
         labels_df = extract_labels(df['labelIds']) if include_labels else pd.DataFrame()
-        senders_df = extract_senders(df['from']) if include_senders else pd.DataFrame()
+        recipients_df = extract_email_addresses_freqs(df, 'to') if include_recipients else pd.DataFrame()
+        senders_df = extract_email_addresses_freqs(df, 'from') if include_senders else pd.DataFrame()
         thread_ids_df = extract_thread_ids(df['threadId']) if include_thread_ids else pd.DataFrame()
        
         bodies_with_casing_df = extract_capitalized_words(df['body_with_casing']) if include_capitals else pd.DataFrame()
         subjects_with_casing_df = extract_capitalized_words(df['subject_with_casing']) if include_capitals else pd.DataFrame()
 
         features_df = pd.DataFrame()
-        other_dfs = [subject_df, dates_df, labels_df, senders_df, thread_ids_df, bodies_with_casing_df, subjects_with_casing_df]
+        other_dfs = [subject_df, dates_df, labels_df, recipients_df, senders_df, 
+                     thread_ids_df, bodies_with_casing_df, subjects_with_casing_df]
 
         for other_df in other_dfs:
             if not other_df.empty:

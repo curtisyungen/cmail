@@ -9,6 +9,7 @@ const Tag = ({ color, tag }) => {
         <Box
             alignItems="flex-start"
             borderRadius={10}
+            clickable
             height={20}
             justifyContent="flex-start"
             padding={{ top: 5 }}
@@ -18,6 +19,7 @@ const Tag = ({ color, tag }) => {
                     borderColor={color}
                     borderRadius={10}
                     borderWidth={1}
+                    clickable
                     margin={{ right: 5 }}
                     padding={4}
                 >

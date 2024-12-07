@@ -7,6 +7,7 @@ import { useApi, useAppContext } from "../../hooks";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
+import { LS } from "../../res";
 
 const OtherActions = () => {
     const { clearEmailsFromRedis } = useApi();
@@ -18,7 +19,9 @@ const OtherActions = () => {
     const handleClearCache = async () => {
         try {
             setLoading(true);
-            StorageUtils.clearAll();
+            StorageUtils.removeItem(LS.CLUSTERS);
+            StorageUtils.removeItem(LS.EMAIL_CLUSTERS);
+            StorageUtils.removeItem(LS.MODEL_RESULT);
             await clearEmailsFromRedis();
             setEmails([]);
             setModelResult({});

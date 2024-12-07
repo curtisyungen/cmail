@@ -121,7 +121,7 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
     include_subjects = feature_config.get('include_subjects')
     include_capitals = feature_config.get('include_capitals')
 
-    stopwords = get_stopwords(custom_stopwords) if include_bodies or include_subjects or include_capitals else []
+    stopwords = get_stopwords(custom_stopwords)
 
     # Set-up
     df = init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals)

@@ -24,6 +24,7 @@ export const Entry = ({
     includeCapitals,
     includeDates,
     includeLabels,
+    includeRecipients,
     includeSenders,
     includeSubject,
     includeThreadIds,
@@ -60,6 +61,11 @@ export const Entry = ({
                         <Label
                             boolean
                             label={includeBodies}
+                            width={LABEL_WIDTH_S}
+                        />
+                        <Label
+                            boolean
+                            label={includeRecipients}
                             width={LABEL_WIDTH_S}
                         />
                         <Label
@@ -124,6 +130,7 @@ export const Header = () => {
                         <HeaderLabel label="Dates" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Subject" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Bodies" width={LABEL_WIDTH_S} />
+                        <HeaderLabel label="Recipients" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Senders" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Labels" width={LABEL_WIDTH_S} />
                         <HeaderLabel label="Thread IDs" width={LABEL_WIDTH_S} />
