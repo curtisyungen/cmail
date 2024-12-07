@@ -1,9 +1,8 @@
-import gensim
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from gensim import corpora
 from sentence_transformers import SentenceTransformer, util
-from .openai import label_cluster_with_open_ai
+from .lda import run_lda
+from .openai import generate_label_with_open_ai
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -48,30 +47,6 @@ def generate_label(keywords, categories):
     except Exception as e:
         print(f"Error generating label: {e}")
         return "Unknown", False
-    
-def run_lda(cluster, keywords, categories, no_below, no_above, num_topics):
-    print(f"cluster {cluster}, num. keywords: {len(keywords)}")
-    if not keywords:
-        return []
-    try:
-        dictionary = corpora.Dictionary([keyword] for keyword in keywords)
-        dictionary.filter_extremes(no_below=no_below, no_above=no_above)
-        corpus = [dictionary.doc2bow(keywords)]
-
-        lda_model = gensim.models.LdaMulticore(corpus, num_topics=num_topics, id2word=dictionary, passes=10)
-        lda_topics = []
-        for _, words in lda_model.show_topics(num_topics=num_topics, formatted=False):
-            sorted_keywords = [word for word, _ in words]
-            label, generated = generate_label(sorted_keywords, categories)
-            lda_topics.append({
-                'topic_id': int(cluster),
-                'keywords': [{'word': word, 'weight': float(weight)} for word, weight in words],
-                'label': label,
-                'generated': generated
-            })
-        return lda_topics
-    except Exception as e:
-        print(f"Error running LDA: {e}")
 
 def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, categories, naming_config):
     try:
@@ -84,29 +59,23 @@ def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, cat
             top_keywords = [{'word': word } for word, _ in cluster_keyword_counts[int(cluster)]]
 
             if topic_naming_model == "LDA":
-                lda_result = run_lda(cluster, keywords, categories, 
-                                    no_below=naming_config.get('no_below'), 
-                                    no_above=naming_config.get('no_above'), 
-                                    num_topics=naming_config.get('num_topics'))
-                clusters_with_labels.append(lda_result)
+                no_above = naming_config.get('no_above')
+                no_below = naming_config.get('no_below')
+                lda_keywords = run_lda(cluster, keywords, no_below=no_below, no_above=no_above, num_topics=1)
+                label, generated = generate_label(lda_keywords, categories)
             elif topic_naming_model == "Open AI":
                 top_keywords_as_strings = [kw['word'] for kw in top_keywords]
-                open_ai_result = label_cluster_with_open_ai(cluster, top_keywords_as_strings)
-                print(f"Open AI result: {open_ai_result}")
-                clusters_with_labels.append([{
-                    'topic_id': int(cluster),
-                    'keywords': top_keywords,
-                    'label': open_ai_result,
-                    'generated': True
-                }])
+                label = generate_label_with_open_ai(cluster, top_keywords_as_strings)
+                generated = True
             else:
                 label, generated = generate_label(keywords, categories)
-                clusters_with_labels.append([{
-                    'topic_id': int(cluster),
-                    'keywords': top_keywords,
-                    'label': label,
-                    'generated': generated
-                }])
+
+            clusters_with_labels.append([{
+                'topic_id': int(cluster),
+                'keywords': top_keywords,
+                'label': label,
+                'generated': generated # Whether it was generated from model or came from pre-defined categories
+            }])
         print("Labeling complete.")
         return clusters_with_labels
     except Exception as e:

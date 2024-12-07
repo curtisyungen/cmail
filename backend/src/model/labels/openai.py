@@ -2,7 +2,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def label_cluster_with_open_ai(cluster, keywords):
+def generate_label_with_open_ai(cluster, keywords):
     try:
         print(f"Labeling cluster {cluster} with Open AI...")
         prompt = (

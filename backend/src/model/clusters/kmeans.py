@@ -75,3 +75,15 @@ class KMeans:
             return self
         except Exception as e:
             print(f"Error fitting: {e}")
+
+def run_kmeans(df, features, num_clusters):
+    try:
+        print("Running K-means...")
+        kmeans = KMeans(k = int(num_clusters), random_state=26)
+        kmeans.fit(features)
+        df['cluster_id'] = kmeans.labels
+        print("K-means complete.")
+        return df, kmeans
+    except Exception as e:
+        print(f"Error running k-means: {e}")
+        return None

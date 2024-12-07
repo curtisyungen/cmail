@@ -1,6 +1,6 @@
 import numpy as np
-from .kmeans import KMeans
 from .silhouette_score import calculate_silhouette_score
+from ..model.clusters.kmeans import KMeans
 
 def run_elbow_method(features, max_clusters):
     print(f"Running Elbow Method with max of {max_clusters} clusters...")
@@ -26,19 +26,3 @@ def run_elbow_method(features, max_clusters):
         print(f"Error running Elbow Method: {e}")
         return None, None
     
-def find_max_silhouette_score(features, max_clusters):
-    print(f"Finding max. silhouette score with max of {max_clusters} clusters...")
-    try:
-        silhouette_scores = []
-        for k in range(2, max_clusters + 1):
-            kmeans = KMeans(k=k, random_state=26)
-            kmeans.fit(features)
-            silhouette_score = calculate_silhouette_score(features, kmeans.labels)
-            silhouette_scores.append(silhouette_score)
-            print(f"Silhouette score with {k} clusters = {silhouette_score:.2f}")
-        optimal_clusters = np.argmax(silhouette_scores) + 2
-        print(f"Max. silhouette score found with optimal clusters: {optimal_clusters} clusters")
-        return optimal_clusters
-    except Exception as e:
-        print(f"Error finding max. silhouette score: {e}")
-        return None, None

@@ -3,6 +3,7 @@ import re
 import emoji
 from bs4 import BeautifulSoup
 from nltk.stem import WordNetLemmatizer
+from collections import Counter
 from config import stopwords as default_stopwords
 
 lemmatizer = WordNetLemmatizer()
@@ -98,3 +99,37 @@ def clean_and_tokenize(text, stopwords):
         return []
     words = text.lower().split()
     return [word for word in words if word.isalpha() and word not in stopwords]
+
+def count_keywords(df, stopwords):
+    try:
+        print("Counting keywords...")
+        cluster_keywords = {}
+        for cluster in df['cluster_id'].unique():
+            emails = df[df['cluster_id'] == cluster]['body']
+            all_words = []
+            for email in emails:
+                all_words.extend(clean_and_tokenize(email, stopwords))
+            word_counts = Counter(all_words)
+            top_keywords = word_counts.most_common(10)
+            cluster_keywords[int(cluster)] = [(word, int(count)) for word, count in top_keywords]
+        print("Keyword counting complete.")
+        return cluster_keywords
+    except Exception as e:
+        print(f"Error counting keywords: {e}")
+        return {}
+    
+def extract_keywords(df, stopwords):
+    try:
+        print("Extracting keywords...")
+        cluster_keywords = {}
+        for cluster in df['cluster_id'].unique():
+            emails = df[df['cluster_id'] == cluster]['body']
+            all_words = []
+            for email in emails:
+                all_words.extend(clean_and_tokenize(email, stopwords))
+            cluster_keywords[int(cluster)] = all_words
+        print("Keyword extraction complete.")
+        return cluster_keywords
+    except Exception as e:
+        print(f"Error extracting keywords: {e}")
+        return {}

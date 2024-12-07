@@ -1,5 +1,5 @@
 import pandas as pd
-from src.model.clustering import run_model
+from src.model.clusters.clustering import run_model
 
 def run_model_main(emails_df: pd.DataFrame, categories: list[str], 
                      feature_config: dict, model_config: dict,
