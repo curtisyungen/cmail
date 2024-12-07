@@ -84,7 +84,7 @@ const TopicsList = () => {
             margin={{ right: DIMENS.SPACING_STANDARD }}
             padding={{ left: 10 }}
             style={{ minWidth: "fit-content", overflowY: "scroll" }}
-            width="fit-content"
+            width={DIMENS.TOPICS_LIST_WIDTH}
         >
             <Box margin={{ bottom: 3, top: 3 }}>
                 <Text bold fontSize={FONT_SIZE.M}>

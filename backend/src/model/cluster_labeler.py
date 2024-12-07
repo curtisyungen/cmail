@@ -3,6 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from gensim import corpora
 from sentence_transformers import SentenceTransformer, util
+from .openai import label_cluster_with_open_ai
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -25,9 +26,6 @@ def match_topic(keywords, categories, threshold=0.8):
         return best_match
     else:
         return None
-
-def match_topic_to_keywords(keywords, categories):
-    return None
 
 def generate_label(keywords, categories):
     if not keywords:
@@ -83,6 +81,7 @@ def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, cat
         clusters_with_labels = []
         for cluster in cluster_column.unique():
             keywords = cluster_keywords[int(cluster)]
+            top_keywords = [{'word': word } for word, _ in cluster_keyword_counts[int(cluster)]]
 
             if topic_naming_model == "LDA":
                 lda_result = run_lda(cluster, keywords, categories, 
@@ -90,10 +89,18 @@ def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, cat
                                     no_above=naming_config.get('no_above'), 
                                     num_topics=naming_config.get('num_topics'))
                 clusters_with_labels.append(lda_result)
+            elif topic_naming_model == "Open AI":
+                top_keywords_as_strings = [kw['word'] for kw in top_keywords]
+                open_ai_result = label_cluster_with_open_ai(cluster, top_keywords_as_strings)
+                print(f"Open AI result: {open_ai_result}")
+                clusters_with_labels.append([{
+                    'topic_id': int(cluster),
+                    'keywords': top_keywords,
+                    'label': open_ai_result,
+                    'generated': True
+                }])
             else:
                 label, generated = generate_label(keywords, categories)
-                total_words = sum(count for _, count in cluster_keyword_counts[int(cluster)])
-                top_keywords = [{'word': word, 'weight': count / total_words} for word, count in cluster_keyword_counts[int(cluster)]]
                 clusters_with_labels.append([{
                     'topic_id': int(cluster),
                     'keywords': top_keywords,

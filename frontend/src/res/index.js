@@ -13,6 +13,7 @@ export const MODEL = {
     },
     TOPIC_NAMING: {
         LDA: "LDA",
+        OPEN_AI: "Open AI",
     },
 };
 
