@@ -53,6 +53,7 @@ export const DEFAULT_FEATURE_CONFIG = Object.freeze({
     include_senders: false,
     include_subjects: false,
     include_thread_ids: false,
+    max_email_length: null,
     model: null,
     num_epochs: 50,
 });

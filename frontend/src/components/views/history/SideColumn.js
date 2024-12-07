@@ -23,6 +23,12 @@ const SideColumn = () => {
         setFormattedEmailAddress(capitalizedName.concat(emailParts[1]));
     }, [emailAddress]);
 
+    const handleClearHistory = () => {
+        if (window.confirm("Clear history?")) {
+            clearHistory();
+        }
+    };
+
     if (!showNavigationPane) {
         return null;
     }
@@ -68,7 +74,7 @@ const SideColumn = () => {
                 hoverBackground={
                     history.length > 0 ? COLORS.GRAY_LIGHT_3 : COLORS.GRAY_LIGHT
                 }
-                onClick={clearHistory}
+                onClick={handleClearHistory}
                 padding={{ bottom: 6, left: 19, top: 6 }}
             >
                 <Flex>

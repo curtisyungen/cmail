@@ -110,6 +110,7 @@ const HistoryView = () => {
                     <Title onSortClick={handleSortClick} sortType={sortType} />
                     <Header />
                     <Box
+                        justifyContent="flex-start"
                         style={{
                             overflowX: "scroll",
                             overflowY: "scroll",

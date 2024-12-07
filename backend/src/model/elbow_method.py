@@ -37,7 +37,7 @@ def find_max_silhouette_score(features, max_clusters):
             silhouette_scores.append(silhouette_score)
             print(f"Silhouette score with {k} clusters = {silhouette_score:.2f}")
         optimal_clusters = np.argmax(silhouette_scores) + 2
-        print(f"Elbow method complete with optimal clusters: {optimal_clusters} clusters")
+        print(f"Max. silhouette score found with optimal clusters: {optimal_clusters} clusters")
         return optimal_clusters
     except Exception as e:
         print(f"Error finding max. silhouette score: {e}")

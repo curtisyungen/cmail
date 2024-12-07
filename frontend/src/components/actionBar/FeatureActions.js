@@ -12,6 +12,7 @@ import {
     OPACITY,
     Select,
     Text,
+    TextEllipsis,
 } from "../../styles";
 
 const SettingSwitch = ({ disabled, enabled, icon, label, onClick }) => {
@@ -57,7 +58,7 @@ const FeatureActions = () => {
             <Flex>
                 <Box
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
-                    margin={{ right: DIMENS.SPACING_STANDARD }}
+                    margin={{ right: 5 }}
                     style={{ flex: 1 }}
                 >
                     <Select
@@ -84,6 +85,40 @@ const FeatureActions = () => {
                     <Text center fontSize={FONT_SIZE.S}>
                         Model
                     </Text>
+                </Box>
+                <Box
+                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                    margin={{ right: DIMENS.SPACING_STANDARD }}
+                    style={{ flex: 1 }}
+                >
+                    <Select
+                        disabled={status === STATUS.RUNNING_KMEANS}
+                        name="max_email_length"
+                        onChange={(e) =>
+                            handleConfigChange(
+                                "max_email_length",
+                                parseInt(e.target.value)
+                            )
+                        }
+                        style={{
+                            marginBottom: "5px",
+                        }}
+                        value={featureConfig.max_email_length}
+                        width={DIMENS.SELECT_WIDTH}
+                    >
+                        <option value={null}>Any</option>
+                        {Array.from(
+                            { length: 10 },
+                            (_, index) => index + 1
+                        ).map((num) => (
+                            <option key={num} value={num * 100}>
+                                {num * 100}
+                            </option>
+                        ))}
+                    </Select>
+                    <TextEllipsis center fontSize={FONT_SIZE.S}>
+                        Max. Email Chars.
+                    </TextEllipsis>
                 </Box>
                 <Box
                     height="100%"

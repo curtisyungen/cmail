@@ -176,8 +176,14 @@ def extract_features(df, feature_config):
         include_senders = feature_config.get('include_senders')
         include_thread_ids = feature_config.get('include_thread_ids')
         include_capitals = feature_config.get('include_capitals')
+        max_email_length = feature_config.get('max_email_length')
 
         print(f"Extracting features...")
+        if max_email_length and include_bodies:
+            print("Trimming bodies...")
+            df['body'] = df['body'].apply(lambda x: x[:max_email_length] if isinstance(x, str) else x)
+            print("Trimming complete.")
+
         body_df = pd.DataFrame()
         if include_bodies:
             if feature_model == "Autoencoder":

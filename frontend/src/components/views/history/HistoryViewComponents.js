@@ -170,7 +170,7 @@ const Label = ({ bold, boolean, color, label, width = LABEL_WIDTH_L }) => {
                 label ? (
                     <Icon color={COLORS.BLACK} name={ICON.CHECK} size={10} />
                 ) : (
-                    <></>
+                    <Text center>-</Text>
                 )
             ) : (
                 <TextEllipsis bold={bold} center color={color}>

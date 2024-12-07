@@ -49,13 +49,13 @@ const Home = () => {
             background={COLORS.GRAY_LIGHT}
             height="100vh"
             justifyContent="flex-start"
-            overflow="hidden"
             style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundPositionX: "50%",
                 backgroundPositionY: "50%",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
+                overflowY: "hidden",
             }}
         >
             <TitleBar />

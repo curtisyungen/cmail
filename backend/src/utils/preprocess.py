@@ -46,7 +46,7 @@ def clean_text(text):
         text = re.sub(r'http\S+|www\S+|https\S+', '', text) # URLs
         text = re.sub(r'\S+@\S+', '', text) # emails
         text = re.sub(r'=\S+', ' ', text) # encodings
-        text = re.sub(r'[^\w\s]', '', text) # punctuation and special chars
+        text = re.sub(r'[^\w\s]', ' ', text) # punctuation and special chars
         text = re.sub(r'\s+', ' ', text).strip() # whitespaces
         text = re.sub(r'\n+', ' ', text) # line-breaks
         text = re.sub(
