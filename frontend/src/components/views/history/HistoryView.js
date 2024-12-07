@@ -103,6 +103,8 @@ const HistoryView = () => {
                     justifyContent="flex-start"
                     overflow="hidden"
                     style={{
+                        borderBottomLeftRadius: "0px",
+                        borderBottomRightRadius: "0px",
                         borderTopLeftRadius: "5px",
                         borderTopRightRadius: "5px",
                     }}
