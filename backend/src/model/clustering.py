@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from .kmeans import KMeans
 from .cluster_labeler import label_clusters
-from .elbow_method import run_elbow_method
+from .elbow_method import run_elbow_method, find_max_silhouette_score
 from .silhouette_score import calculate_silhouette_score
 from .feature_extraction import extract_features, process_features
 from ..utils.preprocess import clean_and_tokenize, clean_and_lemmatize, get_stopwords
@@ -141,7 +141,8 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
     if model == "K-means":
         num_clusters = model_config.get('num_clusters')
         if not num_clusters: # User has selected 'Optimal'
-            num_clusters, elbow_data = run_elbow_method(features, max_clusters=20)
+            num_clusters = find_max_silhouette_score(features, max_clusters=20)
+            # num_clusters, elbow_data = run_elbow_method(features, max_clusters=20)
         df, kmeans = run_kmeans(df, features, num_clusters)
         centroids = kmeans.centroids
     elif model == "HDBSCAN":
