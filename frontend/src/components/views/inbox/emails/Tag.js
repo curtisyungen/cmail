@@ -2,7 +2,7 @@ import React from "react";
 
 import { Icon } from "../../../common";
 import { ICON } from "../../../../res/icons";
-import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../../../styles";
+import { Box, COLORS, Flex, FONT_SIZE, TextEllipsis } from "../../../../styles";
 
 const Tag = ({ color, tag }) => {
     return (
@@ -22,12 +22,17 @@ const Tag = ({ color, tag }) => {
                     clickable
                     margin={{ right: 5 }}
                     padding={4}
+                    width="fit-content"
                 >
                     <Icon color={color} name={ICON.CATEGORY} size={8} />
                 </Box>
-                <Text center color={COLORS.GRAY_DARK} fontSize={FONT_SIZE.S}>
+                <TextEllipsis
+                    center
+                    color={COLORS.GRAY_DARK}
+                    fontSize={FONT_SIZE.S}
+                >
                     {tag}
-                </Text>
+                </TextEllipsis>
             </Flex>
         </Box>
     );
