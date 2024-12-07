@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Plot from "react-plotly.js";
 import Modal from "react-modal";
+import convexHull from "convex-hull";
 
+import { Chart } from "../common";
 import { useAppContext } from "../../hooks";
-import { Box, COLORS } from "../../styles";
+import { Box, COLORS, FONT_SIZE, Text } from "../../styles";
 
 Modal.setAppElement("#root");
 
@@ -27,11 +28,11 @@ const ClusterChart = ({ onClose, open }) => {
             type: "scatter",
             name: "Centroids",
             marker: {
-                size: 12,
+                size: 10,
                 color: "black",
                 symbol: "x",
             },
-            text: centroids_data.map((_, idx) => `C${idx + 1}`),
+            text: centroids_data.map((_, idx) => `${getLabel(idx)}`),
             textposition: "top center",
             textfont: {
                 size: 10,
@@ -39,20 +40,38 @@ const ClusterChart = ({ onClose, open }) => {
             },
         };
 
-        const clusterTraces = clusters_data.map((cluster, idx) => {
-            return {
-                x: cluster.x,
-                y: cluster.y,
-                mode: "markers",
-                type: "scatter",
-                name: `C${idx + 1} (${getLabel(idx)})`,
-                marker: {
-                    size: 4,
-                    color: `rgb(${(idx * 30) % 255}, ${(idx * 50) % 255}, ${
-                        (idx * 100) % 255
-                    })`,
+        const clusterTraces = clusters_data.flatMap((cluster, idx) => {
+            const points = cluster.x.map((x, i) => [x, cluster.y[i]]);
+            const hullIndices = convexHull(points);
+            const hullPoints = hullIndices.map(([i]) => points[i]);
+            const hullX = hullPoints.map(([x]) => x);
+            const hullY = hullPoints.map(([_, y]) => y);
+            return [
+                {
+                    x: cluster.x,
+                    y: cluster.y,
+                    mode: "markers",
+                    type: "scatter",
+                    name: `C${idx + 1} (${getLabel(idx)})`,
+                    marker: {
+                        size: 4,
+                        color: `rgb(${(idx * 30) % 255}, ${(idx * 50) % 255}, ${
+                            (idx * 100) % 255
+                        })`,
+                    },
                 },
-            };
+                {
+                    x: [...hullX, hullX[0]],
+                    y: [...hullY, hullY[0]],
+                    mode: "lines",
+                    fill: "toself",
+                    fillcolor: `rgba(${(idx * 30) % 255}, ${
+                        (idx * 50) % 255
+                    }, ${(idx * 100) % 255}, 0.2)`,
+                    line: { color: "rgba(0,0,0,0)" },
+                    name: `C${idx + 1} Boundary`,
+                },
+            ];
         });
 
         setPlotData([...clusterTraces, centroidTrace]);
@@ -74,19 +93,17 @@ const ClusterChart = ({ onClose, open }) => {
                     height: "fit-content",
                     margin: "auto",
                     userSelect: "none",
+                    width: "800px",
                 },
             }}
         >
             <Box>
-                <Plot
-                    data={plotData}
-                    layout={{
-                        title: "Clusters",
-                        xaxis: { title: "X Cord." },
-                        yaxis: { title: "Y Cord." },
-                        showlegend: true,
-                    }}
-                />
+                <Box alignItems="center" margin={{ bottom: 10 }}>
+                    <Text bold center fontSize={FONT_SIZE.XL}>
+                        Clusters
+                    </Text>
+                </Box>
+                <Chart data={plotData} />
             </Box>
         </Modal>
     );

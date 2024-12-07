@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Plot from "react-plotly.js";
 import Modal from "react-modal";
 
+import { Chart } from "../common";
 import { useAppContext } from "../../hooks";
 import { Box, COLORS, FONT_SIZE, Select, Text } from "../../styles";
 
@@ -77,7 +77,7 @@ const KeywordChart = ({ onClose, open }) => {
             }}
         >
             <Box>
-                <Box alignItems="center">
+                <Box alignItems="center" margin={{ bottom: 10 }}>
                     <Text bold center fontSize={FONT_SIZE.XL}>
                         Cluster Keywords
                     </Text>
@@ -95,15 +95,16 @@ const KeywordChart = ({ onClose, open }) => {
                         ))}
                     </Select>
                 </Box>
-                <Plot
+                <Chart
                     data={plotData}
-                    layout={{
+                    layoutProps={{
                         xaxis: {
                             title: "Keyword",
                             tickangle: 300,
                         },
                         yaxis: { title: "Count" },
                         barmode: "group",
+                        margin: { t: 30 },
                         showlegend: true,
                     }}
                 />

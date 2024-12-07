@@ -9,6 +9,7 @@
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
         "axios": "^1.7.7",
+        "convex-hull": "^1.0.3",
         "plotly.js": "^2.35.2",
         "postcss-selector-parser": "^6.0.10",
         "react": "^18.3.1",
