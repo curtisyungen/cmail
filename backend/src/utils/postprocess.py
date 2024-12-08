@@ -4,7 +4,7 @@ def get_clusters_data(df):
         clusters_data = []
         for cluster_id in df['cluster_id'].unique():
             cluster_data = df[df['cluster_id'] == cluster_id]
-            email_data = cluster_data[['date', 'from', 'subject']].to_dict(orient='records')
+            email_data = cluster_data[['date', 'from', 'raw_subject']].to_dict(orient='records')
             clusters_data.append({
                 'cluster_id': int(cluster_id),
                 'x': cluster_data['x'].tolist(),

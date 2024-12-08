@@ -65,7 +65,7 @@ def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, cat
                 label, generated = generate_label(lda_keywords, categories)
             elif topic_naming_model == "Open AI":
                 top_keywords_as_strings = [kw['word'] for kw in top_keywords]
-                label = generate_label_with_open_ai(cluster, top_keywords_as_strings)
+                label = generate_label_with_open_ai(cluster, top_keywords_as_strings, categories)
                 generated = True
             else:
                 label, generated = generate_label(keywords, categories)

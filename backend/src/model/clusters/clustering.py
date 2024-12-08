@@ -13,6 +13,7 @@ def init_df(emails_df, stopwords, include_bodies, include_subjects, include_capi
     # If include_capitals is enabled, it'll extract capitals from BOTH body and subject
     if include_bodies or include_capitals:
         print("Cleaning bodies...")
+        df['raw_body'] = df['body']
         cleaned_body = df['body'].apply(lambda text: clean_and_lemmatize(text, stopwords))
         if include_bodies:
             df['body'] = cleaned_body.apply(lambda text: text.lower())
@@ -22,6 +23,7 @@ def init_df(emails_df, stopwords, include_bodies, include_subjects, include_capi
 
     if include_subjects or include_capitals:
         print("Cleaning subjects...")
+        df['raw_subject'] = df['subject']
         cleaned_subject = df['subject'].apply(lambda text: clean_and_lemmatize(text, stopwords))
         if include_subjects:
             df['subject'] = cleaned_subject.apply(lambda text: text.lower())
