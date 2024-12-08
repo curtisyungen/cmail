@@ -15,7 +15,7 @@ const CategoryActions = () => {
     const [showModal, setShowModal] = useState(false);
 
     const handleClick = () => {
-        if (status !== STATUS.RUNNING_KMEANS) {
+        if (status !== STATUS.RUNNING_MODEL) {
             setShowModal(true);
         }
     };
@@ -47,7 +47,7 @@ const CategoryActions = () => {
                 <Box
                     alignItems="center"
                     borderRadius={DIMENS.BORDER_RADIUS_L}
-                    clickable={status !== STATUS.RUNNING_KMEANS}
+                    clickable={status !== STATUS.RUNNING_MODEL}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
                         status ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
@@ -59,7 +59,7 @@ const CategoryActions = () => {
                 >
                     <Icon
                         color={
-                            status === STATUS.RUNNING_KMEANS
+                            status === STATUS.RUNNING_MODEL
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }
@@ -71,7 +71,7 @@ const CategoryActions = () => {
                     />
                     {!namingConfig.use_categories ? (
                         <Box
-                            clickable={status !== STATUS.RUNNING_KMEANS}
+                            clickable={status !== STATUS.RUNNING_MODEL}
                             style={{
                                 left: 7,
                                 position: "absolute",
@@ -89,7 +89,7 @@ const CategoryActions = () => {
                     <Text
                         center
                         color={
-                            status === STATUS.RUNNING_KMEANS
+                            status === STATUS.RUNNING_MODEL
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLACK
                         }

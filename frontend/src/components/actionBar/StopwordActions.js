@@ -13,7 +13,7 @@ const StopwordActions = () => {
     const [showModal, setShowModal] = useState(false);
 
     const handleClick = () => {
-        if (status !== STATUS.RUNNING_KMEANS) {
+        if (status !== STATUS.RUNNING_MODEL) {
             setShowModal(true);
         }
     };
@@ -24,7 +24,7 @@ const StopwordActions = () => {
                 <Box
                     alignItems="center"
                     borderRadius={DIMENS.BORDER_RADIUS_L}
-                    clickable={status !== STATUS.RUNNING_KMEANS}
+                    clickable={status !== STATUS.RUNNING_MODEL}
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     hoverBackground={
                         status ? COLORS.TRANSPARENT : COLORS.GRAY_LIGHT
@@ -36,7 +36,7 @@ const StopwordActions = () => {
                 >
                     <Icon
                         color={
-                            status === STATUS.RUNNING_KMEANS
+                            status === STATUS.RUNNING_MODEL
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }
@@ -49,7 +49,7 @@ const StopwordActions = () => {
                     <Text
                         center
                         color={
-                            status === STATUS.RUNNING_KMEANS
+                            status === STATUS.RUNNING_MODEL
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLACK
                         }

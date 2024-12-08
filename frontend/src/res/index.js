@@ -80,7 +80,7 @@ export const STATUS = {
     AUTHENTICATING: "authenticating",
     FETCHING_EMAILS: "fetching_emails",
     FETCHING_LABELS: "fetching_labels",
-    RUNNING_KMEANS: "running_kmeans",
+    RUNNING_MODEL: "running_model",
 };
 
 export const TABS = {

@@ -20,7 +20,8 @@ const MAX_CLUSTERS = 30;
 const ModelActions = () => {
     const { runModel } = useApi();
     const { emails, featureConfig, modelConfig, status } = useAppContext();
-    const { setModelConfig, setTopics, setTopicsMap } = useAppActions();
+    const { setModelConfig, setModelResult, setTopics, setTopicsMap } =
+        useAppActions();
 
     const [featureConfigEmpty, setFeatureConfigEmpty] = useState(false);
 
@@ -30,6 +31,8 @@ const ModelActions = () => {
     useEffect(() => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
         const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
+        const savedModelResult = StorageUtils.getItem(LS.MODEL_RESULT);
+        setModelResult(savedModelResult);
         setTopics(savedClusters || []);
         setTopicsMap(savedEmailClusters || {});
     }, []);
@@ -101,7 +104,7 @@ const ModelActions = () => {
                         style={{ marginBottom: "5px" }}
                     />
                     <Text center fontSize={FONT_SIZE.S}>
-                        {status === STATUS.RUNNING_KMEANS ? "Running" : "Run"}
+                        {status === STATUS.RUNNING_MODEL ? "Running" : "Run"}
                     </Text>
                 </Box>
                 <Box
@@ -109,7 +112,7 @@ const ModelActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         name="model"
                         onChange={(e) =>
                             handleConfigChange("model", e.target.value)
@@ -139,7 +142,7 @@ const ModelActions = () => {
                         style={{ flex: 1 }}
                     >
                         <Select
-                            disabled={status === STATUS.RUNNING_KMEANS}
+                            disabled={status === STATUS.RUNNING_MODEL}
                             onChange={(e) =>
                                 handleConfigChange(
                                     "num_clusters",

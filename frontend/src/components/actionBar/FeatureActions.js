@@ -62,7 +62,7 @@ const FeatureActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         name="model"
                         onChange={(e) =>
                             handleConfigChange("model", e.target.value)
@@ -92,7 +92,7 @@ const FeatureActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         name="max_email_length"
                         onChange={(e) =>
                             handleConfigChange(
@@ -127,7 +127,7 @@ const FeatureActions = () => {
                     width={100}
                 >
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={featureConfig.include_dates}
                         icon={ICON.DATE}
                         label="Dates"
@@ -139,7 +139,7 @@ const FeatureActions = () => {
                         }
                     />
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={featureConfig.include_subjects}
                         icon={ICON.SUBJECT}
                         label="Subjects"
@@ -151,7 +151,7 @@ const FeatureActions = () => {
                         }
                     />
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={
                             featureConfig.include_bodies ||
                             featureConfig.model ===
@@ -176,7 +176,7 @@ const FeatureActions = () => {
                     width={100}
                 >
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={featureConfig.include_recipients}
                         icon={ICON.CAPITALS}
                         label="Recipients"
@@ -188,7 +188,7 @@ const FeatureActions = () => {
                         }
                     />
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={featureConfig.include_senders}
                         icon={ICON.SENDER}
                         label="Senders"
@@ -200,7 +200,7 @@ const FeatureActions = () => {
                         }
                     />
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={featureConfig.include_labels}
                         icon={ICON.LABEL}
                         label="Labels"
@@ -214,7 +214,7 @@ const FeatureActions = () => {
                 </Box>
                 <Box height="100%" justifyContent="flex-start" width={100}>
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={featureConfig.include_thread_ids}
                         icon={ICON.THREAD_ID}
                         label="Thread IDs"
@@ -226,7 +226,7 @@ const FeatureActions = () => {
                         }
                     />
                     <SettingSwitch
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         enabled={featureConfig.include_capitals}
                         icon={ICON.CAPITALS}
                         label="Capitals"

@@ -94,10 +94,8 @@ def run_model_route():
         emails = get_value_from_redis(REDIS_KEYS.EMAILS)
         if not emails:
             return jsonify({'error', 'No emails found.'}), 404
-        
         emails_df = pd.read_json(StringIO(emails))
-
-        df, clusters, silhouette_score, centroids_data, elbow_data, keyword_counts = run_model_main(
+        model_response = run_model_main(
             emails_df, 
             categories, 
             feature_config,
@@ -105,39 +103,17 @@ def run_model_route():
             naming_config,
             stopwords
         )
-
-        try:
-            email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
-            email_clusters['id'] = email_clusters.index
-            email_clusters = email_clusters[['id', 'body', 'cluster_id']].to_dict(orient='records')
-        except Exception as e:
-            print(f"Error getting email clusters: {e}")
-
-        try:
-            clusters_data = []
-            for cluster_id in df['cluster_id'].unique():
-                cluster_points = df[df['cluster_id'] == cluster_id]
-                clusters_data.append({
-                    'cluster_id': int(cluster_id),
-                    'x': cluster_points['x'].tolist(),
-                    'y': cluster_points['y'].tolist()
-                })
-        except Exception as e:
-            print(f"Error getting cluster data: {e}")
-
-        response = {
+        return jsonify({
             "status": "success",
             "message": "Ran K-means model.",
-            "clusters": clusters,
-            "email_clusters": email_clusters,
-            "centroids_data": centroids_data,
-            "clusters_data": clusters_data,
-            "elbow_data": elbow_data,
-            "keyword_counts": keyword_counts,
-            "silhouette_score": silhouette_score
-        }
-        
-        return jsonify(response), 200
+            "clusters": model_response.get('clusters'),
+            "email_clusters": model_response.get('email_clusters'),
+            "silhouette_score": model_response.get('silhouette_score'),
+            "centroids_data": model_response.get('centroids_data'),
+            "keyword_counts": model_response.get('keyword_counts'),
+            "clusters_data": model_response.get('clusters_data'),
+            "elbow_data": model_response.get('elbow_data'),
+        }), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
     

@@ -7,7 +7,7 @@ import { useApi, useAppContext } from "../../hooks";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
-import { LS } from "../../res";
+import { LS, STATUS } from "../../res";
 
 const OtherActions = () => {
     const { clearEmailsFromRedis } = useApi();
@@ -34,7 +34,7 @@ const OtherActions = () => {
         }
     };
 
-    const disabled = status || loading;
+    const disabled = status === STATUS.RUNNING_MODEL || loading;
 
     return (
         <>

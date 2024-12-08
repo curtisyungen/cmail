@@ -10,7 +10,7 @@ import { SortUtils } from "../../../utils";
 
 const SORT = {
     CLUSTERS: "Clusters",
-    DATE: "Date",
+    DATE: "Newest first",
     EMAILS: "Num. emails",
     MODEL: "Model",
     SCORE: "Score",
@@ -78,12 +78,14 @@ const HistoryView = () => {
 
     const sortHistory = (history, sortType) => {
         let sortKey;
+        let reverse = false;
         switch (sortType) {
             case SORT.CLUSTERS:
                 sortKey = "numClusters";
                 break;
             case SORT.DATE:
                 sortKey = "index";
+                reverse = true;
                 break;
             case SORT.EMAILS:
                 sortKey = "numEmails";
@@ -93,6 +95,7 @@ const HistoryView = () => {
                 break;
             case SORT.SCORE:
                 sortKey = "score";
+                reverse = true;
                 break;
             default:
                 sortKey = "index";
@@ -101,7 +104,7 @@ const HistoryView = () => {
             SortUtils.sortData({
                 data: history,
                 key: sortKey,
-                reverse: sortType === SORT.SCORE,
+                reverse,
             })
         );
     };

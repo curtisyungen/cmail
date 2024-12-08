@@ -141,7 +141,7 @@ const useApi = () => {
             }
         }
 
-        setStatus(STATUS.RUNNING_KMEANS);
+        setStatus(STATUS.RUNNING_MODEL);
         setModelResult({});
         setSelectedTopic(ALL_TOPICS);
         setTopics([]);

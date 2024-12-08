@@ -26,7 +26,7 @@ const NamingActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status === STATUS.RUNNING_KMEANS}
+                        disabled={status === STATUS.RUNNING_MODEL}
                         name="model"
                         onChange={(e) =>
                             handleConfigChange("model", e.target.value)
@@ -58,7 +58,7 @@ const NamingActions = () => {
                             style={{ flex: 1 }}
                         >
                             <Select
-                                disabled={status === STATUS.RUNNING_KMEANS}
+                                disabled={status === STATUS.RUNNING_MODEL}
                                 name="no_below"
                                 onChange={(e) =>
                                     handleConfigChange(
@@ -91,7 +91,7 @@ const NamingActions = () => {
                             style={{ flex: 1 }}
                         >
                             <Select
-                                disabled={status === STATUS.RUNNING_KMEANS}
+                                disabled={status === STATUS.RUNNING_MODEL}
                                 name="no_above"
                                 onChange={(e) =>
                                     handleConfigChange(

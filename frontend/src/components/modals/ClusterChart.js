@@ -21,6 +21,8 @@ const ClusterChart = ({ onClose, open }) => {
             return;
         }
 
+        console.log("clusters_data: ", clusters_data);
+
         const centroidTrace = {
             x: centroids_data.map((centroid) => centroid.x),
             y: centroids_data.map((centroid) => centroid.y),
@@ -59,6 +61,11 @@ const ClusterChart = ({ onClose, open }) => {
                             (idx * 100) % 255
                         })`,
                     },
+                    text: cluster.email_data.map(
+                        ({ date, sender, subject }) =>
+                            `Sender: ${sender}<br>Subject: ${subject}<br>Date: ${date}`
+                    ),
+                    hoverInfo: "text",
                 },
                 {
                     x: [...hullX, hullX[0]],

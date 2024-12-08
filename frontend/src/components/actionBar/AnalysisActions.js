@@ -6,6 +6,7 @@ import { useAppContext } from "../../hooks";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { Utils } from "../../utils";
+import { STATUS } from "../../res";
 
 const MODAL = {
     CLUSTER: "CLUSTER",
@@ -59,7 +60,10 @@ const AnalysisActions = () => {
     const [activeModal, setActiveModal] = useState(null);
     const [scoreColor, setScoreColor] = useState(COLORS.GRAY_MEDIUM);
 
-    const disabled = status || !clusters_data || clusters_data.length === 0;
+    const disabled =
+        status === STATUS.RUNNING_MODEL ||
+        !clusters_data ||
+        clusters_data.length === 0;
 
     useEffect(() => {
         setScoreColor(disabled ? COLORS.GRAY_MEDIUM : Utils.getScoreColor(ss));
