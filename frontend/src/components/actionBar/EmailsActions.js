@@ -73,6 +73,8 @@ const EmailsActions = () => {
                         value={numEmails}
                         width={DIMENS.SELECT_WIDTH}
                     >
+                        <option value={10}>10</option>
+                        <option value={50}>50</option>
                         {Array.from(
                             { length: 20 },
                             (_, index) => (index + 1) * 100

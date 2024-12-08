@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import CategoryActions from "./CategoryActions";
 import StopwordActions from "./StopwordActions";
 import { Icon } from "../common";
 import { useApi, useAppContext } from "../../hooks";
@@ -39,7 +38,6 @@ const OtherActions = () => {
     return (
         <>
             <Flex>
-                <CategoryActions />
                 <StopwordActions />
                 <Box
                     alignItems="center"

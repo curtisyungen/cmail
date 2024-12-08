@@ -100,7 +100,7 @@ def clean_and_tokenize(text, stopwords):
     words = text.lower().split()
     return [word for word in words if word.isalpha() and word not in stopwords]
 
-def count_keywords(df, stopwords):
+def count_top_keywords(df, stopwords, top_n):
     try:
         print("Counting keywords...")
         cluster_keywords = {}
@@ -110,7 +110,7 @@ def count_keywords(df, stopwords):
             for email in emails:
                 all_words.extend(clean_and_tokenize(email, stopwords))
             word_counts = Counter(all_words)
-            top_keywords = word_counts.most_common(10)
+            top_keywords = word_counts.most_common(top_n)
             cluster_keywords[int(cluster)] = [(word, int(count)) for word, count in top_keywords]
         print("Keyword counting complete.")
         return cluster_keywords

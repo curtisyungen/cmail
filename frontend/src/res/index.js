@@ -41,6 +41,7 @@ export const DEFAULT_NAMING_CONFIG = Object.freeze({
     model: MODEL.TOPIC_NAMING.LDA,
     no_below: 1,
     no_above: 1,
+    num_keywords: 10,
     num_topics: 1,
     use_categories: false,
 });

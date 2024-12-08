@@ -4,7 +4,7 @@ from .kmeans import run_kmeans
 from ..features.feature_extraction import extract_features, process_features
 from ..features.pca import run_pca
 from ..labels.label_generator import label_clusters
-from ...utils.preprocess import clean_and_lemmatize, count_keywords, extract_keywords, get_stopwords
+from ...utils.preprocess import clean_and_lemmatize, count_top_keywords, extract_keywords, get_stopwords
 from ...utils.silhouette_score import calculate_silhouette_score, find_max_silhouette_score
 
 def init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals):
@@ -77,7 +77,7 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
 
     # Keyword extraction
     cluster_keywords = extract_keywords(df, stopwords)
-    cluster_keyword_counts = count_keywords(df, stopwords)
+    cluster_keyword_counts = count_top_keywords(df, stopwords, top_n=naming_config.get('num_keywords', 10))
 
     # Labeling
     clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, cluster_keyword_counts, categories, naming_config)
