@@ -127,7 +127,7 @@ const AnalysisActions = () => {
                             color={scoreColor}
                             fontSize={FONT_SIZE.XXL}
                         >
-                            {isNaN(ss) ? "N/A" : Math.round(ss * 100) / 100}
+                            {isNaN(ss) ? "N/A" : ss.toFixed(2)}
                         </Text>
                     </Box>
                     <Text center disabled={disabled} fontSize={FONT_SIZE.S}>

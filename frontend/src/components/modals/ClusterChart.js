@@ -62,8 +62,8 @@ const ClusterChart = ({ onClose, open }) => {
                         })`,
                     },
                     text: cluster.email_data.map(
-                        ({ date, sender, subject }) =>
-                            `Sender: ${sender}<br>Subject: ${subject}<br>Date: ${date}`
+                        ({ from, raw_subject }) =>
+                            `From: ${from}<br>Subject: ${raw_subject}`
                     ),
                     hoverInfo: "text",
                 },
