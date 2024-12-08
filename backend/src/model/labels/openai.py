@@ -18,7 +18,8 @@ def generate_label_with_open_ai(cluster, keywords, categories):
             prompt += (
                 f"\n\nIf the following categories are provided: {', '.join(categories)}, "
                 "try to match the cluster to one of them. If none of the categories fit well, "
-                "create a new, meaningful label."
+                "create a new, meaningful label. If a cluster does match one of the categories, "
+                "return that category name verbatim."
             )
         prompt += f"\n\nKeywords: {', '.join(keywords)}"
         completion = client.chat.completions.create(

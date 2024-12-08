@@ -5,7 +5,15 @@ import { CategoryModal } from "../modals";
 import { useAppActions, useAppContext } from "../../hooks";
 import { LS, STATUS } from "../../res";
 import { ICON } from "../../res/icons";
-import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
+import {
+    Box,
+    COLORS,
+    DIMENS,
+    Flex,
+    FONT_SIZE,
+    OPACITY,
+    Text,
+} from "../../styles";
 import { SortUtils, StorageUtils } from "../../utils";
 
 const CategoryActions = () => {
@@ -67,20 +75,25 @@ const CategoryActions = () => {
                         size={24}
                         style={{
                             marginBottom: "5px",
+                            opacity: namingConfig.use_categories
+                                ? OPACITY.NORMAL
+                                : OPACITY.LIGHT,
                         }}
                     />
                     {!namingConfig.use_categories ? (
                         <Box
+                            center
                             clickable={status !== STATUS.RUNNING_MODEL}
                             style={{
-                                left: 7,
+                                left: 24,
                                 position: "absolute",
+                                top: 16,
                             }}
                         >
                             <Icon
                                 color={COLORS.RED}
                                 name={ICON.BAN}
-                                size={14}
+                                size={12}
                             />
                         </Box>
                     ) : (
