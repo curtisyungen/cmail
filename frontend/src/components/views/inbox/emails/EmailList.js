@@ -33,11 +33,12 @@ const EmailList = () => {
             setFilteredEmails(emails);
             return;
         }
+        const searchTermLower = searchTerm.toLowerCase();
         const filteredEmails = emails.filter(
             ({ body, from, subject }) =>
-                body.includes(searchTerm) ||
-                from.includes(searchTerm) ||
-                subject.includes(searchTerm)
+                body.toLowerCase().includes(searchTermLower) ||
+                from.toLowerCase().includes(searchTermLower) ||
+                subject.toLowerCase().includes(searchTermLower)
         );
         setFilteredEmails(filteredEmails);
     };
