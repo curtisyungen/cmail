@@ -48,15 +48,15 @@ def generate_label(keywords, categories):
         print(f"Error generating label: {e}")
         return "Unknown", False
 
-def label_clusters(cluster_column, cluster_keywords, cluster_keyword_counts, categories, naming_config):
+def label_clusters(cluster_column, cluster_keywords, cluster_top_keywords, categories, naming_config):
     try:
         topic_naming_model = naming_config.get('model')
         print(f"Labeling clusters using {topic_naming_model}, {len(categories)} categories, and config {naming_config}...")
 
         clusters_with_labels = []
         for cluster in cluster_column.unique():
-            keywords = cluster_keywords[int(cluster)]
-            top_keywords = [{'word': word } for word, _ in cluster_keyword_counts[int(cluster)]]
+            keywords = cluster_keywords[int(cluster)] # All keywords for cluster
+            top_keywords = [{'word': word } for word, _ in cluster_top_keywords[int(cluster)]]
 
             if topic_naming_model == "LDA":
                 no_above = naming_config.get('no_above')

@@ -29,7 +29,7 @@ const EmailList = () => {
     }, [searchTerm]);
 
     const filterEmails = () => {
-        if (!searchTerm) {
+        if (!searchTerm || searchTerm.trim().length === 0) {
             setFilteredEmails(emails);
             return;
         }

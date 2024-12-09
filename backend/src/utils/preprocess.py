@@ -110,7 +110,7 @@ def count_top_keywords(df, stopwords, top_n):
             for email in emails:
                 all_words.extend(clean_and_tokenize(email, stopwords))
             word_counts = Counter(all_words)
-            top_keywords = word_counts.most_common(top_n)
+            top_keywords = word_counts.most_common(int(top_n))
             cluster_keywords[int(cluster)] = [(word, int(count)) for word, count in top_keywords]
         print("Keyword counting complete.")
         return cluster_keywords

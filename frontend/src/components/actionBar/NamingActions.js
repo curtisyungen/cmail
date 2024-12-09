@@ -25,36 +25,6 @@ const NamingActions = () => {
                 <CategoryActions />
                 <Box
                     height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
-                    margin={{ right: 5 }}
-                    style={{ flex: 1 }}
-                >
-                    <Select
-                        disabled={status === STATUS.RUNNING_MODEL}
-                        name="num_keywords"
-                        onChange={(e) =>
-                            handleConfigChange("num_keywords", e.target.value)
-                        }
-                        style={{
-                            marginBottom: "5px",
-                        }}
-                        value={namingConfig.num_keywords}
-                        width={DIMENS.SELECT_WIDTH}
-                    >
-                        {Array.from(
-                            { length: 5 },
-                            (_, index) => (index + 1) * 10
-                        ).map((num) => (
-                            <option key={num} value={num}>
-                                {num}
-                            </option>
-                        ))}
-                    </Select>
-                    <Text center fontSize={FONT_SIZE.S}>
-                        No. Keywords
-                    </Text>
-                </Box>
-                <Box
-                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                     style={{ flex: 1 }}
                 >
                     <Select
@@ -151,6 +121,43 @@ const NamingActions = () => {
                             </Text>
                         </Box>
                     </>
+                ) : (
+                    <></>
+                )}
+                {namingConfig.model === MODEL.TOPIC_NAMING.OPEN_AI ? (
+                    <Box
+                        height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                        margin={{ left: 5 }}
+                        style={{ flex: 1 }}
+                    >
+                        <Select
+                            disabled={status === STATUS.RUNNING_MODEL}
+                            name="num_keywords"
+                            onChange={(e) =>
+                                handleConfigChange(
+                                    "num_keywords",
+                                    e.target.value
+                                )
+                            }
+                            style={{
+                                marginBottom: "5px",
+                            }}
+                            value={namingConfig.num_keywords}
+                            width={DIMENS.SELECT_WIDTH}
+                        >
+                            {Array.from(
+                                { length: 5 },
+                                (_, index) => (index + 1) * 10
+                            ).map((num) => (
+                                <option key={num} value={num}>
+                                    {num}
+                                </option>
+                            ))}
+                        </Select>
+                        <Text center fontSize={FONT_SIZE.S}>
+                            No. Keywords
+                        </Text>
+                    </Box>
                 ) : (
                     <></>
                 )}

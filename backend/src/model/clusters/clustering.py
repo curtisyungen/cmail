@@ -77,10 +77,10 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
 
     # Keyword extraction
     cluster_keywords = extract_keywords(df, stopwords)
-    cluster_keyword_counts = count_top_keywords(df, stopwords, top_n=naming_config.get('num_keywords', 10))
+    cluster_top_keywords = count_top_keywords(df, stopwords, top_n=naming_config.get('num_keywords', 10))
 
     # Labeling
-    clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, cluster_keyword_counts, categories, naming_config)
+    clusters_with_labels = label_clusters(df['cluster_id'], cluster_keywords, cluster_top_keywords, categories, naming_config)
 
     print("Model execution complete.")
-    return df, clusters_with_labels, score, centroids_data, elbow_data, cluster_keyword_counts
+    return df, clusters_with_labels, score, centroids_data, elbow_data, cluster_top_keywords

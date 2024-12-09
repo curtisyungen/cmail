@@ -152,7 +152,7 @@ const ModelActions = () => {
                             style={{
                                 marginBottom: "5px",
                             }}
-                            value={modelConfig.num_clusters}
+                            value={modelConfig.num_clusters || ""}
                             width={DIMENS.SELECT_WIDTH}
                         >
                             <option value={null}>Optimal</option>
