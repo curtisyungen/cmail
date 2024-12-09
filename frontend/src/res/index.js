@@ -63,6 +63,32 @@ export const DEFAULT_FEATURE_CONFIG = Object.freeze({
 
 export const DEFAULT_NUM_EMAILS = 500;
 
+export const DEFAULT_STOPWORDS = [
+    "app",
+    "application",
+    "contact",
+    "dear",
+    "email",
+    "fee",
+    "gmail",
+    "great",
+    "hello",
+    "hi",
+    "francisco",
+    "jose",
+    "llc",
+    "new",
+    "number",
+    "payee",
+    "regards",
+    "san",
+    "sincerely",
+    "store",
+    "total",
+    "usd",
+    "warmly",
+];
+
 export const LS = {
     CATEGORIES: "categories",
     CLUSTERS: "clusters",

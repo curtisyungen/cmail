@@ -5,7 +5,7 @@ import backgroundImage from "../assets/backgroundImage.jpg";
 import { ActionBar, Navbar, Sidebar, TitleBar } from "../components";
 import { HistoryView, InboxView } from "../components/views";
 import { useApi, useAppActions, useAppContext } from "../hooks";
-import { DEFAULT_CATEGORIES, LS, PAGES, VIEW } from "../res";
+import { DEFAULT_CATEGORIES, DEFAULT_STOPWORDS, LS, PAGES, VIEW } from "../res";
 import { Box, COLORS, DIMENS, Flex } from "../styles";
 import { StorageUtils } from "../utils";
 
@@ -14,7 +14,13 @@ const Home = () => {
 
     const { fetchEmails, getEmailAddress } = useApi();
     const { activeView, authenticated, emails, status } = useAppContext();
-    const { setCategories, setStopwords } = useAppActions();
+    const {
+        setCategories,
+        setModelResult,
+        setStopwords,
+        setTopics,
+        setTopicsMap,
+    } = useAppActions();
 
     useEffect(() => {
         if (!authenticated) {
@@ -32,13 +38,21 @@ const Home = () => {
     }, [authenticated]);
 
     useEffect(() => {
-        const savedCategories =
-            StorageUtils.getItem(LS.CATEGORIES) || DEFAULT_CATEGORIES;
-        setCategories(savedCategories);
-
-        const savedStopwords = StorageUtils.getItem(LS.STOPWORDS) || [];
-        setStopwords(savedStopwords);
+        loadStoredData();
     }, []);
+
+    const loadStoredData = () => {
+        const savedCategories = StorageUtils.getItem(LS.CATEGORIES);
+        const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
+        const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
+        const savedModelResult = StorageUtils.getItem(LS.MODEL_RESULT);
+        const savedStopwords = StorageUtils.getItem(LS.STOPWORDS);
+        setCategories(savedCategories || DEFAULT_CATEGORIES);
+        setModelResult(savedModelResult || {});
+        setStopwords(savedStopwords || DEFAULT_STOPWORDS);
+        setTopics(savedClusters || []);
+        setTopicsMap(savedEmailClusters || {});
+    };
 
     if (!authenticated) {
         return null;

@@ -9,6 +9,7 @@ import {
     DEFAULT_NUM_EMAILS,
     TABS,
     VIEW,
+    DEFAULT_STOPWORDS,
 } from "./res";
 
 export const AppContext = createContext();
@@ -31,7 +32,7 @@ const initialState = {
     selectedTopic: ALL_TOPICS,
     showNavigationPane: true,
     status: null,
-    stopwords: [],
+    stopwords: DEFAULT_STOPWORDS,
     tab: TABS.MODEL,
     topics: [],
     topicsMap: {},

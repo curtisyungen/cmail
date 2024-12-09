@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Icon } from "../common";
 import { useApi, useAppActions, useAppContext } from "../../hooks";
-import { MODEL, LS, STATUS } from "../../res";
+import { MODEL, STATUS } from "../../res";
 import { ICON } from "../../res/icons";
 import {
     Box,
@@ -13,29 +13,18 @@ import {
     Select,
     Text,
 } from "../../styles";
-import { StorageUtils } from "../../utils";
 
 const MAX_CLUSTERS = 30;
 
 const ModelActions = () => {
     const { runModel } = useApi();
     const { emails, featureConfig, modelConfig, status } = useAppContext();
-    const { setModelConfig, setModelResult, setTopics, setTopicsMap } =
-        useAppActions();
+    const { setModelConfig } = useAppActions();
 
     const [featureConfigEmpty, setFeatureConfigEmpty] = useState(false);
 
     const runModelDisabled =
         status || emails.length === 0 || featureConfigEmpty;
-
-    useEffect(() => {
-        const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
-        const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
-        const savedModelResult = StorageUtils.getItem(LS.MODEL_RESULT);
-        setModelResult(savedModelResult || {});
-        setTopics(savedClusters || []);
-        setTopicsMap(savedEmailClusters || {});
-    }, []);
 
     useEffect(() => {
         setFeatureConfigEmpty(getIsFeatureConfigEmpty());
