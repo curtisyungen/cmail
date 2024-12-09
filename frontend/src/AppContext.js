@@ -26,6 +26,7 @@ const initialState = {
     modelResult: {},
     namingConfig: DEFAULT_NAMING_CONFIG,
     numEmails: DEFAULT_NUM_EMAILS,
+    searchTerm: "",
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
     showNavigationPane: true,
@@ -49,6 +50,7 @@ export const ACTIONS = {
     SET_MODEL_RESULT: "set_model_result",
     SET_NAMING_CONFIG: "set_naming_config",
     SET_NUM_EMAILS: "set_num_emails",
+    SET_SEARCH_TERM: "set_search_term",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
     SET_SHOW_NAVIGATION_PANE: "set_show_navigation_pane",
@@ -87,6 +89,8 @@ export const appReducer = (state, action) => {
             return { ...state, modelResult: action.payload };
         case ACTIONS.SET_NUM_EMAILS:
             return { ...state, numEmails: action.payload };
+        case ACTIONS.SET_SEARCH_TERM:
+            return { ...state, searchTerm: action.payload };
         case ACTIONS.SET_SELECTED_EMAIL:
             return { ...state, selectedEmail: action.payload };
         case ACTIONS.SET_SELECTED_TOPIC:

@@ -52,6 +52,10 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_NUM_EMAILS, payload: numEmails });
     };
 
+    const setSearchTerm = (searchTerm) => {
+        dispatch({ type: ACTIONS.SET_SEARCH_TERM, payload: searchTerm });
+    };
+
     const setSelectedEmail = (email) => {
         dispatch({ type: ACTIONS.SET_SELECTED_EMAIL, payload: email });
     };
@@ -100,6 +104,7 @@ const useAppActions = () => {
         setModelResult,
         setNamingConfig,
         setNumEmails,
+        setSearchTerm,
         setSelectedEmail,
         setSelectedTopic,
         setShowNavigationPane,

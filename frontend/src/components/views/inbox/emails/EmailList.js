@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Email from "./Email";
 import Header from "./Header";
@@ -7,12 +7,39 @@ import { STATUS } from "../../../../res";
 import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../../../styles";
 
 const EmailList = () => {
-    const { emails, selectedEmail, selectedTopic, status, topics, topicsMap } =
-        useAppContext();
+    const {
+        emails,
+        searchTerm,
+        selectedEmail,
+        selectedTopic,
+        status,
+        topics,
+        topicsMap,
+    } = useAppContext();
     const { setSelectedEmail } = useAppActions();
+
+    const [filteredEmails, setFilteredEmails] = useState([]);
 
     const handleEmailClick = (email) => {
         setSelectedEmail(selectedEmail?.id === email.id ? null : email);
+    };
+
+    useEffect(() => {
+        filterEmails();
+    }, [searchTerm]);
+
+    const filterEmails = () => {
+        if (!searchTerm) {
+            setFilteredEmails(emails);
+            return;
+        }
+        const filteredEmails = emails.filter(
+            ({ body, from, subject }) =>
+                body.includes(searchTerm) ||
+                from.includes(searchTerm) ||
+                subject.includes(searchTerm)
+        );
+        setFilteredEmails(filteredEmails);
     };
 
     return (
@@ -40,7 +67,7 @@ const EmailList = () => {
             ) : (
                 <>
                     <Header selectedTopic={selectedTopic} topics={topics} />
-                    {emails?.map((email, idx) => (
+                    {filteredEmails?.map((email, idx) => (
                         <Email
                             key={idx}
                             email={email}
