@@ -3,7 +3,7 @@ import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
 import backgroundImage from "../assets/backgroundImage.jpg";
-import logo from "../assets/logo2.png";
+import logo from "../assets/logo.png";
 import { Icon } from "../components/common";
 import { useApi, useAppContext, useAuthentication } from "../hooks";
 import { APP_NAME, PAGES, STATUS } from "../res";
@@ -98,10 +98,7 @@ const LoginButton = () => {
                     <Box>
                         <Box margin={{ bottom: 20 }}>
                             <Flex>
-                                <Box
-                                    margin={{ right: 5 }}
-                                    width={23}
-                                >
+                                <Box margin={{ right: 5 }} width={23}>
                                     <img src={logo} alt="Logo" />
                                 </Box>
                                 <Text
