@@ -26,7 +26,7 @@ const EmailList = () => {
 
     useEffect(() => {
         filterEmails();
-    }, [searchTerm]);
+    }, [emails, searchTerm]);
 
     const filterEmails = () => {
         if (!searchTerm || searchTerm.trim().length === 0) {

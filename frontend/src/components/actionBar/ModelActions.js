@@ -32,7 +32,7 @@ const ModelActions = () => {
         const savedClusters = StorageUtils.getItem(LS.CLUSTERS);
         const savedEmailClusters = StorageUtils.getItem(LS.EMAIL_CLUSTERS);
         const savedModelResult = StorageUtils.getItem(LS.MODEL_RESULT);
-        setModelResult(savedModelResult);
+        setModelResult(savedModelResult || {});
         setTopics(savedClusters || []);
         setTopicsMap(savedEmailClusters || {});
     }, []);
