@@ -40,13 +40,19 @@ def fetch_emails(creds, limit):
             msg = service.users().messages().get(userId='me', id=message['id']).execute()
             payload = msg.get('payload', {})
             headers = {header['name']: header['value'] for header in payload.get('headers', [])}
+
+            # Sometimes Drafts have no To field on them
+            to = headers.get('To')
+            if to:
+                continue
+
             email_data = {
                 'id': msg['id'],
                 'threadId': msg['threadId'],
                 'labelIds': msg.get('labelIds', []),
                 'subject': headers.get('Subject', ''),
                 'from': headers.get('From', ''),
-                'to': headers.get('To', ''),
+                'to': to,
                 'date': headers.get('Date', ''),
                 'body': ''
             }
