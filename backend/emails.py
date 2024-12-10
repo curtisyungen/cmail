@@ -7,7 +7,7 @@ from config import REDIS_KEYS
 from src.utils.preprocess import clean_text
 
 MAX_EMAILS = 500
-QUERY = 'label:inbox OR -label:spam -label:sent -label:archive -label:trash'
+QUERY = 'label:inbox OR -label:spam -label:sent -label:archive -label:trash -in:drafts'
 
 def fetch_emails(creds, limit):
     print(f"Fetching {limit} emails from API...")
@@ -39,18 +39,13 @@ def fetch_emails(creds, limit):
             payload = msg.get('payload', {})
             headers = {header['name']: header['value'] for header in payload.get('headers', [])}
 
-            # Sometimes Drafts have no To field on them
-            to = headers.get('To')
-            if not to:
-                continue
-
             email_data = {
                 'id': msg['id'],
                 'threadId': msg['threadId'],
                 'labelIds': msg.get('labelIds', []),
                 'subject': headers.get('Subject', ''),
                 'from': headers.get('From', ''),
-                'to': to,
+                'to': headers.get('To', ''),
                 'date': headers.get('Date', ''),
                 'body': ''
             }

@@ -141,7 +141,7 @@ const useApi = () => {
                 namingConfig,
                 stopwords,
             });
-            console.log("response: ", res.data);
+            console.log("runModel response: ", res.data);
 
             const { email_clusters } = res.data;
             const clusters = handleEmptyClusters(res.data.clusters);
