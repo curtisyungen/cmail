@@ -25,6 +25,7 @@ const EmailList = () => {
     };
 
     useEffect(() => {
+        console.log("emails: ", emails);
         filterEmails();
     }, [emails, searchTerm]);
 

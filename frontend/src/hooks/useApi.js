@@ -73,6 +73,7 @@ const useApi = () => {
             const response = await axios.get("/api/fetch-emails", {
                 params: { limit: numEmails },
             });
+            console.log("fetchEmails response: ", response);
             if (response.status === 200) {
                 setEmails(Utils.parseJSON(response.data)?.emails || []);
             } else {
@@ -80,21 +81,6 @@ const useApi = () => {
             }
         } catch (e) {
             console.error("Error fetching emails: ", e);
-        } finally {
-            setStatus(null);
-        }
-    };
-
-    const fetchLabels = async () => {
-        if (status) {
-            return;
-        }
-        setStatus(STATUS.FETCHING_LABELS);
-        try {
-            const response = await axios.get("/api/fetch-labels");
-            console.log("fetch-labels response: ", response);
-        } catch (e) {
-            console.error("Error fetching labels: ", e);
         } finally {
             setStatus(null);
         }
@@ -190,7 +176,6 @@ const useApi = () => {
         clearEmailsFromRedis,
         clearRedis,
         fetchEmails,
-        fetchLabels,
         getEmailAddress,
         runModel,
     };

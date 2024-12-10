@@ -1,7 +1,5 @@
 import pandas as pd
-import requests
 from googleapiclient.discovery import build
-from google.auth.transport.requests import Request
 from io import StringIO
 from redis_cache import get_value_from_redis, store_value_in_redis
 from utils import decode_base64url
@@ -12,7 +10,7 @@ MAX_EMAILS = 500
 QUERY = 'label:inbox OR -label:spam -label:sent -label:archive -label:trash'
 
 def fetch_emails(creds, limit):
-    print(f"Fetching emails from API...")
+    print(f"Fetching {limit} emails from API...")
     
     service = build('gmail', 'v1', credentials=creds)
     next_page_token = None
@@ -43,7 +41,7 @@ def fetch_emails(creds, limit):
 
             # Sometimes Drafts have no To field on them
             to = headers.get('To')
-            if to:
+            if not to:
                 continue
 
             email_data = {
@@ -116,13 +114,3 @@ def get_email_address(creds):
     except Exception as e:
         print(f"Error getting email address: {e}")
         return None
-    
-def fetch_labels(creds):
-    try:
-        service = build('gmail', 'v1', credentials=creds)
-        results = service.users().labels().list(userId='me').execute()
-        labels = results.get('labels', [])
-        return labels
-    except Exception as e:
-        print(f"Error fetching labels: {e}")
-        return []
