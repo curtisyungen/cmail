@@ -24,7 +24,7 @@ const ModelActions = () => {
     const [featureConfigEmpty, setFeatureConfigEmpty] = useState(false);
 
     const runModelDisabled =
-        status || emails.length === 0 || featureConfigEmpty;
+        status || emails?.length === 0 || featureConfigEmpty;
 
     useEffect(() => {
         setFeatureConfigEmpty(getIsFeatureConfigEmpty());

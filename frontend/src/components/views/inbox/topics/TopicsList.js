@@ -20,7 +20,7 @@ const TopicsList = () => {
     useEffect(() => {
         setTopicTotals({
             ...topicTotals,
-            [ALL_TOPICS]: emails.length,
+            [ALL_TOPICS]: emails?.length,
         });
     }, [emails]);
 

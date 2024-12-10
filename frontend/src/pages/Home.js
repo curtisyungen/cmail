@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import backgroundImage from "../assets/backgroundImage.jpg";
-import { ActionBar, Navbar, Sidebar, TitleBar } from "../components";
+import { ActionBar, Loading, Navbar, Sidebar, TitleBar } from "../components";
 import { HistoryView, InboxView } from "../components/views";
 import { useApi, useAppActions, useAppContext } from "../hooks";
 import { DEFAULT_CATEGORIES, DEFAULT_STOPWORDS, LS, PAGES, VIEW } from "../res";
@@ -22,6 +22,8 @@ const Home = () => {
         setTopicsMap,
     } = useAppActions();
 
+    const [showLoading, setShowLoading] = useState(true);
+
     useEffect(() => {
         if (!authenticated) {
             navigate(PAGES.LOGIN);
@@ -29,7 +31,7 @@ const Home = () => {
     }, [authenticated]);
 
     useEffect(() => {
-        if (authenticated && emails.length === 0 && !status) {
+        if (authenticated && emails?.length === 0 && !status) {
             fetchEmails();
             getEmailAddress();
         }
@@ -93,6 +95,11 @@ const Home = () => {
                     </Box>
                 </Box>
             </Flex>
+            {showLoading ? (
+                <Loading onComplete={() => setShowLoading(false)} />
+            ) : (
+                <></>
+            )}
         </Box>
     );
 };
