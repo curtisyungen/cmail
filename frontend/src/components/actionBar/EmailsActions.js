@@ -21,9 +21,20 @@ const EmailsActions = () => {
 
     useEffect(() => {
         if (emails?.length > 0 && emails?.length !== numEmails) {
-            setNumEmails(emails.length);
+            let roundedCount = emails.length;
+            switch (true) {
+                case roundedCount >= 100:
+                    roundedCount = Math.ceil(roundedCount / 100) * 100;
+                    break;
+                case roundedCount >= 50:
+                    roundedCount = Math.ceil(roundedCount / 50) * 50;
+                    break;
+                default:
+                    roundedCount = Math.ceil(roundedCount / 10) * 10;
+            }
+            setNumEmails(roundedCount);
         }
-    }, []);
+    }, [emails]);
 
     const handleFetchEmails = async () => {
         await clearEmailsFromRedis();
@@ -64,7 +75,6 @@ const EmailsActions = () => {
                 </Box>
                 <Box style={{ flex: 1 }}>
                     <Select
-                        defaultValue={numEmails}
                         disabled={false}
                         onChange={(e) => setNumEmails(parseInt(e.target.value))}
                         style={{
