@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="frontend/src/assets/logo.png" alt="Cmail App UI" width="150" />
+</div>
+
 # **Cmail**
 
 **Curtis Yungen**  
