@@ -27,7 +27,7 @@ const useApi = () => {
         setTopics,
         setTopicsMap,
     } = useAppActions();
-    const { updateHistory } = useHistory();
+    const { addToHistory } = useHistory();
 
     const authenticateUser = async (code) => {
         setStatus(STATUS.AUTHENTICATING);
@@ -168,7 +168,7 @@ const useApi = () => {
             StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
             StorageUtils.setItem(LS.MODEL_RESULT, res.data);
 
-            updateHistory({
+            addToHistory({
                 featureConfig,
                 modelConfig,
                 numClusters: clusters.length,

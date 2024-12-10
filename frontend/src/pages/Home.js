@@ -32,8 +32,6 @@ const Home = () => {
         if (authenticated && emails.length === 0 && !status) {
             fetchEmails();
             getEmailAddress();
-            StorageUtils.removeItem(LS.CLUSTERS);
-            StorageUtils.removeItem(LS.EMAIL_CLUSTERS);
         }
     }, [authenticated]);
 

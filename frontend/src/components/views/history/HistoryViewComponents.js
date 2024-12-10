@@ -32,6 +32,7 @@ export const Entry = ({
     numClustersInput,
     numClustersOutput,
     numEmails,
+    onDelete,
     score,
 }) => {
     return (
@@ -102,6 +103,15 @@ export const Entry = ({
                             color={Utils.getScoreColor(score)}
                             label={score}
                         />
+                        <Box
+                            center
+                            clickable
+                            onClick={onDelete}
+                            style={{ minWidth: "30px" }}
+                            width={30}
+                        >
+                            <Icon name={ICON.TRASH} size={14} />
+                        </Box>
                     </Flex>
                 </Box>
             </Flex>
@@ -150,6 +160,7 @@ export const Header = () => {
                     <Flex justifyContent="space-evenly">
                         <HeaderLabel label="Num. Clusters" />
                         <HeaderLabel label="Score" />
+                        <Box width={30} />
                     </Flex>
                 </Box>
             </Flex>

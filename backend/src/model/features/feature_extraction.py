@@ -196,7 +196,7 @@ def extract_features(df, feature_config):
         body_df = pd.DataFrame()
         if include_bodies:
             if feature_model == "Autoencoder":
-                body_df = encode_column(df['body'])
+                body_df = run_tfidf(df, 'body')
             elif feature_model == "BERT":
                 body_df = pd.DataFrame(df['body'])
             else:

@@ -80,25 +80,6 @@ const CategoryActions = () => {
                                 : OPACITY.LIGHT,
                         }}
                     />
-                    {!namingConfig.use_categories ? (
-                        <Box
-                            center
-                            clickable={status !== STATUS.RUNNING_MODEL}
-                            style={{
-                                left: 24,
-                                position: "absolute",
-                                top: 16,
-                            }}
-                        >
-                            <Icon
-                                color={COLORS.RED}
-                                name={ICON.BAN}
-                                size={12}
-                            />
-                        </Box>
-                    ) : (
-                        <></>
-                    )}
                     <Text
                         center
                         color={

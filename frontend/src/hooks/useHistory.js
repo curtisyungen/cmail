@@ -12,6 +12,12 @@ const useHistory = () => {
         loadHistory();
     }, []);
 
+    const addToHistory = (newEntry) => {
+        const updatedHistory = [...history, newEntry];
+        StorageUtils.setItem(LS.HISTORY, updatedHistory);
+        setHistory(updatedHistory);
+    };
+
     const clearHistory = () => {
         StorageUtils.removeItem(LS.HISTORY);
         setHistory([]);
@@ -22,17 +28,18 @@ const useHistory = () => {
         setHistory(history || []);
     };
 
-    const updateHistory = (newEntry) => {
-        const updatedHistory = [...history, newEntry];
+    const removeFromHistory = (index) => {
+        const updatedHistory = history.filter((_, idx) => index !== idx);
         StorageUtils.setItem(LS.HISTORY, updatedHistory);
         setHistory(updatedHistory);
     };
 
     return {
         history,
+        addToHistory,
         clearHistory,
         loadHistory,
-        updateHistory,
+        removeFromHistory,
     };
 };
 
