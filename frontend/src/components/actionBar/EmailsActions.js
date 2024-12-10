@@ -20,7 +20,7 @@ const EmailsActions = () => {
     const { setNumEmails } = useAppActions();
 
     useEffect(() => {
-        if (emails.length > 0 && emails.length !== numEmails) {
+        if (emails?.length > 0 && emails?.length !== numEmails) {
             setNumEmails(emails.length);
         }
     }, []);

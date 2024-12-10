@@ -3,7 +3,7 @@ import axios from "axios";
 import useAppActions from "./useAppActions";
 import useAppContext from "./useAppContext";
 import { ALL_TOPICS, LS, STATUS } from "../res";
-import { StorageUtils } from "../utils";
+import { StorageUtils, Utils } from "../utils";
 import useHistory from "./useHistory";
 
 const useApi = () => {
@@ -73,9 +73,8 @@ const useApi = () => {
             const response = await axios.get("/api/fetch-emails", {
                 params: { limit: numEmails },
             });
-            console.log("fetch_emails response: ", response);
             if (response.status === 200) {
-                setEmails(response.data.emails);
+                setEmails(Utils.parseJSON(response.data)?.emails || []);
             } else {
                 console.log(response.data.message || "Failed to fetch emails.");
             }

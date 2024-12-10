@@ -6,6 +6,7 @@ import { useAppActions, useAppContext } from "../hooks";
 import { APP_NAME } from "../res";
 import { Box, COLORS, FONT_SIZE, Text } from "../styles";
 
+const DELAY = 2000; // ms
 const LOGO_SIZE = "150px";
 
 const moveUp = keyframes`
@@ -31,7 +32,7 @@ const Loading = () => {
     const { setShowLoading } = useAppActions();
 
     const handleAnimationEnd = () => {
-        setTimeout(() => setShowLoading(false), 1000);
+        setTimeout(() => setShowLoading(false), DELAY);
     };
 
     if (!showLoading) {

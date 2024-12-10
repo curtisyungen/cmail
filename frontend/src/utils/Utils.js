@@ -15,6 +15,15 @@ class Utils {
                 return COLORS.GRAY_MEDIUM;
         }
     }
+
+    static parseJSON(string) {
+        try {
+            const parsed = JSON.parse(string);
+            return parsed;
+        } catch (e) {
+            return string;
+        }
+    }
 }
 
 export default Utils;
