@@ -28,8 +28,8 @@ const useHistory = () => {
         setHistory(history || []);
     };
 
-    const removeFromHistory = (index) => {
-        const updatedHistory = history.filter((_, idx) => index !== idx);
+    const removeFromHistory = (entry) => {
+        const updatedHistory = history.filter(({ id }) => id !== entry.id);
         StorageUtils.setItem(LS.HISTORY, updatedHistory);
         setHistory(updatedHistory);
     };

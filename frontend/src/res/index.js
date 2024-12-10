@@ -61,7 +61,7 @@ export const DEFAULT_FEATURE_CONFIG = Object.freeze({
     num_epochs: 50,
 });
 
-export const DEFAULT_NUM_EMAILS = 500;
+export const DEFAULT_NUM_EMAILS = 100;
 
 export const DEFAULT_STOPWORDS = [
     "app",

@@ -25,7 +25,7 @@ const SORT_ORDER = [
 ];
 
 const HistoryView = () => {
-    const { addToHistory, history, removeFromHistory } = useHistory();
+    const { history, removeFromHistory } = useHistory();
 
     const [sortedHistory, setSortedHistory] = useState([]);
     const [sortType, setSortType] = useState(SORT.DATE);
@@ -138,7 +138,7 @@ const HistoryView = () => {
                             <Entry
                                 key={idx}
                                 {...entry}
-                                onDelete={() => removeFromHistory(idx)}
+                                onDelete={() => removeFromHistory(entry)}
                             />
                         ))}
                     </Box>

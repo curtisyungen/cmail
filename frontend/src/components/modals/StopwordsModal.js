@@ -5,15 +5,7 @@ import { Icon } from "../common";
 import { useAppActions, useAppContext } from "../../hooks";
 import { LS } from "../../res";
 import { ICON } from "../../res/icons";
-import {
-    Box,
-    Button,
-    COLORS,
-    Flex,
-    FONT_SIZE,
-    Text,
-    TextEllipsis,
-} from "../../styles";
+import { Box, Button, COLORS, Flex, FONT_SIZE, Text } from "../../styles";
 import { SortUtils, StorageUtils } from "../../utils";
 
 Modal.setAppElement("#root");
@@ -90,7 +82,7 @@ const StopwordsModal = ({ onClose, open }) => {
                 <textarea
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
-                    placeholder="Add words separated by commas, i.e. 'Gmail, best regards'"
+                    placeholder="Add words separated by commas, i.e. Gmail, best regards, thank you"
                     style={{
                         fontSize: FONT_SIZE.M,
                         marginTop: "5px",
@@ -146,9 +138,9 @@ const StopwordsModal = ({ onClose, open }) => {
                                     width="fit-content"
                                 >
                                     <Flex alignItems="center">
-                                        <TextEllipsis style={{ lineHeight: 1 }}>
+                                        <Text style={{ lineHeight: 1 }}>
                                             {word}
-                                        </TextEllipsis>
+                                        </Text>
                                         <Box
                                             clickable
                                             margin={{ left: 5 }}

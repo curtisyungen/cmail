@@ -110,7 +110,11 @@ export const Entry = ({
                             style={{ minWidth: "30px" }}
                             width={30}
                         >
-                            <Icon name={ICON.TRASH} size={14} />
+                            <Icon
+                                color={COLORS.GRAY_DARK}
+                                name={ICON.TRASH}
+                                size={14}
+                            />
                         </Box>
                     </Flex>
                 </Box>

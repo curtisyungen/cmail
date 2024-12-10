@@ -154,6 +154,7 @@ const useApi = () => {
             StorageUtils.setItem(LS.MODEL_RESULT, res.data);
 
             addToHistory({
+                id: Math.ceil(Math.random() * 1000),
                 featureConfig,
                 modelConfig,
                 numClusters: clusters.length,

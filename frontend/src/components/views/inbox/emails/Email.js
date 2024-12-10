@@ -73,9 +73,7 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
             transition={"0s"}
             width="100%"
         >
-            <TextEllipsis>
-                {email.from.split("<")[0]?.trim() || UNKNOWN_SENDER}
-            </TextEllipsis>
+            <TextEllipsis>{sender}</TextEllipsis>
             <Box clickable style={{ height: "2px" }} />
             <Flex justifyContent="space-between">
                 <TextEllipsis
