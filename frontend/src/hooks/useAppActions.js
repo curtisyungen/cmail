@@ -71,6 +71,10 @@ const useAppActions = () => {
         });
     };
 
+    const setShowLoading = (showLoading) => {
+        dispatch({ type: ACTIONS.SET_SHOW_LOADING, payload: showLoading });
+    };
+
     const setStatus = (status) => {
         dispatch({ type: ACTIONS.SET_STATUS, payload: status });
     };
@@ -108,6 +112,7 @@ const useAppActions = () => {
         setSelectedEmail,
         setSelectedTopic,
         setShowNavigationPane,
+        setShowLoading,
         setStatus,
         setStopwords,
         setTab,

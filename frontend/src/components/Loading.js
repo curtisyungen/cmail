@@ -2,6 +2,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 import logo from "../assets/logo.png";
+import { useAppActions, useAppContext } from "../hooks";
 import { APP_NAME } from "../res";
 import { Box, COLORS, FONT_SIZE, Text } from "../styles";
 
@@ -25,10 +26,17 @@ const AnimatedBox = styled(Box)`
     width: ${LOGO_SIZE};
 `;
 
-const Loading = ({ onComplete }) => {
+const Loading = () => {
+    const { showLoading } = useAppContext();
+    const { setShowLoading } = useAppActions();
+
     const handleAnimationEnd = () => {
-        setTimeout(onComplete, 1000);
+        setTimeout(() => setShowLoading(false), 1000);
     };
+
+    if (!showLoading) {
+        return null;
+    }
 
     return (
         <Box

@@ -5,7 +5,12 @@ import { useNavigate } from "react-router-dom";
 import backgroundImage from "../assets/backgroundImage.jpg";
 import logo from "../assets/logo.png";
 import { Icon } from "../components/common";
-import { useApi, useAppContext, useAuthentication } from "../hooks";
+import {
+    useApi,
+    useAppActions,
+    useAppContext,
+    useAuthentication,
+} from "../hooks";
 import { APP_NAME, PAGES, STATUS } from "../res";
 import { ICON } from "../res/icons";
 import { Box, Button, COLORS, Flex, FONT_SIZE, Text } from "../styles";
@@ -33,7 +38,8 @@ const LoginButton = () => {
     const navigate = useNavigate();
 
     const { authenticateUser } = useApi();
-    const { authenticated, status } = useAppContext();
+    const { setShowLoading } = useAppActions();
+    const { authenticated, showLoading, status } = useAppContext();
     const { checkAuthentication } = useAuthentication();
 
     useEffect(() => {
@@ -42,6 +48,7 @@ const LoginButton = () => {
 
     useEffect(() => {
         if (authenticated) {
+            setShowLoading(true);
             navigate(PAGES.HOME);
         }
     }, [authenticated]);
@@ -65,6 +72,10 @@ const LoginButton = () => {
         redirect_uri: REDIRECT_URI,
         scope: SCOPES.join(" "),
     });
+
+    if (showLoading) {
+        return null;
+    }
 
     return (
         <Box

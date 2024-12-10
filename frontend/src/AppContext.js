@@ -30,6 +30,7 @@ const initialState = {
     searchTerm: "",
     selectedEmail: null,
     selectedTopic: ALL_TOPICS,
+    showLoading: true,
     showNavigationPane: true,
     status: null,
     stopwords: DEFAULT_STOPWORDS,
@@ -54,6 +55,7 @@ export const ACTIONS = {
     SET_SEARCH_TERM: "set_search_term",
     SET_SELECTED_EMAIL: "set_selected_email",
     SET_SELECTED_TOPIC: "set_selected_topic",
+    SET_SHOW_LOADING: "set_show_loading",
     SET_SHOW_NAVIGATION_PANE: "set_show_navigation_pane",
     SET_STOPWORDS: "set_stop_words",
     SET_TAB: "set_tab",
@@ -96,6 +98,8 @@ export const appReducer = (state, action) => {
             return { ...state, selectedEmail: action.payload };
         case ACTIONS.SET_SELECTED_TOPIC:
             return { ...state, selectedTopic: action.payload };
+        case ACTIONS.SET_SHOW_LOADING:
+            return { ...state, showLoading: action.payload };
         case ACTIONS.SET_SHOW_NAVIGATION_PANE:
             return { ...state, showNavigationPane: action.payload };
         case ACTIONS.SET_STATUS:
