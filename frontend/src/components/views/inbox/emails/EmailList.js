@@ -54,6 +54,7 @@ const EmailList = () => {
                 borderTopWidth: 1,
                 borderTopLeftRadius: 5,
                 borderTopRightRadius: 5,
+                minWidth: DIMENS.EMAIL_WIDTH,
                 overflowX: "hidden",
                 overflowY: "scroll",
             }}

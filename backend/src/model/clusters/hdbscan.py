@@ -4,7 +4,7 @@ import pandas as pd
 def run_hdbscan(df, features):
     try:
         print("Running HDBSCAN...")
-        clusterer = hdbscan.HDBSCAN(min_cluster_size=5, min_samples=5, gen_min_span_tree=True)
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=2, min_samples=2, gen_min_span_tree=True)
         clusterer.fit(features)
         df['cluster_id'] = clusterer.labels_
         print("HDBSCAN complete.")

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Topic from "./Topic";
+import TopicsListSection from "./TopicsListSection";
 import { useAppActions, useAppContext } from "../../../../hooks";
 import { ALL_TOPICS } from "../../../../res";
 import { Box, DIMENS, FONT_SIZE, Text } from "../../../../styles";
@@ -25,6 +26,7 @@ const TopicsList = () => {
     }, [emails]);
 
     useEffect(() => {
+        console.log("topics: ", topics);
         sortTopics();
     }, [topics]);
 
@@ -85,55 +87,50 @@ const TopicsList = () => {
             padding={{ left: 10, right: 5 }}
             style={{
                 maxWidth: `${DIMENS.TOPICS_LIST_WIDTH}px`,
-                minWidth: "fit-content",
+                minWidth: DIMENS.TOPICS_LIST_WIDTH,
                 overflowY: "scroll",
                 scrollbarWidth: "none",
             }}
             width={DIMENS.TOPICS_LIST_WIDTH}
         >
-            <Box margin={{ bottom: 3, top: 3 }}>
-                <Text bold fontSize={FONT_SIZE.M}>
-                    Custom
-                </Text>
-            </Box>
-            <Topic
-                id={ALL_TOPICS}
-                title={ALL_TOPICS}
-                onClick={() => handleTopicClick(ALL_TOPICS)}
-                selectedTopic={selectedTopic}
-                size={topicTotals[ALL_TOPICS]}
-            />
-            {groupedTopics.custom.map(({ label, topic_id }, idx) => (
+            <TopicsListSection title="Custom">
                 <Topic
-                    key={idx}
-                    id={topic_id}
-                    title={label}
-                    onClick={() => handleTopicClick(topic_id)}
+                    id={ALL_TOPICS}
+                    title={ALL_TOPICS}
+                    onClick={() => handleTopicClick(ALL_TOPICS)}
                     selectedTopic={selectedTopic}
-                    size={topicTotals[topic_id]}
+                    subtopics={[]}
+                    topicTotals={topicTotals}
                 />
-            ))}
-            {groupedTopics?.generated?.length > 0 ? (
-                <>
-                    <Box margin={{ bottom: 3, top: 3 }}>
-                        <Text bold fontSize={FONT_SIZE.M}>
-                            Generated
-                        </Text>
-                    </Box>
-                    {groupedTopics.generated.map(({ label, topic_id }, idx) => (
+                {groupedTopics.custom.map(
+                    ({ label, subtopics, topic_id }, idx) => (
                         <Topic
                             key={idx}
                             id={topic_id}
                             title={label}
                             onClick={() => handleTopicClick(topic_id)}
                             selectedTopic={selectedTopic}
-                            size={topicTotals[topic_id]}
+                            subtopics={subtopics}
+                            topicTotals={topicTotals}
                         />
-                    ))}
-                </>
-            ) : (
-                <></>
-            )}
+                    )
+                )}
+            </TopicsListSection>
+            <TopicsListSection title="Generated">
+                {groupedTopics.generated.map(
+                    ({ label, subtopics, topic_id }, idx) => (
+                        <Topic
+                            key={idx}
+                            id={topic_id}
+                            title={label}
+                            onClick={() => handleTopicClick(topic_id)}
+                            selectedTopic={selectedTopic}
+                            subtopics={subtopics}
+                            topicTotals={topicTotals}
+                        />
+                    )
+                )}
+            </TopicsListSection>
         </Box>
     );
 };
