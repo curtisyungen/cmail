@@ -6,12 +6,7 @@ import { UNKNOWN_SENDER } from "../../../../res";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../../../styles";
 import { DateTimeUtils } from "../../../../utils";
 
-const Body = ({ body, keywords = [] }) => {
-    const keywordPattern = new RegExp(`\\b(${keywords.join("|")})\\b`, "gi");
-    const highlightedBody = body.replace(
-        keywordPattern,
-        (match) => `<strong>${match}</strong>`
-    );
+const Body = ({ body }) => {
     return <Text dangerouslySetInnerHTML={{ __html: body }} />;
 };
 

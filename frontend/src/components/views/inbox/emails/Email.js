@@ -48,7 +48,10 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
     };
 
     const getClippedBody = () => {
-        const body = typeof email.body === Array ? email.body[0] : email.body;
+        const body =
+            typeof email.body_no_html === Array
+                ? email.body_no_html[0]
+                : email.body_no_html;
         return body.slice(0, CLIPPED_BODY_LENGTH);
     };
 
@@ -73,7 +76,9 @@ const Email = ({ email, isSelected, onClick, topicId }) => {
             transition={"0s"}
             width="100%"
         >
-            <TextEllipsis>{sender}</TextEllipsis>
+            <TextEllipsis>
+                {email.from?.split("<")[0] || UNKNOWN_SENDER}
+            </TextEllipsis>
             <Box clickable style={{ height: "2px" }} />
             <Flex justifyContent="space-between">
                 <TextEllipsis

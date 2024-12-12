@@ -4,7 +4,7 @@ from io import StringIO
 from redis_cache import get_value_from_redis, store_value_in_redis
 from utils import decode_base64url
 from config import REDIS_KEYS
-from src.utils.preprocess import clean_text
+from src.utils.preprocess import clean_html, clean_text
 
 MAX_EMAILS = 500
 QUERY = 'label:inbox OR -label:spam -label:sent -label:archive -label:trash -in:drafts'
@@ -80,6 +80,7 @@ def get_emails(creds, limit):
 
         emails_df['raw_body'] = emails_df['body']
         emails_df['raw_subject'] = emails_df['subject']
+        emails_df['body_no_html'] = emails_df['body'].apply(clean_html)
         emails_df['body'] = emails_df['body'].apply(clean_text)
         emails_df['subject'] = emails_df['subject'].apply(clean_text)
 
