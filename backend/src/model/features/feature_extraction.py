@@ -150,8 +150,9 @@ def run_autoencoder(features, feature_config):
 def run_bert(features):
     try:
         print("Running BERT...")
-        tokenizer, feature_model = initialize_bert(model_name='bert-base-uncased')
-        embeddings = get_bert_embeddings(features, tokenizer, feature_model, pooling='mean', max_length=128)
+        tokenizer, feature_model = initialize_bert()
+        embeddings = get_bert_embeddings(features, tokenizer, feature_model, 
+                                         pooling='mean', max_length=256)
         print("BERT complete.")
         return embeddings
     except Exception as e:
@@ -198,7 +199,7 @@ def extract_features(df, feature_config):
             if feature_model == "Autoencoder":
                 body_df = run_tfidf(df, 'body')
             elif feature_model == "BERT":
-                body_df = pd.DataFrame(df['body'])
+                body_df = pd.DataFrame(df['body_no_html'])
             else:
                 body_df = run_tfidf(df, 'body')
 
@@ -245,7 +246,7 @@ def process_features(body_df, features_df, feature_config):
                 features = features_df.values
             else:
                 # Operates on body only; don't pass in categorical features like thread IDs, dates, etc.
-                bert_features = run_bert(body_df['body'].tolist())
+                bert_features = run_bert(body_df['body_no_html'].tolist())
                 if len(bert_features) == 0:
                     features = features_df.values
                 elif features_df.empty:

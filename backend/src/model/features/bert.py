@@ -1,10 +1,10 @@
-from transformers import BertTokenizer, BertModel
+from transformers import AlbertTokenizer, AlbertModel
 import torch
 
-def initialize_bert(model_name='bert-base-uncased'):
+def initialize_bert(model_name='albert-base-v2'):
     try:
-        tokenizer = BertTokenizer.from_pretrained(model_name)
-        model = BertModel.from_pretrained(model_name)
+        tokenizer = AlbertTokenizer.from_pretrained(model_name)
+        model = AlbertModel.from_pretrained(model_name)
         model.eval()
         return tokenizer, model
     except Exception as e:
@@ -21,7 +21,7 @@ def preprocess_texts(texts, tokenizer, max_length=128):
     )
     return inputs
 
-def get_bert_embeddings(texts, tokenizer, model, pooling='mean', device='cpu', max_length=128):
+def get_bert_embeddings(texts, tokenizer, model, pooling='mean', device='cpu', max_length=256):
     try:
         model.to(device)
         inputs = preprocess_texts(texts, tokenizer, max_length=max_length)

@@ -12,6 +12,7 @@ const TopicsListSection = ({ children, title }) => {
                 clickable
                 margin={{ bottom: 3, top: 3 }}
                 onClick={() => setExpanded(!expanded)}
+                style={{ userSelect: "none" }}
             >
                 <Flex>
                     <Box clickable width={15}>

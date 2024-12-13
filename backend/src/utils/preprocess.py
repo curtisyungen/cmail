@@ -36,7 +36,7 @@ def clean_html(original_text):
         for element in soup.select(selector):
             element.decompose()
     text = soup.get_text(separator=' ')
-    return text.strip()
+    return remove_encodings(text).strip()
 
 def clean_text(text):
     try: 
@@ -46,7 +46,7 @@ def clean_text(text):
         text = emoji.replace_emoji(text, replace='')
         text = re.sub(r'http\S+|www\S+|https\S+', '', text) # URLs
         text = re.sub(r'\S+@\S+', '', text) # emails
-        text = re.sub(r'=\S+', ' ', text) # encodings
+        text = remove_encodings(text) # encodings
         text = re.sub(r'[^\w\s]', ' ', text) # punctuation and special chars
         text = re.sub(r'\s+', ' ', text).strip() # whitespaces
         text = re.sub(r'\n+', ' ', text) # line-breaks
@@ -59,6 +59,9 @@ def clean_text(text):
     except Exception as e:
         print(f"Error cleaning text: {e}")
         return text
+    
+def remove_encodings(text):
+    return re.sub(r'=\S+', ' ', text)
 
 def lemmatize_text(text, stopwords):
     try:
