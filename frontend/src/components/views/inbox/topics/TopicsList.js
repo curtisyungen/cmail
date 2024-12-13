@@ -4,7 +4,7 @@ import Topic from "./Topic";
 import TopicsListSection from "./TopicsListSection";
 import { useAppActions, useAppContext } from "../../../../hooks";
 import { ALL_TOPICS } from "../../../../res";
-import { Box, DIMENS, FONT_SIZE, Text } from "../../../../styles";
+import { Box, DIMENS } from "../../../../styles";
 import { SortUtils } from "../../../../utils";
 
 const TopicsList = () => {

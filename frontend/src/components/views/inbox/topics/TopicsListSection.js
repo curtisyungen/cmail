@@ -5,7 +5,7 @@ import { ICON } from "../../../../res/icons";
 import { Box, COLORS, Flex, FONT_SIZE, Text } from "../../../../styles";
 
 const TopicsListSection = ({ children, title }) => {
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
     return (
         <>
             <Box
