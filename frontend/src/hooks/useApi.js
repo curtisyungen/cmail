@@ -69,6 +69,10 @@ const useApi = () => {
             return;
         }
         setStatus(STATUS.FETCHING_EMAILS);
+        setModelResult({});
+        setSelectedTopic(ALL_TOPICS);
+        setTopics([]);
+        setTopicsMap({});
         try {
             const response = await axios.get("/api/fetch-emails", {
                 params: { limit: numEmails },

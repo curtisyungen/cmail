@@ -65,7 +65,9 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
         df, kmeans = run_kmeans(df, features, num_clusters)
         centroids = kmeans.centroids
     elif model == "HDBSCAN":
-        df = run_hdbscan(df, features)
+        min_cluster_size = model_config.get('min_cluster_size')
+        min_samples = model_config.get('min_samples')
+        df = run_hdbscan(df, features, min_cluster_size, min_samples)
     else:
         raise ValueError(f"Invalid model: {model}")
 

@@ -33,6 +33,8 @@ export const DEFAULT_CATEGORIES = [
 ];
 
 export const DEFAULT_MODEL_CONFIG = Object.freeze({
+    min_cluster_size: 10,
+    min_samples: 5,
     model: MODEL.CLUSTERING.KMEANS,
     num_clusters: 12,
 });

@@ -161,6 +161,76 @@ const ModelActions = () => {
                 ) : (
                     <></>
                 )}
+                {modelConfig.model === MODEL.CLUSTERING.HDBSCAN ? (
+                    <>
+                        <Box
+                            height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                            margin={{ left: 5 }}
+                            style={{ flex: 1 }}
+                        >
+                            <Select
+                                disabled={status === STATUS.RUNNING_MODEL}
+                                onChange={(e) =>
+                                    handleConfigChange(
+                                        "min_cluster_size",
+                                        parseInt(e.target.value)
+                                    )
+                                }
+                                style={{
+                                    marginBottom: "5px",
+                                }}
+                                value={modelConfig.min_cluster_size || ""}
+                                width={DIMENS.SELECT_WIDTH}
+                            >
+                                {Array.from(
+                                    { length: 49 },
+                                    (_, index) => index
+                                ).map((num) => (
+                                    <option key={num} value={num + 2}>
+                                        {num + 2}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Text center fontSize={FONT_SIZE.S}>
+                                Min. Cluster Size
+                            </Text>
+                        </Box>
+                        <Box
+                            height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                            margin={{ left: 5 }}
+                            style={{ flex: 1 }}
+                        >
+                            <Select
+                                disabled={status === STATUS.RUNNING_MODEL}
+                                onChange={(e) =>
+                                    handleConfigChange(
+                                        "min_samples",
+                                        parseInt(e.target.value)
+                                    )
+                                }
+                                style={{
+                                    marginBottom: "5px",
+                                }}
+                                value={modelConfig.min_samples || ""}
+                                width={DIMENS.SELECT_WIDTH}
+                            >
+                                {Array.from(
+                                    { length: 10 },
+                                    (_, index) => index + 1
+                                ).map((num) => (
+                                    <option key={num} value={num}>
+                                        {num}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Text center fontSize={FONT_SIZE.S}>
+                                Min. Samples
+                            </Text>
+                        </Box>
+                    </>
+                ) : (
+                    <></>
+                )}
             </Flex>
             <Text fontSize={FONT_SIZE.XS}>Clustering</Text>
         </>
