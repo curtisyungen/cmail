@@ -100,12 +100,11 @@ const useApi = () => {
         }
     };
 
-    const processClusters = (clusters) => {
+    const processSubClusters = (clusters) => {
         try {
             const parentClusterMap = {};
             for (const cluster of clusters) {
                 const { parent_id } = cluster;
-                console.log("parent_id: ", parent_id);
                 if (parent_id >= 0 && parent_id !== null) {
                     if (!parentClusterMap[parent_id]) {
                         parentClusterMap[parent_id] = [];
@@ -113,8 +112,6 @@ const useApi = () => {
                     parentClusterMap[parent_id].push(cluster);
                 }
             }
-            console.log("parentClusterMap: ", parentClusterMap);
-
             const finalClusters = [];
             for (const cluster of clusters) {
                 const { parent_id, topic_id } = cluster;
@@ -126,9 +123,6 @@ const useApi = () => {
                         : [],
                 });
             }
-
-            console.log("finalClusters: ", finalClusters);
-
             return finalClusters;
         } catch (e) {
             console.error("Error processing clusters: ", e);
@@ -187,7 +181,7 @@ const useApi = () => {
             const clusters = handleEmptyClusters(res.data.clusters);
             const finalClusters =
                 modelConfig.model === MODEL.CLUSTERING.LAYERED_KMEANS
-                    ? processClusters(clusters)
+                    ? processSubClusters(clusters)
                     : clusters;
 
             setModelResult(res.data);

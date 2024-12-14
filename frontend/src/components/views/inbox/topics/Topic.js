@@ -28,7 +28,7 @@ const Topic = ({
     const isAll = title === ALL_TOPICS;
     const isSelected = id === selectedTopic;
     const disabled = !title;
-    const size = topicTotals?.length > id ? topicTotals[id] : 0;
+    const size = topicTotals[id] || 0;
 
     const handleClick = () => {
         if (!disabled) {
