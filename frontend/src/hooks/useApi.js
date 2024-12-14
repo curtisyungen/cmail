@@ -2,7 +2,7 @@ import axios from "axios";
 
 import useAppActions from "./useAppActions";
 import useAppContext from "./useAppContext";
-import { ALL_TOPICS, LS, MODEL, STATUS } from "../res";
+import { ALL_TOPICS, LS, MODEL, STATUS, UNGROUPED_TOPIC_ID } from "../res";
 import { StorageUtils, Utils } from "../utils";
 import useHistory from "./useHistory";
 
@@ -177,7 +177,7 @@ const useApi = () => {
             });
             console.log("runModel response: ", res.data);
 
-            const { email_clusters } = res.data;
+            const { email_clusters, invalid_emails } = res.data;
             const clusters = handleEmptyClusters(res.data.clusters);
             const finalClusters =
                 modelConfig.model === MODEL.CLUSTERING.LAYERED_KMEANS
@@ -187,6 +187,9 @@ const useApi = () => {
             const emailToTopicIdMap = {};
             for (const { cluster_id, id } of email_clusters) {
                 emailToTopicIdMap[id] = cluster_id;
+            }
+            for (const email of invalid_emails) {
+                emailToTopicIdMap[email.id] = UNGROUPED_TOPIC_ID;
             }
 
             setModelResult(res.data);

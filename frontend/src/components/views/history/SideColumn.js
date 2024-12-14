@@ -87,7 +87,7 @@ const SideColumn = () => {
             <Box
                 clickable={history.length > 0}
                 hoverBackground={
-                    history.length > 0 ? COLORS.GRAY_LIGHT_3 : COLORS.GRAY_LIGHT
+                    history.length > 0 ? COLORS.GRAY_LIGHT3 : COLORS.GRAY_LIGHT
                 }
                 onClick={handleClearHistory}
                 padding={{ bottom: 6, left: 19, top: 6 }}

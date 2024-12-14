@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from ...utils.custom_print import CustomPrint
-from ...utils.scoring import calculate_cluster_inertia
+from ...utils.scoring import calculate_cluster_inertia, calculate_silhouette_score
 
 printer = CustomPrint()
 
@@ -81,24 +81,44 @@ class KMeans:
         except Exception as e:
             printer.error(f"Error fitting: {e}")
 
-def run_kmeans(features, num_clusters):
+def find_max_silhouette_score(features, max_clusters):
+    printer.status(f"Finding max. silhouette score with max of {max_clusters} clusters...")
     try:
-        printer.status("Running K-means...")
+        silhouette_scores = []
+        for k in range(2, max_clusters + 1):
+            kmeans = KMeans(k=k, random_state=26)
+            kmeans.fit(features)
+            silhouette_score = calculate_silhouette_score(features, kmeans.labels)
+            silhouette_scores.append(silhouette_score)
+            printer.info(f"Silhouette score with {k} clusters = {silhouette_score:.2f}")
+        optimal_clusters = np.argmax(silhouette_scores) + 2
+        printer.info(f"Max. silhouette score found with optimal clusters: {optimal_clusters} clusters")
+        return optimal_clusters
+    except Exception as e:
+        printer.error(f"Error finding max. silhouette score: {e}")
+        return None, None
+
+def run_kmeans_model(features, num_clusters):
+    try:
+        printer.status("Running K-means model...")
+        if not num_clusters: # User has selected 'Optimal' OR second layer of Layered K-means
+            num_clusters = find_max_silhouette_score(features, max_clusters=20)
         kmeans = KMeans(k=int(num_clusters), random_state=26)
         kmeans.fit(features)
-        printer.success("K-means complete.")
+        printer.success("K-means model complete.")
         return kmeans
     except Exception as e:
-        printer.error(f"Error running k-means: {e}")
+        printer.error(f"Error running k-means model: {e}")
         return None
 
 def run_layered_kmeans(df, features, num_clusters):
     try:
-        printer.status(f"Running layered K-means...")
-        kmeans = run_kmeans(features, num_clusters)
+        printer.status("Running layered K-means...")
+        kmeans = run_kmeans_model(features, num_clusters)
+
         df['cluster_id'] = kmeans.labels
         centroids = kmeans.centroids
-        
+
         inertia_threshold = 1000
         unique_cluster_ids = df['cluster_id'].unique()
 
@@ -107,20 +127,38 @@ def run_layered_kmeans(df, features, num_clusters):
             cluster_indices = df[df['cluster_id'] == cluster_id].index
             cluster_features = features[cluster_indices]
             cluster_inertia = calculate_cluster_inertia(cluster_features, centroids[cluster_id])
-            printer.info(f"Cluster {cluster_id}: Inertia = {cluster_inertia}, size = {cluster_size}")
-            if cluster_inertia > inertia_threshold and cluster_size > 50:
+
+            if cluster_inertia >= inertia_threshold and cluster_size >= 30:
                 printer.info(f"Re-running K-means for cluster {cluster_id}...")
-                sub_kmeans = run_kmeans(cluster_features, 3)
+                sub_kmeans = run_kmeans_model(cluster_features, None)
+
                 if sub_kmeans:
                     sub_df = df.loc[cluster_indices].copy()
                     sub_df['parent_id'] = int(cluster_id)
                     sub_df['cluster_id'] = (int(cluster_id) + 1) * 10 + sub_kmeans.labels
-
                     df = pd.concat([df, sub_df], axis=0)
                     features = np.vstack([features, cluster_features])
-
                     centroids = np.vstack([kmeans.centroids, sub_kmeans.centroids])
+                    
         return df, features, centroids
     except Exception as e:
         printer.error(f"Error running layered K-means: {e}")
         return df, features, centroids
+        
+def run_single_kmeans(df, features, num_clusters):
+    try:
+        printer.status("Running single K-means...")
+        kmeans = run_kmeans_model(features, num_clusters)
+        df['cluster_id'] = kmeans.labels
+        centroids = kmeans.centroids
+        return df, centroids
+    except Exception as e:
+        printer.error(f"Error running single K-means: {e}")
+        return df, None
+    
+def run_kmeans(df, features, model, num_clusters):
+    if model == "K-means":
+        df, features, centroids = run_single_kmeans(df, features, num_clusters)
+    elif model == "Layered K-means":
+        df, features, centroids = run_layered_kmeans(df, features, num_clusters)
+    return df, features, centroids

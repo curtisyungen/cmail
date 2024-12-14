@@ -92,7 +92,10 @@ const FeatureActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status === STATUS.RUNNING_MODEL}
+                        disabled={
+                            status === STATUS.RUNNING_MODEL ||
+                            !featureConfig.include_bodies
+                        }
                         name="min_email_length"
                         onChange={(e) =>
                             handleConfigChange(
@@ -107,6 +110,7 @@ const FeatureActions = () => {
                         width={DIMENS.SELECT_WIDTH}
                     >
                         <option value={null}>Any</option>
+                        <option value={50}>50</option>
                         {Array.from({ length: 5 }, (_, index) => index + 1).map(
                             (num) => (
                                 <option key={num} value={num * 100}>
@@ -125,7 +129,10 @@ const FeatureActions = () => {
                     style={{ flex: 1 }}
                 >
                     <Select
-                        disabled={status === STATUS.RUNNING_MODEL}
+                        disabled={
+                            status === STATUS.RUNNING_MODEL ||
+                            !featureConfig.include_bodies
+                        }
                         name="max_email_length"
                         onChange={(e) =>
                             handleConfigChange(

@@ -19,6 +19,7 @@ export const MODEL = {
 };
 
 export const ALL_TOPICS = "All";
+export const UNGROUPED_TOPIC_ID = -2;
 
 export const DEFAULT_CATEGORIES = [
     { name: "Apartments", color: COLORS.YELLOW },

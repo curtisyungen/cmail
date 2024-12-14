@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Topic from "./Topic";
 import TopicsListSection from "./TopicsListSection";
 import { useAppActions, useAppContext } from "../../../../hooks";
-import { ALL_TOPICS } from "../../../../res";
+import { ALL_TOPICS, MODEL, UNGROUPED_TOPIC_ID } from "../../../../res";
 import { Box, DIMENS } from "../../../../styles";
 import { SortUtils } from "../../../../utils";
 
@@ -12,6 +12,7 @@ const TopicsList = () => {
     const {
         emails,
         emailToTopicIdMap,
+        modelResult,
         selectedTopic,
         showNavigationPane,
         topics,
@@ -64,6 +65,7 @@ const TopicsList = () => {
         const sortedTopics = SortUtils.sortData({
             data: topics || [],
             key: "label",
+            parseKeys: modelResult?.config?.naming_config?.model === "None",
         });
         const groupedTopics = {
             custom: [],
@@ -100,10 +102,10 @@ const TopicsList = () => {
             <TopicsListSection title="Custom">
                 <Topic
                     id={ALL_TOPICS}
-                    title={ALL_TOPICS}
                     onClick={handleTopicClick}
                     selectedTopic={selectedTopic}
                     subtopics={[]}
+                    title={ALL_TOPICS}
                     topicTotals={topicTotals}
                 />
                 {groupedTopics.custom.map(
@@ -111,10 +113,10 @@ const TopicsList = () => {
                         <Topic
                             key={idx}
                             id={topic_id}
-                            title={label}
                             onClick={handleTopicClick}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
+                            title={label}
                             topicTotals={topicTotals}
                         />
                     )
@@ -126,13 +128,25 @@ const TopicsList = () => {
                         <Topic
                             key={idx}
                             id={topic_id}
-                            title={label}
                             onClick={handleTopicClick}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
+                            title={label}
                             topicTotals={topicTotals}
                         />
                     )
+                )}
+                {modelResult?.invalid_emails?.length > 0 ? (
+                    <Topic
+                        id={UNGROUPED_TOPIC_ID}
+                        onClick={handleTopicClick}
+                        selectedTopic={selectedTopic}
+                        subtopics={[]}
+                        title="Ungrouped"
+                        topicTotals={topicTotals}
+                    />
+                ) : (
+                    <></>
                 )}
             </TopicsListSection>
         </Box>

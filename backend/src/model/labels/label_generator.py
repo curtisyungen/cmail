@@ -73,7 +73,8 @@ def label_clusters(df, cluster_keywords, cluster_top_keywords, categories, namin
                 label = generate_label_with_open_ai(cluster, top_keywords_as_strings, categories)
                 generated = True
             else:
-                label, generated = generate_label(keywords, categories)
+                label = f"Cluster {cluster + 1}"
+                generated = True
 
             parent_id = df[df['cluster_id'] == cluster]['parent_id'].iloc[0]
             parent_id = int(parent_id) if not pd.isna(parent_id) else None

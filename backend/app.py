@@ -104,6 +104,8 @@ def run_model_route():
             "keyword_counts": model_response.get('keyword_counts'),
             "clusters_data": model_response.get('clusters_data'),
             "elbow_data": model_response.get('elbow_data'),
+            "invalid_emails": model_response.get('invalid_emails'),
+            "config": model_response.get('config')
         }), 200
     except Exception as e:
         printer.error(f"Error running model: {e}")

@@ -41,7 +41,7 @@ const Loading = () => {
 
     return (
         <Box
-            background={COLORS.GRAY_LIGHT_3}
+            background={COLORS.GRAY_LIGHT3}
             height="100vh"
             style={{
                 bottom: "0px",
