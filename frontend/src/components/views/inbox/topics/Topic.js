@@ -32,7 +32,7 @@ const Topic = ({
 
     const handleClick = () => {
         if (!disabled) {
-            onClick();
+            onClick(id);
         }
     };
 
@@ -42,7 +42,9 @@ const Topic = ({
                 background={isSelected ? COLORS.BLUE_LIGHT : COLORS.TRANSPARENT}
                 borderRadius={DIMENS.BORDER_RADIUS_L}
                 clickable={!disabled}
-                hoverBackground={COLORS.GRAY_MEDIUM2}
+                hoverBackground={
+                    isSelected ? COLORS.BLUE_LIGHT : COLORS.GRAY_MEDIUM2
+                }
                 margin={{
                     right: 5,
                 }}
@@ -102,7 +104,7 @@ const Topic = ({
                         key={idx}
                         id={topic_id}
                         title={label}
-                        onClick={() => handleClick(topic_id)}
+                        onClick={onClick}
                         isSubtopic={true}
                         selectedTopic={selectedTopic}
                         subtopics={[]}

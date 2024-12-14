@@ -96,7 +96,7 @@ const TopicsList = () => {
                 <Topic
                     id={ALL_TOPICS}
                     title={ALL_TOPICS}
-                    onClick={() => handleTopicClick(ALL_TOPICS)}
+                    onClick={handleTopicClick}
                     selectedTopic={selectedTopic}
                     subtopics={[]}
                     topicTotals={topicTotals}
@@ -107,7 +107,7 @@ const TopicsList = () => {
                             key={idx}
                             id={topic_id}
                             title={label}
-                            onClick={() => handleTopicClick(topic_id)}
+                            onClick={handleTopicClick}
                             parent_id={parent_id}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
@@ -123,7 +123,7 @@ const TopicsList = () => {
                             key={idx}
                             id={topic_id}
                             title={label}
-                            onClick={() => handleTopicClick(topic_id)}
+                            onClick={handleTopicClick}
                             parent_id={parent_id}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
