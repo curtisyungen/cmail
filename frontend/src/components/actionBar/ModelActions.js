@@ -23,6 +23,9 @@ const ModelActions = () => {
 
     const [featureConfigEmpty, setFeatureConfigEmpty] = useState(false);
 
+    const kmeansSelected =
+        modelConfig.model === MODEL.CLUSTERING.KMEANS ||
+        modelConfig.model === MODEL.CLUSTERING.LAYERED_KMEANS;
     const runModelDisabled =
         status || emails?.length === 0 || featureConfigEmpty;
 
@@ -84,11 +87,7 @@ const ModelActions = () => {
                                 ? COLORS.GRAY_MEDIUM
                                 : COLORS.BLUE_DARK
                         }
-                        name={
-                            modelConfig.model === MODEL.CLUSTERING.KMEANS
-                                ? ICON.KMEANS
-                                : ICON.HDBSCAN
-                        }
+                        name={kmeansSelected ? ICON.KMEANS : ICON.HDBSCAN}
                         size={26}
                         style={{ marginBottom: "5px" }}
                     />
@@ -124,7 +123,7 @@ const ModelActions = () => {
                         Model
                     </Text>
                 </Box>
-                {modelConfig.model === MODEL.CLUSTERING.KMEANS ? (
+                {kmeansSelected ? (
                     <Box
                         height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
                         margin={{ left: 5 }}

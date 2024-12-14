@@ -17,6 +17,7 @@ const Divider = () => {
             background={COLORS.BORDER}
             height={DIMENS.ACTION_BAR_HEIGHT - 10}
             margin={{ left: 5, right: 5 }}
+            style={{ maxWidth: "1px", minWidth: "1px" }}
             width={1}
         />
     );

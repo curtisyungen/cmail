@@ -1,8 +1,11 @@
 import gensim
 from gensim import corpora
+from ...utils.custom_print import CustomPrint
+
+printer = CustomPrint()
 
 def run_lda(cluster, keywords, no_below, no_above, num_topics=1):
-    print(f"cluster {cluster}, num. keywords: {len(keywords)}")
+    printer.status(f"cluster {cluster}, num. keywords: {len(keywords)}")
     if not keywords:
         return []
     try:
@@ -20,5 +23,5 @@ def run_lda(cluster, keywords, no_below, no_above, num_topics=1):
         sorted_keywords = [word for word, _ in topics[0][1]]
         return sorted_keywords
     except Exception as e:
-        print(f"Error running LDA: {e}")
+        printer.error(f"Error running LDA: {e}")
         return []

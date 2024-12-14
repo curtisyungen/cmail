@@ -6,6 +6,7 @@ export const MODEL = {
     CLUSTERING: {
         KMEANS: "K-means",
         HDBSCAN: "HDBSCAN",
+        LAYERED_KMEANS: "Layered K-means",
     },
     FEATURE_EXTRACTION: {
         AUTOENCODER: "Autoencoder",

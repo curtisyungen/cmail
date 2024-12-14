@@ -2,7 +2,7 @@ import axios from "axios";
 
 import useAppActions from "./useAppActions";
 import useAppContext from "./useAppContext";
-import { ALL_TOPICS, LS, STATUS } from "../res";
+import { ALL_TOPICS, LS, MODEL, STATUS } from "../res";
 import { StorageUtils, Utils } from "../utils";
 import useHistory from "./useHistory";
 
@@ -100,6 +100,42 @@ const useApi = () => {
         }
     };
 
+    const processClusters = (clusters) => {
+        try {
+            const parentClusterMap = {};
+            for (const cluster of clusters) {
+                const { parent_id } = cluster;
+                console.log("parent_id: ", parent_id);
+                if (parent_id >= 0 && parent_id !== null) {
+                    if (!parentClusterMap[parent_id]) {
+                        parentClusterMap[parent_id] = [];
+                    }
+                    parentClusterMap[parent_id].push(cluster);
+                }
+            }
+            console.log("parentClusterMap: ", parentClusterMap);
+
+            const finalClusters = [];
+            for (const cluster of clusters) {
+                const { parent_id, topic_id } = cluster;
+                if (parent_id >= 0 && parent_id !== null) continue;
+                finalClusters.push({
+                    ...cluster,
+                    subtopics: parentClusterMap[topic_id]
+                        ? parentClusterMap[topic_id]
+                        : [],
+                });
+            }
+
+            console.log("finalClusters: ", finalClusters);
+
+            return finalClusters;
+        } catch (e) {
+            console.error("Error processing clusters: ", e);
+            return clusters;
+        }
+    };
+
     const runModel = async () => {
         function handleEmptyClusters(clusters) {
             try {
@@ -149,11 +185,15 @@ const useApi = () => {
 
             const { email_clusters } = res.data;
             const clusters = handleEmptyClusters(res.data.clusters);
+            const finalClusters =
+                modelConfig.model === MODEL.CLUSTERING.LAYERED_KMEANS
+                    ? processClusters(clusters)
+                    : clusters;
 
             setModelResult(res.data);
-            setTopics(clusters);
+            setTopics(finalClusters);
             setTopicsMap(email_clusters);
-            StorageUtils.setItem(LS.CLUSTERS, clusters);
+            StorageUtils.setItem(LS.CLUSTERS, finalClusters);
             StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
             StorageUtils.setItem(LS.MODEL_RESULT, res.data);
 
@@ -162,6 +202,7 @@ const useApi = () => {
                 featureConfig,
                 modelConfig,
                 numClusters: clusters.length,
+                numSubClusters: clusters.length - finalClusters.length,
                 numEmails,
                 silhouetteScore: res.data.silhouette_score,
             });

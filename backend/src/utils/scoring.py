@@ -1,11 +1,22 @@
 import numpy as np
-from ..model.clusters.kmeans import KMeans
+from .custom_print import CustomPrint
+
+printer = CustomPrint()
 
 def euclidean_distance(a, b):
     return np.sqrt(np.sum((a - b) ** 2))
 
+def calculate_cluster_inertia(cluster_features, centroid):
+    try:
+        distances = [euclidean_distance(point, centroid) for point in cluster_features]
+        inertia = sum(distance ** 2 for distance in distances)
+        return inertia
+    except Exception as e:
+        printer.error(f"Error calculating cluster inertia: {e}")
+        return 0.0
+
 def calculate_silhouette_score(X, labels):
-    print("Calculating silhouette score...")
+    printer.status("Calculating silhouette score...")
     try:
         unique_labels = np.unique(labels)
         if len(unique_labels) == 1:
@@ -49,28 +60,11 @@ def calculate_silhouette_score(X, labels):
             scores.append(s_i)
 
         silhouette_score = np.nanmean(scores) if scores else 0
-        print(f"Silhouette score: {silhouette_score:.2f}")
+        printer.info(f"Silhouette score: {silhouette_score:.2f}")
         
         if np.isnan(silhouette_score):
             return 0
         return silhouette_score
     except Exception as e:
-        print(f"Error calculating silhouette score: {e}")
+        printer.error(f"Error calculating silhouette score: {e}")
         return 0
-    
-def find_max_silhouette_score(features, max_clusters):
-    print(f"Finding max. silhouette score with max of {max_clusters} clusters...")
-    try:
-        silhouette_scores = []
-        for k in range(2, max_clusters + 1):
-            kmeans = KMeans(k=k, random_state=26)
-            kmeans.fit(features)
-            silhouette_score = calculate_silhouette_score(features, kmeans.labels)
-            silhouette_scores.append(silhouette_score)
-            print(f"Silhouette score with {k} clusters = {silhouette_score:.2f}")
-        optimal_clusters = np.argmax(silhouette_scores) + 2
-        print(f"Max. silhouette score found with optimal clusters: {optimal_clusters} clusters")
-        return optimal_clusters
-    except Exception as e:
-        print(f"Error finding max. silhouette score: {e}")
-        return None, None

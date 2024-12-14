@@ -1,5 +1,8 @@
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model
+from ...utils.custom_print import CustomPrint
+
+printer = CustomPrint()
 
 def construct_autoencoder(input_dim, encoding_dim):
     try:
@@ -11,5 +14,5 @@ def construct_autoencoder(input_dim, encoding_dim):
         autoencoder.compile(optimizer='adam', loss='mse')
         return autoencoder, encoder
     except Exception as e:
-        print(f"Error constructing autoencoder: {e}")
+        printer.error(f"Error constructing autoencoder: {e}")
         return None, None

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Avatar from "./Avatar";
 import { useAppContext, useKeywords } from "../../../../hooks";
@@ -61,6 +61,11 @@ const EmailReader = () => {
     const { selectedEmail } = useAppContext();
     const { keywords } = useKeywords();
     const { date, from, raw_body, raw_subject, to } = selectedEmail;
+
+    useEffect(() => {
+        console.log("selectedEmail: ", selectedEmail);
+    }, [selectedEmail]);
+
     return (
         <Box
             justifyContent="flex-start"

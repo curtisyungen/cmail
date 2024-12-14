@@ -5,6 +5,9 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from .autoencoder import construct_autoencoder
 from .bert import initialize_bert, get_bert_embeddings
+from ...utils.custom_print import CustomPrint
+
+printer = CustomPrint()
 
 def compute_email_address_freqs(email_column):
     # Some recipients/senders have <email@gmail.com>; others, such as emails sent to self, are just email@gmail.com
@@ -21,7 +24,7 @@ def compute_email_address_freqs(email_column):
                     clean_addresses.append(address.strip().lower())
             return clean_addresses
         except Exception as e:
-            print(f"Error extracting email addresses: {e}")
+            printer.error(f"Error extracting email addresses: {e}")
             return ""
     
     try:
@@ -36,7 +39,7 @@ def compute_email_address_freqs(email_column):
         email_address_freqs = {address: count / total_email_addresses for address, count in email_address_counts.items()}
         return email_address_freqs
     except Exception as e:
-        print(f"Error computing email address frequencies: {e}")
+        printer.error(f"Error computing email address frequencies: {e}")
         return {}
     
 def encode_column(column_data):
@@ -56,7 +59,7 @@ def encode_column(column_data):
             encoded_text.append(vector)
         return pd.DataFrame(encoded_text, columns=list(word_to_index.keys()))
     except Exception as e:
-        print(f"Error encoding text: {e}")
+        printer.error(f"Error encoding text: {e}")
         return pd.DataFrame()
     
 def extract_capitalized_words(data_column):
@@ -78,7 +81,7 @@ def extract_capitalized_words(data_column):
             encoded_capitalized_words.append(vector)
         return pd.DataFrame(encoded_capitalized_words, columns=sorted(word_to_index.keys()))
     except Exception as e:
-        print(f"Error extracting capitalized words: {e}")
+        printer.error(f"Error extracting capitalized words: {e}")
         return pd.DataFrame()
 
 def extract_date(datetime_column):
@@ -94,7 +97,7 @@ def extract_date(datetime_column):
             'hour_of_day': hour_of_day
         })
     except Exception as e:
-        print(f"Error extracting date: {e}")
+        printer.error(f"Error extracting date: {e}")
         return pd.DataFrame()
     
 def extract_labels(labels_column):
@@ -111,7 +114,7 @@ def extract_labels(labels_column):
             encoded_labels.append(vector)
         return pd.DataFrame(encoded_labels, columns=sorted(label_id_to_index.keys()))
     except Exception as e:
-        print(f"Error extracting labels: {e}")
+        printer.error(f"Error extracting labels: {e}")
         return pd.DataFrame()
 
 def extract_email_addresses_freqs(df, column):
@@ -121,7 +124,7 @@ def extract_email_addresses_freqs(df, column):
         final_df = email_column.apply(lambda email_address: email_address_freqs.get(email_address, 0)).to_frame(name=f"{column}_freq")
         return final_df
     except Exception as e:
-        print(f"Error extracting email addresses: {e}")
+        printer.error(f"Error extracting email addresses: {e}")
         return pd.DataFrame()
     
 def extract_thread_ids(thread_id_column):
@@ -130,39 +133,39 @@ def extract_thread_ids(thread_id_column):
         encoded_thread_ids = [int(thread_id_to_index[thread_id]) for thread_id in thread_id_column]
         return pd.DataFrame(encoded_thread_ids, columns=["encoded_threadId"])
     except Exception as e:
-        print(f"Error extracting thread IDs: {e}")
+        printer.error(f"Error extracting thread IDs: {e}")
         return pd.DataFrame()
 
 def run_autoencoder(features, feature_config):
     try:
-        print(f"Running autoencoder...")
+        printer.status(f"Running autoencoder...")
         encoding_dim = feature_config.get('encoding_dim', 256)
         epochs = feature_config.get('epochs', 50)
         autoencoder, encoder = construct_autoencoder(features.shape[1], encoding_dim)
         autoencoder.fit(features, features, epochs=epochs, batch_size=32, shuffle=True, verbose=1)
         embeddings = encoder.predict(features)
-        print("Autoencoder complete.")
+        printer.success("Autoencoder complete.")
         return embeddings.tolist()
     except Exception as e:
-        print(f"Error running autoencoder: {e}")
+        printer.error(f"Error running autoencoder: {e}")
         return None
     
 def run_bert(features):
     try:
-        print("Running BERT...")
+        printer.status("Running BERT...")
         tokenizer, feature_model = initialize_bert()
         embeddings = get_bert_embeddings(features, tokenizer, feature_model, 
                                          pooling='mean', max_length=256)
-        print("BERT complete.")
+        printer.success("BERT complete.")
         return embeddings
     except Exception as e:
-        print(f"Error running BERT: {e}")
+        printer.error(f"Error running BERT: {e}")
         return None
 
 def run_tfidf(df, column):
     try:
         if df[column].isnull().any():
-            print(f"Warning: Found null values in '{column}' column")
+            printer.info(f"Warning: Found null values in '{column}' column")
             df = df.dropna(subset=[column])
         vectorizer = TfidfVectorizer(stop_words='english', max_features=1000, ngram_range=(1, 3))
         tfidf_matrix = vectorizer.fit_transform(df[column])
@@ -170,12 +173,11 @@ def run_tfidf(df, column):
         tfidf_df.columns = [f"{column}_tfidf_{col}" for col in tfidf_df.columns]
         return tfidf_df
     except Exception as e:
-        print(f"Error running tfidf on {column}: {e}")
+        printer.error(f"Error running tfidf on {column}: {e}")
         return pd.DataFrame()
 
 def extract_features(df, feature_config):
     try:
-        print(f"feature_config: {feature_config}")
         feature_model = feature_config.get('model')
 
         include_bodies = feature_config.get('include_bodies')
@@ -188,11 +190,11 @@ def extract_features(df, feature_config):
         include_capitals = feature_config.get('include_capitals')
         max_email_length = feature_config.get('max_email_length')
 
-        print(f"Extracting features...")
+        printer.status(f"Extracting features...")
         if max_email_length and include_bodies:
-            print("Trimming bodies...")
+            printer.status("Trimming bodies...")
             df['body'] = df['body'].apply(lambda x: x[:max_email_length] if isinstance(x, str) else x)
-            print("Trimming complete.")
+            printer.success("Trimming complete.")
 
         body_df = pd.DataFrame()
         if include_bodies:
@@ -227,10 +229,10 @@ def extract_features(df, feature_config):
             if not other_df.empty:
                 features_df = pd.concat([features_df, other_df], axis=1)
 
-        print(f"Feature extraction complete. Body_df shape: {body_df.shape}, features_df shape: {features_df.shape}.")
+        printer.success(f"Feature extraction complete. Body_df shape: {body_df.shape}, features_df shape: {features_df.shape}.")
         return body_df, features_df
     except Exception as e:
-        print(f"Error extracting features: {e}")
+        printer.error(f"Error extracting features: {e}")
         return pd.DataFrame(), pd.DataFrame()
     
 def process_features(body_df, features_df, feature_config):
@@ -242,7 +244,7 @@ def process_features(body_df, features_df, feature_config):
         
         if feature_model == "BERT":
             if body_df.empty:
-                print("Skipping BERT because body_df is empty.")
+                printer.info("Skipping BERT because body_df is empty.")
                 features = features_df.values
             else:
                 # Operates on body only; don't pass in categorical features like thread IDs, dates, etc.
@@ -264,8 +266,8 @@ def process_features(body_df, features_df, feature_config):
             if feature_model == "Autoencoder":
                 features = run_autoencoder(features, feature_config)
 
-        print(f"Feature processing complete. Features size: {len(features)}")
+        printer.success(f"Feature processing complete. Features size: {len(features)}")
         return np.array(features, dtype=float)
     except Exception as e:
-        print(f"Error processing features: {e}")
+        printer.error(f"Error processing features: {e}")
         return None

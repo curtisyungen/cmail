@@ -1,9 +1,12 @@
+import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer, util
 from .lda import run_lda
 from .openai import generate_label_with_open_ai
+from ...utils.custom_print import CustomPrint
 
+printer = CustomPrint()
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def match_topic(keywords, categories, threshold=0.8):
@@ -45,15 +48,17 @@ def generate_label(keywords, categories):
         final_keyword = keywords[best_idx].title()
         return final_keyword, True
     except Exception as e:
-        print(f"Error generating label: {e}")
+        printer.error(f"Error generating label: {e}")
         return "Unknown", False
 
-def label_clusters(cluster_column, cluster_keywords, cluster_top_keywords, categories, naming_config):
+def label_clusters(df, cluster_keywords, cluster_top_keywords, categories, naming_config):
     try:
         topic_naming_model = naming_config.get('model')
-        print(f"Labeling clusters using {topic_naming_model}, {len(categories)} categories, and config {naming_config}...")
+        printer.status(f"Labeling clusters using {topic_naming_model}, {len(categories)} categories, and config {naming_config}...")
 
+        cluster_column = df['cluster_id']
         clusters_with_labels = []
+
         for cluster in cluster_column.unique():
             keywords = cluster_keywords[int(cluster)] # All keywords for cluster
             top_keywords = [{'word': word } for word, _ in cluster_top_keywords[int(cluster)]]
@@ -70,14 +75,19 @@ def label_clusters(cluster_column, cluster_keywords, cluster_top_keywords, categ
             else:
                 label, generated = generate_label(keywords, categories)
 
+            parent_id = df[df['cluster_id'] == cluster]['parent_id'].iloc[0]
+            parent_id = int(parent_id) if not pd.isna(parent_id) else None
+            printer.info(f"cluster: {cluster}, parent_id: {parent_id}")
+
             clusters_with_labels.append([{
                 'topic_id': int(cluster),
+                'parent_id': parent_id,
                 'keywords': top_keywords,
                 'label': label,
                 'generated': generated # Whether it was generated from model or came from pre-defined categories
             }])
-        print("Labeling complete.")
+        printer.success("Labeling complete.")
         return clusters_with_labels
     except Exception as e:
-        print(f"Error labeling clusters: {e}")
+        printer.error(f"Error labeling clusters: {e}")
         return []

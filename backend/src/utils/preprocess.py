@@ -5,8 +5,10 @@ from bs4 import BeautifulSoup
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
 from config import stopwords as default_stopwords
+from .custom_print import CustomPrint
 
 lemmatizer = WordNetLemmatizer()
+printer = CustomPrint()
 
 def get_stopwords(custom_stopwords=[]):
     try:
@@ -16,7 +18,7 @@ def get_stopwords(custom_stopwords=[]):
             return lowercase_stopwords.union(lowercase_custom_stopwords)
         return lowercase_stopwords
     except Exception as e:
-        print(f"Error getting stopwords: {e}")
+        printer.error(f"Error getting stopwords: {e}")
         return []
 
 def clean_html(original_text):
@@ -57,7 +59,7 @@ def clean_text(text):
         )
         return text
     except Exception as e:
-        print(f"Error cleaning text: {e}")
+        printer.error(f"Error cleaning text: {e}")
         return text
     
 def remove_encodings(text):
@@ -75,7 +77,7 @@ def lemmatize_text(text, stopwords):
         ]
         return ' '.join(lemmatized_words)
     except Exception as e:
-        print(f"Error lemmatizing text: {e}")
+        printer.error(f"Error lemmatizing text: {e}")
         return text
 
 # Remove previous messages quoted in the email body
@@ -105,7 +107,7 @@ def clean_and_tokenize(text, stopwords):
 
 def count_top_keywords(df, stopwords, top_n):
     try:
-        print("Counting keywords...")
+        printer.status("Counting keywords...")
         cluster_keywords = {}
         for cluster in df['cluster_id'].unique():
             emails = df[df['cluster_id'] == cluster]['body']
@@ -115,15 +117,15 @@ def count_top_keywords(df, stopwords, top_n):
             word_counts = Counter(all_words)
             top_keywords = word_counts.most_common(int(top_n))
             cluster_keywords[int(cluster)] = [(word, int(count)) for word, count in top_keywords]
-        print("Keyword counting complete.")
+        printer.success("Keyword counting complete.")
         return cluster_keywords
     except Exception as e:
-        print(f"Error counting keywords: {e}")
+        printer.error(f"Error counting keywords: {e}")
         return {}
     
 def extract_keywords(df, stopwords):
     try:
-        print("Extracting keywords...")
+        printer.status("Extracting keywords...")
         cluster_keywords = {}
         for cluster in df['cluster_id'].unique():
             emails = df[df['cluster_id'] == cluster]['body']
@@ -131,8 +133,8 @@ def extract_keywords(df, stopwords):
             for email in emails:
                 all_words.extend(clean_and_tokenize(email, stopwords))
             cluster_keywords[int(cluster)] = all_words
-        print("Keyword extraction complete.")
+        printer.success("Keyword extraction complete.")
         return cluster_keywords
     except Exception as e:
-        print(f"Error extracting keywords: {e}")
+        printer.error(f"Error extracting keywords: {e}")
         return {}

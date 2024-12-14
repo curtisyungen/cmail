@@ -16,7 +16,9 @@ import {
 const Topic = ({
     id,
     title,
+    isSubtopic,
     onClick,
+    parent_id,
     selectedTopic,
     subtopics = [],
     topicTotals,
@@ -26,7 +28,7 @@ const Topic = ({
     const isAll = title === ALL_TOPICS;
     const isSelected = id === selectedTopic;
     const disabled = !title;
-    const size = topicTotals[id] || 0;
+    const size = topicTotals?.length > id ? topicTotals[id] : 0;
 
     const handleClick = () => {
         if (!disabled) {
@@ -35,57 +37,65 @@ const Topic = ({
     };
 
     return (
-        <Box
-            background={isSelected ? COLORS.BLUE_LIGHT : COLORS.TRANSPARENT}
-            borderRadius={DIMENS.BORDER_RADIUS_L}
-            clickable={!disabled}
-            margin={{ bottom: 1, right: 5, top: 1 }}
-            onClick={handleClick}
-            padding={{ bottom: 4, left: 10, right: 10, top: 4 }}
-            style={{ userSelect: "none" }}
-            width="100%"
-        >
-            <Flex justifyContent="space-between">
-                <Flex style={{ marginRight: "5px" }}>
-                    <Box
-                        clickable
-                        onClick={() => setExpanded(!expanded)}
-                        width={15}
-                    >
-                        {subtopics.length > 0 ? (
-                            <Icon
-                                color={COLORS.GRAY_DARK}
-                                name={
-                                    expanded ? ICON.CHEV_DOWN : ICON.CHEV_RIGHT
-                                }
-                                size={10}
-                            />
-                        ) : (
-                            <></>
-                        )}
-                    </Box>
-                    <Icon
-                        disabled={disabled}
-                        name={
-                            isAll
-                                ? ICON.INBOX
-                                : isSelected
-                                ? ICON.FOLDER
-                                : ICON.FOLDER_REG
-                        }
-                        size={FONT_SIZE.M}
-                        style={{ marginRight: "8px", width: "12px" }}
-                    />
-                    <TextEllipsis
-                        bold={isSelected}
-                        disabled={disabled}
-                        style={{ textTransform: "capitalize" }}
-                    >
-                        {title || "Empty"}
-                    </TextEllipsis>
+        <>
+            <Box
+                background={isSelected ? COLORS.BLUE_LIGHT : COLORS.TRANSPARENT}
+                borderRadius={DIMENS.BORDER_RADIUS_L}
+                clickable={!disabled}
+                hoverBackground={COLORS.GRAY_MEDIUM2}
+                margin={{
+                    right: 5,
+                }}
+                onClick={handleClick}
+                padding={{ bottom: 5, left: 10, right: 10, top: 5 }}
+                style={{ userSelect: "none" }}
+            >
+                <Flex justifyContent="space-between">
+                    <Flex style={{ marginRight: "5px" }}>
+                        {isSubtopic ? <Box height={10} width={10} /> : <></>}
+                        <Box
+                            clickable
+                            onClick={() => setExpanded(!expanded)}
+                            width={15}
+                        >
+                            {subtopics.length > 0 ? (
+                                <Icon
+                                    color={COLORS.GRAY_DARK}
+                                    name={
+                                        expanded
+                                            ? ICON.CHEV_DOWN
+                                            : ICON.CHEV_RIGHT
+                                    }
+                                    size={10}
+                                />
+                            ) : (
+                                <></>
+                            )}
+                        </Box>
+                        <Icon
+                            color={parent_id ? COLORS.RED : COLORS.GRAY_DARK}
+                            disabled={disabled}
+                            name={
+                                isAll
+                                    ? ICON.INBOX
+                                    : isSelected
+                                    ? ICON.FOLDER
+                                    : ICON.FOLDER_REG
+                            }
+                            size={FONT_SIZE.M}
+                            style={{ marginRight: "8px", width: "12px" }}
+                        />
+                        <TextEllipsis
+                            bold={isSelected}
+                            disabled={disabled}
+                            style={{ textTransform: "capitalize" }}
+                        >
+                            {title || "Empty"}
+                        </TextEllipsis>
+                    </Flex>
+                    <Text color={COLORS.GRAY_DARK}>{size}</Text>
                 </Flex>
-                <Text color={COLORS.GRAY_DARK}>{size}</Text>
-            </Flex>
+            </Box>
             {subtopics.length > 0 && expanded ? (
                 subtopics.map(({ label, topic_id }, idx) => (
                     <Topic
@@ -93,15 +103,16 @@ const Topic = ({
                         id={topic_id}
                         title={label}
                         onClick={() => handleClick(topic_id)}
+                        isSubtopic={true}
                         selectedTopic={selectedTopic}
-                        size={topicTotals[topic_id]}
                         subtopics={[]}
+                        topicTotals={topicTotals}
                     />
                 ))
             ) : (
                 <></>
             )}
-        </Box>
+        </>
     );
 };
 

@@ -1,5 +1,5 @@
 import numpy as np
-from .silhouette_score import calculate_silhouette_score
+from .scoring import calculate_silhouette_score
 from ..model.clusters.kmeans import KMeans
 
 def run_elbow_method(features, max_clusters):

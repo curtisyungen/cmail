@@ -1,3 +1,7 @@
+from .custom_print import CustomPrint
+
+printer = CustomPrint()
+
 # For charting cluster data
 def get_clusters_data(df):
     try:
@@ -13,7 +17,7 @@ def get_clusters_data(df):
             })
         return clusters_data
     except Exception as e:
-        print(f"Error getting cluster data: {e}")
+        printer.error(f"Error getting cluster data: {e}")
         return []
 
 def get_email_clusters(df):
@@ -23,5 +27,5 @@ def get_email_clusters(df):
         email_clusters = email_clusters[['id', 'body', 'cluster_id']].to_dict(orient='records')
         return email_clusters
     except Exception as e:
-        print(f"Error getting email clusters: {e}")
+        printer.error(f"Error getting email clusters: {e}")
         return []

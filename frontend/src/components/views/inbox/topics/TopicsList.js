@@ -103,12 +103,13 @@ const TopicsList = () => {
                     topicTotals={topicTotals}
                 />
                 {groupedTopics.custom.map(
-                    ({ label, subtopics, topic_id }, idx) => (
+                    ({ label, parent_id, subtopics, topic_id }, idx) => (
                         <Topic
                             key={idx}
                             id={topic_id}
                             title={label}
                             onClick={() => handleTopicClick(topic_id)}
+                            parent_id={parent_id}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
                             topicTotals={topicTotals}
@@ -118,12 +119,13 @@ const TopicsList = () => {
             </TopicsListSection>
             <TopicsListSection title="Generated">
                 {groupedTopics.generated.map(
-                    ({ label, subtopics, topic_id }, idx) => (
+                    ({ label, parent_id, subtopics, topic_id }, idx) => (
                         <Topic
                             key={idx}
                             id={topic_id}
                             title={label}
                             onClick={() => handleTopicClick(topic_id)}
+                            parent_id={parent_id}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
                             topicTotals={topicTotals}
