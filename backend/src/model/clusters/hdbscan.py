@@ -1,6 +1,6 @@
 import hdbscan
 import pandas as pd
-from utils.custom_print import CustomPrint
+from ...utils.custom_print import CustomPrint
 
 printer = CustomPrint()
 

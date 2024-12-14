@@ -1,5 +1,5 @@
 from openai import OpenAI
-from utils.custom_print import CustomPrint
+from ...utils.custom_print import CustomPrint
 
 client = OpenAI()
 printer = CustomPrint()

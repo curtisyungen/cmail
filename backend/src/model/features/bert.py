@@ -1,6 +1,6 @@
 from transformers import AlbertTokenizer, AlbertModel
 import torch
-from utils.custom_print import CustomPrint
+from ...utils.custom_print import CustomPrint
 
 printer = CustomPrint()
 

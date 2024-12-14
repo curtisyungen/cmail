@@ -11,9 +11,12 @@ from ...utils.scoring import calculate_silhouette_score
 
 printer = CustomPrint()
 
-def init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals):
+def init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals, min_email_length):
     df = emails_df.copy()
     df['parent_id'] = None
+
+    if min_email_length:
+        df = df[df['body'].str.len() >= min_email_length]
 
     # If include_capitals is enabled, it'll extract capitals from BOTH body and subject
     if include_bodies or include_capitals:
@@ -61,11 +64,12 @@ def run_model(emails_df, categories, feature_config, model_config, naming_config
     include_bodies = feature_config.get('include_bodies')
     include_subjects = feature_config.get('include_subjects')
     include_capitals = feature_config.get('include_capitals')
+    min_email_length = feature_config.get('min_email_length')
 
     stopwords = get_stopwords(custom_stopwords)
 
     # Set-up
-    df = init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals)
+    df = init_df(emails_df, stopwords, include_bodies, include_subjects, include_capitals, min_email_length)
     
     # Feature extraction and processing
     body_df, features_df = extract_features(df, feature_config)

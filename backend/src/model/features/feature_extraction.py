@@ -191,13 +191,12 @@ def extract_features(df, feature_config):
         max_email_length = feature_config.get('max_email_length')
 
         printer.status(f"Extracting features...")
-        if max_email_length and include_bodies:
-            printer.status("Trimming bodies...")
-            df['body'] = df['body'].apply(lambda x: x[:max_email_length] if isinstance(x, str) else x)
-            printer.success("Trimming complete.")
 
         body_df = pd.DataFrame()
         if include_bodies:
+            if max_email_length:
+                df['body'] = df['body'].apply(lambda x: x[:max_email_length] if isinstance(x, str) else x)
+
             if feature_model == "Autoencoder":
                 body_df = run_tfidf(df, 'body')
             elif feature_model == "BERT":

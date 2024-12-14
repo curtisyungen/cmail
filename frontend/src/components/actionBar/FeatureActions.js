@@ -93,6 +93,39 @@ const FeatureActions = () => {
                 >
                     <Select
                         disabled={status === STATUS.RUNNING_MODEL}
+                        name="min_email_length"
+                        onChange={(e) =>
+                            handleConfigChange(
+                                "min_email_length",
+                                parseInt(e.target.value)
+                            )
+                        }
+                        style={{
+                            marginBottom: "5px",
+                        }}
+                        value={featureConfig.min_email_length}
+                        width={DIMENS.SELECT_WIDTH}
+                    >
+                        <option value={null}>Any</option>
+                        {Array.from({ length: 5 }, (_, index) => index + 1).map(
+                            (num) => (
+                                <option key={num} value={num * 100}>
+                                    {num * 100}
+                                </option>
+                            )
+                        )}
+                    </Select>
+                    <TextEllipsis center fontSize={FONT_SIZE.S}>
+                        Min. Email Chars.
+                    </TextEllipsis>
+                </Box>
+                <Box
+                    height={DIMENS.ACTION_BAR_SECTION_HEIGHT}
+                    margin={{ right: DIMENS.SPACING_STANDARD }}
+                    style={{ flex: 1 }}
+                >
+                    <Select
+                        disabled={status === STATUS.RUNNING_MODEL}
                         name="max_email_length"
                         onChange={(e) =>
                             handleConfigChange(
