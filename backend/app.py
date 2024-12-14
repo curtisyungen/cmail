@@ -8,11 +8,14 @@ from main import run_model_main
 from config import REDIS_KEYS
 from emails import get_emails, get_email_address
 from redis_cache import clear_redis_values, get_value_from_redis, remove_value_from_redis
+from src.utils.custom_print import CustomPrint
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+printer = CustomPrint()
 
 @app.route("/api/check-authentication", methods=['GET'])
 def check_authentication():
@@ -23,7 +26,7 @@ def check_authentication():
         else:
             return jsonify({'authenticated': False})
     except Exception as e:
-        print(f"Error checking authentication: {e}")
+        printer.error(f"Error checking authentication: {e}")
         return jsonify({'authenticated': False}), 500
 
 @app.route("/api/authenticate", methods=['POST'])
@@ -36,7 +39,7 @@ def authenticate():
         exchange_code_for_token(auth_code)
         return jsonify({'message': 'User authenticated.'})
     except Exception as e:
-        print(f"Error authenticating: {e}")
+        printer.error(f"Error authenticating: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route("/api/fetch-emails", methods=['GET'])
@@ -48,13 +51,12 @@ def fetch_emails_for_user():
             return jsonify({'error': 'Failed to get credentials.'}), 400
         
         emails_df = get_emails(creds, limit)
-        print(f"emails_df size = {len(emails_df)}")
         if emails_df is None or emails_df.empty:
             return jsonify({'error': 'No emails found.'}), 404
 
         return jsonify({'emails': emails_df.to_dict(orient='records')})
     except Exception as e:
-        print(f"Error fetching emails: {e}")
+        printer.error(f"Error fetching emails: {e}")
         return jsonify({'message': str(e)}), 500
     
 @app.route("/api/get-email-address", methods=['GET'])
@@ -66,7 +68,7 @@ def get_email_address_route():
         email_address = get_email_address(creds)
         return jsonify({'email_address': email_address})
     except Exception as e:
-        print(f"Error getting email address: {e}")
+        printer.error(f"Error getting email address: {e}")
         return jsonify({'message': str(e)}), 500
 
 @app.route('/api/run-model', methods=['POST'])
@@ -104,6 +106,7 @@ def run_model_route():
             "elbow_data": model_response.get('elbow_data'),
         }), 200
     except Exception as e:
+        printer.error(f"Error running model: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
     
 @app.route('/api/clear-redis', methods=['POST'])
@@ -116,6 +119,7 @@ def clear_redis():
         }
         return jsonify(response), 200
     except Exception as e:
+        printer.error(f"Error clearing Redis: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
     
 @app.route('/api/remove-emails-from-redis', methods=['POST'])
@@ -128,5 +132,6 @@ def remove_emails_from_redis():
         }
         return jsonify(response), 200
     except Exception as e:
+        printer.error(f"Error removing emails from Redis: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 

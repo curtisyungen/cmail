@@ -5,6 +5,9 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from redis_cache import get_value_from_redis, store_value_in_redis
 from config import REDIS_KEYS
+from src.utils.custom_print import CustomPrint
+
+printer = CustomPrint()
 
 CREDENTIALS_FILE = './credentials.json'
 
@@ -57,15 +60,15 @@ def get_creds():
             creds.refresh(Request())
         return creds
     except Exception as e:
-        print(f"Error retrieving credentials: {e}")
+        printer.error(f"Error retrieving credentials: {e}")
         return None
 
 def store_auth_data(access_token, refresh_token):
     try:
         store_value_in_redis(REDIS_KEYS.ACCESS_TOKEN, access_token)
         store_value_in_redis(REDIS_KEYS.REFRESH_TOKEN, refresh_token)
-        print("Tokens successfully stored.")
+        printer.success("Tokens successfully stored.")
         return jsonify({'message': 'User authenticated.'})
     except Exception as e:
-        print(f"Error storing tokens: {e}")
+        printer.error(f"Error storing tokens: {e}")
         return jsonify({'message': 'Error storing tokens.'})

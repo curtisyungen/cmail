@@ -1,5 +1,8 @@
 from transformers import AlbertTokenizer, AlbertModel
 import torch
+from utils.custom_print import CustomPrint
+
+printer = CustomPrint()
 
 def initialize_bert(model_name='albert-base-v2'):
     try:
@@ -8,7 +11,7 @@ def initialize_bert(model_name='albert-base-v2'):
         model.eval()
         return tokenizer, model
     except Exception as e:
-        print(f"Error initializing BERT: {e}")
+        printer.error(f"Error initializing BERT: {e}")
         return None, None
 
 def preprocess_texts(texts, tokenizer, max_length=128):
@@ -39,5 +42,5 @@ def get_bert_embeddings(texts, tokenizer, model, pooling='mean', device='cpu', m
                 raise ValueError("Invalid pooling method. Choose 'mean' or 'cls'.")
         return embeddings
     except Exception as e:
-        print(f"Error getting BERT embeddings: {e}")
+        printer.error(f"Error getting BERT embeddings: {e}")
         return None

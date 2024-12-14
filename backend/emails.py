@@ -4,13 +4,16 @@ from io import StringIO
 from redis_cache import get_value_from_redis, store_value_in_redis
 from utils import decode_base64url
 from config import REDIS_KEYS
+from src.utils.custom_print import CustomPrint
 from src.utils.preprocess import clean_html, clean_text
+
+printer = CustomPrint()
 
 MAX_EMAILS = 500
 QUERY = 'label:inbox OR -label:spam -label:sent -label:archive -label:trash -in:drafts'
 
 def fetch_emails(creds, limit):
-    print(f"Fetching {limit} emails from API...")
+    printer.status(f"Fetching {limit} emails from API...")
     
     service = build('gmail', 'v1', credentials=creds)
     next_page_token = None
@@ -29,7 +32,7 @@ def fetch_emails(creds, limit):
             if not next_page_token:
                 break
         except Exception as e:
-            print(f"Error fetching emails: {e}")
+            printer.error(f"Error fetching emails: {e}")
             break
 
     emails = []
@@ -61,7 +64,7 @@ def fetch_emails(creds, limit):
             email_data['body'] = decode_base64url(body)
             emails.append(email_data)
         except Exception as e:
-            print(f"Error getting message details: {e}")
+            printer.error(f"Error getting message details: {e}")
             
     return pd.DataFrame(emails)
 
@@ -88,7 +91,7 @@ def get_emails(creds, limit):
 
         return emails_df
     except Exception as e:
-        print(f"Error getting emails: {e}")
+        printer.error(f"Error getting emails: {e}")
         return None
 
 def get_email_address(creds):
@@ -108,5 +111,5 @@ def get_email_address(creds):
 
         return email_address
     except Exception as e:
-        print(f"Error getting email address: {e}")
+        printer.error(f"Error getting email address: {e}")
         return None
