@@ -2,16 +2,18 @@ import React, { useState } from "react";
 
 import StopwordActions from "./StopwordActions";
 import { Icon } from "../common";
-import { useApi, useAppContext } from "../../hooks";
+import { useApi, useAppActions } from "../../hooks";
 import { ICON } from "../../res/icons";
 import { Box, COLORS, DIMENS, Flex, FONT_SIZE, Text } from "../../styles";
 import { StorageUtils } from "../../utils";
 import { LS, STATUS } from "../../res";
+import { useAppContext } from "../../AppContext";
 
 const OtherActions = () => {
     const { clearEmailsFromRedis } = useApi();
-    const { setEmails, setModelResult, setTopics, setTopicsMap, status } =
-        useAppContext();
+    const { setEmails, setEmailToTopicIdMap, setModelResult, setTopics } =
+        useAppActions();
+    const { status } = useAppContext();
 
     const [loading, setLoading] = useState(false);
 
@@ -23,9 +25,9 @@ const OtherActions = () => {
             StorageUtils.removeItem(LS.MODEL_RESULT);
             await clearEmailsFromRedis();
             setEmails([]);
+            setEmailToTopicIdMap({});
             setModelResult({});
             setTopics([]);
-            setTopicsMap({});
         } catch (e) {
             console.error("Error clearing cache: ", e);
         } finally {

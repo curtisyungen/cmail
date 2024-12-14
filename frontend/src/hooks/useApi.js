@@ -20,12 +20,12 @@ const useApi = () => {
         setAuthenticated,
         setEmailAddress,
         setEmails,
+        setEmailToTopicIdMap,
         setError,
         setModelResult,
         setSelectedTopic,
         setStatus,
         setTopics,
-        setTopicsMap,
     } = useAppActions();
     const { addToHistory } = useHistory();
 
@@ -72,7 +72,7 @@ const useApi = () => {
         setModelResult({});
         setSelectedTopic(ALL_TOPICS);
         setTopics([]);
-        setTopicsMap({});
+        setEmailToTopicIdMap({});
         try {
             const response = await axios.get("/api/fetch-emails", {
                 params: { limit: numEmails },
@@ -184,9 +184,14 @@ const useApi = () => {
                     ? processSubClusters(clusters)
                     : clusters;
 
+            const emailToTopicIdMap = {};
+            for (const { cluster_id, id } of email_clusters) {
+                emailToTopicIdMap[id] = cluster_id;
+            }
+
             setModelResult(res.data);
             setTopics(finalClusters);
-            setTopicsMap(email_clusters);
+            setEmailToTopicIdMap(emailToTopicIdMap);
             StorageUtils.setItem(LS.CLUSTERS, finalClusters);
             StorageUtils.setItem(LS.EMAIL_CLUSTERS, email_clusters);
             StorageUtils.setItem(LS.MODEL_RESULT, res.data);

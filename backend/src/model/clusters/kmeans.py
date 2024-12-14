@@ -118,7 +118,6 @@ def run_layered_kmeans(df, features, num_clusters):
 
                     df = pd.concat([df, sub_df], axis=0)
                     features = np.vstack([features, cluster_features])
-                    print(f"df: {df}")
 
                     centroids = np.vstack([kmeans.centroids, sub_kmeans.centroids])
         return df, features, centroids

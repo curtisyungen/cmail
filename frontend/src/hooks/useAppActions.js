@@ -24,6 +24,13 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_EMAILS, payload: emails });
     };
 
+    const setEmailToTopicIdMap = (emailToTopicIdMap) => {
+        dispatch({
+            type: ACTIONS.SET_EMAIL_TO_TOPIC_ID_MAP,
+            payload: emailToTopicIdMap,
+        });
+    };
+
     const setError = (error) => {
         dispatch({ type: ACTIONS.SET_ERROR, payload: error });
     };
@@ -91,16 +98,13 @@ const useAppActions = () => {
         dispatch({ type: ACTIONS.SET_TOPICS, payload: topics });
     };
 
-    const setTopicsMap = (topicsMap) => {
-        dispatch({ type: ACTIONS.SET_TOPICS_MAP, payload: topicsMap });
-    };
-
     return {
         setActiveView,
         setAuthenticated,
         setCategories,
         setEmailAddress,
         setEmails,
+        setEmailToTopicIdMap,
         setError,
         setFeatureConfig,
         setHistory,
@@ -117,7 +121,6 @@ const useAppActions = () => {
         setStopwords,
         setTab,
         setTopics,
-        setTopicsMap,
     };
 };
 

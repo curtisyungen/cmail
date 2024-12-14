@@ -22,10 +22,7 @@ def get_clusters_data(df):
 
 def get_email_clusters(df):
     try:
-        email_clusters = df[['body', 'cluster_id']].astype({'cluster_id': int})
-        email_clusters['id'] = email_clusters.index
-        email_clusters = email_clusters[['id', 'body', 'cluster_id']].to_dict(orient='records')
-        return email_clusters
+        return df[['id', 'body', 'cluster_id']].astype({'cluster_id': int}).to_dict(orient='records')
     except Exception as e:
         printer.error(f"Error getting email clusters: {e}")
         return []

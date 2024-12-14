@@ -16,10 +16,10 @@ const Home = () => {
     const { activeView, authenticated, emails, status } = useAppContext();
     const {
         setCategories,
+        setEmailToTopicIdMap,
         setModelResult,
         setStopwords,
         setTopics,
-        setTopicsMap,
     } = useAppActions();
 
     const [showLoading, setShowLoading] = useState(true);
@@ -51,7 +51,7 @@ const Home = () => {
         setModelResult(savedModelResult || {});
         setStopwords(savedStopwords || DEFAULT_STOPWORDS);
         setTopics(savedClusters || []);
-        setTopicsMap(savedEmailClusters || {});
+        setEmailToTopicIdMap(savedEmailClusters || {});
     };
 
     if (!authenticated) {

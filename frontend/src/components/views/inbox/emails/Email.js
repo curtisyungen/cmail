@@ -17,13 +17,13 @@ import { DateTimeUtils } from "../../../../utils";
 const CLIPPED_BODY_LENGTH = 50;
 
 const Email = ({ email, isSelected, onClick, topicId }) => {
-    const { categories, selectedTopic, topics, topicsMap } = useAppContext();
+    const { categories, selectedTopic, topics } = useAppContext();
 
     const [category, setCategory] = useState(null);
 
     useEffect(() => {
         loadCategory();
-    }, [email, topicsMap]);
+    }, [email]);
 
     const loadCategory = () => {
         try {

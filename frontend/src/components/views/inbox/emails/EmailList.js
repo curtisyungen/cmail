@@ -9,24 +9,24 @@ import { Box, COLORS, DIMENS, FONT_SIZE, Text } from "../../../../styles";
 const EmailList = () => {
     const {
         emails,
+        emailToTopicIdMap,
         searchTerm,
         selectedEmail,
         selectedTopic,
         status,
         topics,
-        topicsMap,
     } = useAppContext();
     const { setSelectedEmail } = useAppActions();
 
     const [filteredEmails, setFilteredEmails] = useState([]);
 
-    const handleEmailClick = (email) => {
-        setSelectedEmail(selectedEmail?.id === email.id ? null : email);
-    };
-
     useEffect(() => {
         filterEmails();
     }, [emails, searchTerm]);
+
+    const handleEmailClick = (email) => {
+        setSelectedEmail(selectedEmail?.id === email.id ? null : email);
+    };
 
     const filterEmails = () => {
         if (!searchTerm || searchTerm.trim().length === 0) {
@@ -75,9 +75,7 @@ const EmailList = () => {
                             email={email}
                             isSelected={selectedEmail?.id === email.id}
                             onClick={() => handleEmailClick(email)}
-                            topicId={
-                                topicsMap ? topicsMap[idx]?.cluster_id : null
-                            }
+                            topicId={emailToTopicIdMap[email.id]}
                         />
                     ))}
                 </>

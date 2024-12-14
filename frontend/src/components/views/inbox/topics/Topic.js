@@ -18,7 +18,6 @@ const Topic = ({
     title,
     isSubtopic,
     onClick,
-    parent_id,
     selectedTopic,
     subtopics = [],
     topicTotals,
@@ -31,9 +30,14 @@ const Topic = ({
     const size = topicTotals[id] || 0;
 
     const handleClick = () => {
-        if (!disabled) {
-            onClick(id);
+        if (disabled) {
+            return;
         }
+        if (subtopics.length > 0) {
+            setExpanded(!expanded);
+            return;
+        }
+        onClick(id);
     };
 
     return (
@@ -75,7 +79,6 @@ const Topic = ({
                             )}
                         </Box>
                         <Icon
-                            color={parent_id ? COLORS.RED : COLORS.GRAY_DARK}
                             disabled={disabled}
                             name={
                                 isAll

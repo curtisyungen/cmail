@@ -9,8 +9,13 @@ import { SortUtils } from "../../../../utils";
 
 const TopicsList = () => {
     const { setSelectedEmail, setSelectedTopic } = useAppActions();
-    const { emails, selectedTopic, showNavigationPane, topics, topicsMap } =
-        useAppContext();
+    const {
+        emails,
+        emailToTopicIdMap,
+        selectedTopic,
+        showNavigationPane,
+        topics,
+    } = useAppContext();
 
     const [groupedTopics, setGroupedTopics] = useState({
         generated: [],
@@ -31,19 +36,19 @@ const TopicsList = () => {
 
     useEffect(() => {
         calculateTopicTotals();
-    }, [topicsMap]);
+    }, [emailToTopicIdMap]);
 
     const calculateTopicTotals = () => {
-        if (!topicsMap) {
+        if (!emailToTopicIdMap) {
             return;
         }
         const totals = {};
         let totalEmails = 0;
-        for (const { cluster_id } of Object.values(topicsMap)) {
-            if (!totals[cluster_id]) {
-                totals[cluster_id] = 0;
+        for (const clusterId of Object.values(emailToTopicIdMap)) {
+            if (!totals[clusterId]) {
+                totals[clusterId] = 0;
             }
-            totals[cluster_id] += 1;
+            totals[clusterId] += 1;
             totalEmails += 1;
         }
         totals[ALL_TOPICS] = totalEmails;
@@ -102,13 +107,12 @@ const TopicsList = () => {
                     topicTotals={topicTotals}
                 />
                 {groupedTopics.custom.map(
-                    ({ label, parent_id, subtopics, topic_id }, idx) => (
+                    ({ label, subtopics, topic_id }, idx) => (
                         <Topic
                             key={idx}
                             id={topic_id}
                             title={label}
                             onClick={handleTopicClick}
-                            parent_id={parent_id}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
                             topicTotals={topicTotals}
@@ -118,13 +122,12 @@ const TopicsList = () => {
             </TopicsListSection>
             <TopicsListSection title="Generated">
                 {groupedTopics.generated.map(
-                    ({ label, parent_id, subtopics, topic_id }, idx) => (
+                    ({ label, subtopics, topic_id }, idx) => (
                         <Topic
                             key={idx}
                             id={topic_id}
                             title={label}
                             onClick={handleTopicClick}
-                            parent_id={parent_id}
                             selectedTopic={selectedTopic}
                             subtopics={subtopics}
                             topicTotals={topicTotals}

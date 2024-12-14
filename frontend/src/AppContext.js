@@ -20,6 +20,7 @@ const initialState = {
     categories: DEFAULT_CATEGORIES,
     emailAddress: null,
     emails: [],
+    emailToTopicIdMap: {},
     error: false,
     featureConfig: DEFAULT_FEATURE_CONFIG,
     history: [],
@@ -36,7 +37,6 @@ const initialState = {
     stopwords: DEFAULT_STOPWORDS,
     tab: TABS.MODEL,
     topics: [],
-    topicsMap: {},
 };
 
 export const ACTIONS = {
@@ -45,6 +45,7 @@ export const ACTIONS = {
     SET_CATEGORIES: "set_categories",
     SET_EMAIL_ADDRESS: "set_email_address",
     SET_EMAILS: "set_email",
+    SET_EMAIL_TO_TOPIC_ID_MAP: "set_email_to_topic_id_map",
     SET_ERROR: "set_error",
     SET_FEATURE_CONFIG: "set_feature_config",
     SET_HISTORY: "set_history",
@@ -61,7 +62,6 @@ export const ACTIONS = {
     SET_TAB: "set_tab",
     SET_STATUS: "set_status",
     SET_TOPICS: "set_topics",
-    SET_TOPICS_MAP: "set_topics_map",
 };
 
 export const useAppContext = () => useContext(AppContext);
@@ -78,6 +78,8 @@ export const appReducer = (state, action) => {
             return { ...state, emailAddress: action.payload };
         case ACTIONS.SET_EMAILS:
             return { ...state, emails: action.payload };
+        case ACTIONS.SET_EMAIL_TO_TOPIC_ID_MAP:
+            return { ...state, emailToTopicIdMap: action.payload };
         case ACTIONS.SET_ERROR:
             return { ...state, error: action.payload };
         case ACTIONS.SET_FEATURE_CONFIG:
@@ -110,8 +112,6 @@ export const appReducer = (state, action) => {
             return { ...state, tab: action.payload };
         case ACTIONS.SET_TOPICS:
             return { ...state, topics: action.payload };
-        case ACTIONS.SET_TOPICS_MAP:
-            return { ...state, topicsMap: action.payload };
         default:
             return state;
     }
