@@ -7,11 +7,22 @@ const useKeywords = () => {
     const [keywords, setKeywords] = useState([]);
 
     useEffect(() => {
-        const keywords = topics.find(
-            ({ topic_id }) => topic_id === selectedTopic
-        )?.keywords;
-        setKeywords(keywords || []);
+        setKeywords(getKeywords());
     }, [selectedTopic, topics]);
+
+    const getKeywords = () => {
+        for (const { keywords, subtopics, topic_id } of topics) {
+            if (topic_id === selectedTopic) {
+                return keywords;
+            }
+            for (const subtopic of subtopics) {
+                if (subtopic.topic_id === selectedTopic) {
+                    return subtopic.keywords;
+                }
+            }
+        }
+        return [];
+    };
 
     return {
         keywords: keywords.map(({ word }) => word),

@@ -98,7 +98,11 @@ const Topic = ({
                             {title || "Empty"}
                         </TextEllipsis>
                     </Flex>
-                    <Text color={COLORS.GRAY_DARK}>{size}</Text>
+                    {subtopics.length === 0 ? (
+                        <Text color={COLORS.GRAY_DARK}>{size}</Text>
+                    ) : (
+                        <></>
+                    )}
                 </Flex>
             </Box>
             {subtopics.length > 0 && expanded ? (
